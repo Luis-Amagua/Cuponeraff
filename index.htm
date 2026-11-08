@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cuponeraf | descubre · ahorra · disfruta</title>
+<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<!-- Leaflet CSS y JS para el mapa dinámico -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+:root{--orange:#f47721;--orange-dark:#df5e0c;--cream:#fff7ef;--ink:#252525;--muted:#777;--line:#f0e5dc;--green:#198754;--red:#c83c32;--blue:#2868a8}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,Arial,sans-serif;color:var(--ink);background:#fff}button,input{font:inherit}button{cursor:pointer}header{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}.nav{max-width:1180px;margin:auto;padding:14px 22px;display:flex;align-items:center;gap:24px}.brand{display:flex;flex-direction:column;line-height:1}.logo{font-size:28px;font-weight:950;letter-spacing:-1.5px;color:var(--ink)}.logo .offword{color:var(--orange)}.tagline{font-size:9px;font-weight:850;letter-spacing:1.2px;color:#8b6b57;margin-top:5px;text-transform:lowercase}.tagline b{color:var(--orange-dark)}nav{display:flex;gap:20px;margin-left:14px}nav a{color:#555;text-decoration:none;font-size:13px;font-weight:700}.navright{margin-left:auto;display:flex;align-items:center;gap:9px}.muted{color:var(--muted)}.btn{border:0;border-radius:11px;padding:11px 16px;background:var(--orange);color:white;font-weight:800}.btn:hover{background:var(--orange-dark)}.btn.secondary{background:#fff0e4;color:var(--orange-dark)}.btn.dark{background:#292522}.btn.green{background:var(--green)}.btn.red{background:var(--red)}.btn.small{padding:8px 11px;font-size:12px}.linkbtn{border:0;background:none;color:var(--orange-dark);font-weight:800}.container{max-width:1180px;margin:auto;padding:28px 22px}.hero{background:linear-gradient(115deg,#fff1e4,#fff9f3);padding:48px 22px}.hero-inner{max-width:1136px;margin:auto;display:grid;grid-template-columns:1.2fr .8fr;gap:30px;align-items:center}.eyebrow{color:var(--orange-dark);font-size:11px;letter-spacing:1.5px;font-weight:900;text-transform:uppercase}.hero h1{font-size:clamp(38px,5vw,58px);line-height:1.02;letter-spacing:-2.4px;margin:12px 0}.hero h1 em{color:var(--orange);font-style:normal}.hero p{color:#68615c;line-height:1.6;max-width:560px}.hero-art{min-height:220px;border-radius:26px;background:var(--orange);display:grid;place-items:center;color:white;font-size:88px;position:relative;overflow:hidden}.hero-art:before,.hero-art:after{content:'';position:absolute;border:1px solid #ffffff55;border-radius:50%;width:260px;height:260px}.hero-art:after{width:350px;height:350px}.hero-art span{z-index:1;filter:drop-shadow(0 9px 8px #83360040)}.search{display:flex;gap:8px;max-width:520px;margin-top:20px}.search input,.field{width:100%;border:1px solid var(--line);border-radius:10px;padding:12px 13px;outline:none;background:white}.search input:focus,.field:focus{border-color:var(--orange)}.sectionhead{display:flex;justify-content:space-between;align-items:end;gap:12px;margin-bottom:20px}.sectionhead h2{margin:5px 0;font-size:26px}.categories{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}.chip{border:1px solid var(--line);background:white;border-radius:30px;padding:9px 14px;font-size:12px;font-weight:800}.chip.active,.chip:hover{background:var(--orange);border-color:var(--orange);color:white}.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:17px}.card,.panel,.metric{border:1px solid var(--line);border-radius:16px;background:#fff;box-shadow:0 5px 18px #1b130b08}.card{overflow:hidden}.cardvisual{height:135px;background:#fff0e2;display:grid;place-items:center;font-size:58px;position:relative}.off{position:absolute;top:12px;left:12px;background:var(--orange);color:white;padding:7px 9px;border-radius:8px;font-size:11px;font-weight:900}.cardbody{padding:15px}.cardtitle{display:flex;justify-content:space-between;gap:8px}.cardtitle h3{font-size:16px;margin:0}.rating{font-size:11px;color:#a76a15;font-weight:900}.cardbody p{font-size:12px;color:var(--muted);line-height:1.45}.cardfoot{border-top:1px solid var(--line);padding-top:11px;display:flex;align-items:center;justify-content:space-between;gap:8px}.cardfoot small{color:#888;font-size:10px}.how{background:var(--cream);padding:36px 22px}.steps{max-width:1136px;margin:20px auto 0;display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.step{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px}.num{width:30px;height:30px;border-radius:9px;background:#fff0e4;color:var(--orange-dark);display:grid;place-items:center;font-weight:900}.step h3{font-size:15px}.step p{font-size:12px;color:var(--muted);line-height:1.5}footer{background:#24211f;color:white;padding:25px 22px}.footerin{max-width:1136px;margin:auto;display:flex;justify-content:space-between;gap:15px;align-items:center}.footerin p{font-size:11px;color:#c9c2bd}.hidden{display:none!important}.view{min-height:65vh}.panel{padding:20px}.panel h2{margin:0 0 5px}.sub{font-size:13px;color:var(--muted);margin:0 0 18px}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}.metric{padding:15px}.metric strong{font-size:28px;display:block;margin-top:5px}.metric span{font-size:11px;color:var(--muted)}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}.notice{padding:12px 14px;border-radius:11px;font-size:12px;line-height:1.5;background:#fff6e9;border:1px solid #f4dfc8;color:#78512d}.notice.blue{background:#eef6ff;border-color:#d7e8fb;color:#315b83}.notice.green{background:#edf8f0;border-color:#d5ecda;color:#24613b}.notice.red{background:#fff0ef;border-color:#f1d2cf;color:#8d3029}.formrow{display:grid;gap:7px;margin:12px 0}.formrow label{font-size:12px;font-weight:800}.authbox{max-width:460px;margin:30px auto}.authbox .panel{padding:25px}.authhead{text-align:center;margin-bottom:18px}.authhead .brand{align-items:center}.authhead h2{margin:12px 0 4px}.tablewrap{overflow:auto}table{border-collapse:collapse;width:100%;font-size:12px}th,td{text-align:left;padding:11px 9px;border-bottom:1px solid var(--line);white-space:nowrap}th{color:#806c5c;background:#fffaf6;font-size:10px;text-transform:uppercase;letter-spacing:.5px}.status{display:inline-block;padding:5px 8px;border-radius:20px;font-size:10px;font-weight:900}.s-active{background:#e9f7ed;color:#237342}.s-redeemed{background:#f0eafa;color:#6841a5}.s-expired{background:#fff0df;color:#9a5c16}.s-rejected{background:#ffeded;color:#a62f2f}.scannerbox{border:2px dashed #f0c6a5;border-radius:17px;background:#fffaf6;padding:18px;text-align:center;min-height:310px;display:flex;flex-direction:column;justify-content:center;gap:12px}.scannericon{font-size:55px}.scanner-actions{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}.result{border-radius:13px;padding:14px;text-align:left;border:1px solid var(--line);background:white}.result h3{margin:0 0 6px}.result p{margin:4px 0;font-size:12px;color:#666}.qr{width:190px;height:190px;object-fit:contain;border:7px solid white;box-shadow:0 0 0 1px var(--line);border-radius:10px}.qrholder{width:204px;height:204px;margin:12px auto;display:grid;place-items:center;background:#fff;border:7px solid white;box-shadow:0 0 0 1px var(--line);border-radius:10px}.qrholder img,.qrholder canvas{max-width:190px;max-height:190px}.couponbox{text-align:center}.couponbox .qr{display:block;margin:12px auto}.couponcode{font-weight:950;letter-spacing:2px;background:#fff1e5;color:var(--orange-dark);padding:11px;border-radius:9px}.free-banner{display:inline-flex;align-items:center;gap:7px;background:#eaf7ee;color:#23663a;border:1px solid #cfe9d6;border-radius:30px;padding:8px 12px;font-size:11px;font-weight:850;margin-top:12px}.shortcode{font-size:25px;letter-spacing:4px;font-weight:950;color:var(--orange-dark);background:#fff1e5;border:1px dashed #f2b47f;border-radius:12px;padding:12px 16px;display:inline-block;margin:8px auto}.codehint{font-size:11px;color:#806c5c;line-height:1.45}.demo{font-size:10px;color:#a18e80;margin-top:12px}.logline{font-size:12px;padding:10px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:12px}.right{text-align:right}.userpill{font-size:11px;background:#fff0e4;color:#a84d0b;border-radius:30px;padding:7px 10px;font-weight:800}.modalback{position:fixed;inset:0;background:#17120fc9;z-index:20;display:none;align-items:center;justify-content:center;padding:18px}.modalback.show{display:flex}.modal{background:#fff;border-radius:18px;padding:24px;width:min(100%,440px);max-height:90vh;overflow:auto;position:relative}.x{position:absolute;right:12px;top:8px;border:0;background:none;font-size:25px;color:#777}.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#24211f;color:white;padding:12px 17px;border-radius:12px;z-index:50;font-size:12px;box-shadow:0 8px 25px #0003;display:none}.toast.show{display:block}
+
+.brand-home{border:0;background:transparent;padding:0;text-align:left;cursor:pointer;display:flex;flex-direction:column;line-height:1}.brand-home:hover .logo{opacity:.82}.auth-switch{text-align:center;font-size:13px;margin:18px 0 8px;color:#665d56}.register-panel{border-top:1px solid var(--line);margin-top:18px;padding-top:14px}.divider-title{font-size:12px;font-weight:900;color:#8b6b57;margin:12px 0}.consent-row{display:flex;align-items:flex-start;gap:9px;font-size:11px;line-height:1.5;color:#5f5751;margin-top:14px}.consent-row input{margin-top:2px;accent-color:var(--orange)}.inline-link{font-size:inherit;padding:0;text-decoration:underline}.modal-wide{width:min(100%,620px)}.privacy-copy{font-size:12px;line-height:1.65;color:#514a45}.privacy-copy p{margin:10px 0}.floating-promo{position:fixed;right:0;top:42%;z-index:15;max-width:230px;padding:13px 25px 13px 14px;border-radius:14px 0 0 14px;background:#292522;color:#fff;box-shadow:0 6px 22px #0002;font-size:11px;line-height:1.45;font-weight:650}.floating-promo b{color:#ffad72}.promo-dot{color:#6bd28b;margin-right:5px}.promo-close{position:absolute;right:5px;top:3px;background:transparent;border:0;color:#ddd;font-size:18px;line-height:1}.floating-promo.hidden{display:none!important}
+
+/* Estilos para el mapa */
+#mapContainer{width:100%;height:380px;border-radius:16px;border:1px solid var(--line);margin-top:15px;z-index:1}
+.map-popup{font-size:12px;text-align:center}.map-popup b{color:var(--orange-dark);font-size:13px;display:block}
+.field-error{font-size:11px;color:var(--red);margin-top:4px;font-weight:700;display:none}
+
+/* Tarjetas de Selección de Planes */
+.plan-card{border:2px solid var(--line);border-radius:14px;padding:16px;text-align:center;cursor:pointer;transition:all .2s ease;background:#fff}
+.plan-card:hover,.plan-card.selected{border-color:var(--orange);background:#fff9f4}
+.plan-card h4{margin:0 0 6px;font-size:15px}
+.plan-card .price{font-size:20px;font-weight:950;color:var(--orange-dark);margin:6px 0}
+.plan-card p{font-size:11px;color:var(--muted);margin:0}
+
+@media(max-width:780px){nav{display:none}.hero-inner{grid-template-columns:1fr}.hero-art{min-height:160px}.cards{grid-template-columns:repeat(2,1fr)}.steps{grid-template-columns:1fr}.grid2{grid-template-columns:1fr}.grid3{grid-template-columns:1fr 1fr}.container{padding:22px 16px}.hero{padding:35px 17px}.nav{padding:12px 16px}.navright .location{display:none}}
+@media(max-width:480px){.cards{grid-template-columns:1fr}.grid3{grid-template-columns:1fr}.sectionhead{align-items:start;flex-direction:column}.footerin{align-items:flex-start;flex-direction:column}.search{flex-direction:column}.cardvisual{height:120px}}
+</style></head>
+<body>
+<header><div class="nav"><button class="brand brand-home" onclick="showView('home')" aria-label="Ir a Explorar"><span class="logo"><span>Cuponera</span><span class="offword">f</span><span class="offword">.</span></span><span class="tagline">descubre <b>·</b> ahorra <b>·</b> disfruta</span></button><nav id="mainNav"><a href="#" onclick="showView('home');return false">Explorar</a><a href="#mapa" onclick="showView('home');setTimeout(()=>document.getElementById('mapa').scrollIntoView(),50);return false">Mapa de Comercios</a><a href="#como" onclick="showView('home');setTimeout(()=>document.getElementById('como').scrollIntoView(),50);return false">Cómo funciona</a></nav><div class="navright" id="navRightContainer"><span class="location muted">📍 Quito, Ecuador</span><button class="btn secondary small" onclick="openClientAccount()">Mi cuenta</button><button class="btn small" onclick="showView('merchantLogin')">Acceso comercios</button></div></div></header>
+<main>
+<section id="homeView" class="view">
+<div class="hero"><div class="hero-inner"><div><div class="eyebrow">Beneficios para disfrutar más</div><h1>Descubre.<br><em>Ahorra.</em><br>Disfruta.</h1><p>Encuentra restaurantes seleccionados en Quito, aprovecha promociones especiales y presenta tu cupón digital al momento de pagar.</p><div class="search"><input id="searchInput" placeholder="Busca hamburguesas, pizza, café..."><button class="btn" onclick="filterCards()">Buscar</button></div></div><div class="hero-art"><span>🍔🍕☕</span></div></div></div>
+<div class="container" id="offers"><div class="sectionhead"><div><div class="eyebrow">OFERTAS CERCA DE TI</div><h2>Tu próximo lugar favorito</h2><p class="sub">Comercios aliados y descuentos para disfrutar en persona.</p></div></div><div class="categories"><button class="chip active" data-cat="all" onclick="setCat(this)">Todos</button><button class="chip" data-cat="burger" onclick="setCat(this)">🍔 Hamburguesas</button><button class="chip" data-cat="pizza" onclick="setCat(this)">🍕 Pizza</button><button class="chip" data-cat="cafe" onclick="setCat(this)">☕ Cafeterías</button><button class="chip" data-cat="dessert" onclick="setCat(this)">🍰 Postres</button></div><div class="cards" id="cards"></div><p id="empty" class="muted hidden">No encontramos promociones con esa búsqueda.</p></div>
+
+<!-- SECCIÓN DEL MAPA EN QUITO -->
+<div class="container" id="mapa" style="padding-top:10px;">
+  <div class="sectionhead">
+    <div>
+      <div class="eyebrow">MAPA INTERACTIVO</div>
+      <h2>Comercios aliados en Quito Norte</h2>
+      <p class="sub">Explora los locales cercanos a los Parques Bicentenario y La Carolina.</p>
+    </div>
+  </div>
+  <div id="mapContainer"></div>
+</div>
+
+<div class="how" id="como"><div class="container" style="padding-top:0;padding-bottom:0"><div class="eyebrow">Así de sencillo</div><h2>¿Cómo funciona?</h2><p class="sub">Tu descuento está a solo tres pasos.</p></div><div class="steps"><div class="step"><div class="num">1</div><h3>Explora</h3><p>Descubre restaurantes, sucursales y descuentos, y revisa las condiciones de cada promo.</p></div><div class="step"><div class="num">2</div><h3>Obtén tu cupón</h3><p>Pulsa «Obtener cupón», inicia sesión o regístrate, y Cuponeraf te genera un código QR con tu promoción.</p></div><div class="step"><div class="num">3</div><h3>Canjea y disfruta</h3><p>Presenta el QR en el restaurante y disfruta tu descuento. ¡Así de fácil!</p></div></div></div>
+</section>
+<section id="clientLoginView" class="view hidden"><div class="container"><div class="authbox"><div class="panel"><div class="authhead"><div class="brand"><div class="logo"><span>Cuponera</span><span class="offword">f</span><span class="offword">.</span></div><div class="tagline">cuenta cliente</div></div><h2>Accede a tu cuenta</h2><p class="sub"><b>Inicia sesión o crea tu cuenta para obtener tu cupón.</b> </p></div><form id="clientLoginForm" onsubmit="clientLogin(event)"><div class="formrow"><label for="clientUserPage">Correo electrónico</label><input class="field" id="clientUserPage" type="email" required value="cliente@demo.com" autocomplete="username"></div><div class="formrow"><label for="clientPassPage">Contraseña</label><input class="field" id="clientPassPage" type="password" required value="cliente" autocomplete="current-password"></div><button class="btn" style="width:100%">Iniciar sesión</button></form><div class="auth-switch">¿Todavía no tienes cuenta? <button class="linkbtn" onclick="toggleClientRegister(true)">Regístrate</button></div>
+<div id="clientRegisterPanel" class="register-panel hidden">
+  <div class="divider-title">Crear cuenta</div>
+  <form id="clientRegisterForm" onsubmit="registerClientStep1(event)">
+    <div class="grid2">
+      <div class="formrow"><label for="regFirstName">Nombre</label><input class="field" id="regFirstName" required maxlength="60" autocomplete="given-name"></div>
+      <div class="formrow"><label for="regLastName">Apellido</label><input class="field" id="regLastName" required maxlength="60" autocomplete="family-name"></div>
+    </div>
+    <div class="formrow"><label for="regBirth">Fecha de nacimiento</label><input class="field" id="regBirth" type="date" required max="2026-11-05" autocomplete="bday"></div>
+    <div class="formrow">
+      <label for="regEmail">Correo electrónico</label>
+      <input class="field" id="regEmail" type="email" required maxlength="120" autocomplete="email" onblur="validateEmailOnBlur(this, 'regEmailErr')">
+      <div id="regEmailErr" class="field-error">Ingresa un correo válido (evita correos genéricos o de prueba).</div>
+    </div>
+    <div class="formrow"><label for="regPhone">Celular <span class="muted">(opcional)</span></label><input class="field" id="regPhone" type="tel" maxlength="25" placeholder="Ej. 099 123 4567" autocomplete="tel"></div>
+    <div class="formrow"><label for="regPassword">Contraseña</label><input class="field" id="regPassword" type="password" required minlength="8" autocomplete="new-password" placeholder="Mínimo 8 caracteres"></div>
+    <div class="formrow">
+      <label for="regPassword2">Confirmar contraseña</label>
+      <input class="field" id="regPassword2" type="password" required minlength="8" autocomplete="new-password" oninput="validatePasswordMatch()">
+      <div id="regPassMatchErr" class="field-error">Las contraseñas no coinciden.</div>
+    </div>
+    <label class="consent-row"><input id="privacyConsent" type="checkbox" required><span>He leído y acepto la <button type="button" class="linkbtn inline-link" onclick="openPrivacy()">Política de Protección de Datos Personales</button> y autorizo el tratamiento de mis datos para gestionar mi cuenta y los cupones.</span></label>
+    <button class="btn" style="width:100%;margin-top:15px">Continuar al siguiente paso →</button>
+  </form>
+  <p class="auth-switch">¿Ya tienes cuenta? <button class="linkbtn" onclick="toggleClientRegister(false)">Iniciar sesión</button></p>
+</div>
+<button class="linkbtn" onclick="showView('home')">← Volver a promociones</button></div></div></div></section>
+
+<!-- SECCIÓN VISTA CLIENTE -->
+<section id="clientView" class="view hidden"><div class="container"><div class="sectionhead"><div><div class="eyebrow">Mi Cuenta</div><h2>Mis cupones</h2><p class="sub" id="clientWelcome"></p></div></div><div class="notice blue">Tu cupón es de un solo uso. Muestra el QR en el comercio para canjearlo.</div><div id="myCoupons" class="cards" style="margin-top:18px"></div></div></section>
+
+<!-- SECCIÓN ACCESO COMERCIOS -->
+<section id="merchantLoginView" class="view hidden"><div class="container"><div class="authbox"><div class="panel"><div class="authhead"><div class="brand"><div class="logo"><span>Cuponera</span><span class="offword">f</span><span class="offword">.</span></div><div class="tagline"></div></div><h2>Acceso para comercios</h2></div><form onsubmit="merchantLogin(event)"><div class="formrow"><label for="merchantUser">Usuario</label><input class="field" id="merchantUser" autocomplete="username" required placeholder="Usuario del comercio"></div><div class="formrow"><label for="merchantPass">Contraseña</label><input class="field" id="merchantPass" type="password" autocomplete="current-password" required placeholder="Contraseña"></div><button class="btn" style="width:100%">Iniciar sesión</button></form><div class="auth-switch">¿Tienes un comercio? <button class="linkbtn" onclick="openMerchantRequest()">Quiero ser comercio socio</button></div><p class="demo">¿Aún no formas parte de Cuponeraf? Cuéntanos sobre tu negocio. Revisaremos tu solicitud y nos pondremos en contacto contigo.</p><button class="linkbtn" onclick="showView('home')">← Volver a promociones</button></div></div></div></section>
+
+<!-- SECCIÓN PORTAL COMERCIO -->
+<section id="merchantView" class="view hidden"><div class="container"><div class="sectionhead"><div><div class="eyebrow">Portal del comercio</div><h2 id="merchantTitle">Burger House</h2><p class="sub">Valida cupones y consulta la actividad de tu establecimiento.</p></div></div><div class="grid3" id="merchantMetrics"></div><div class="grid2" style="margin-top:17px;align-items:start"><div class="panel"><h2>Validar cupón</h2><p class="sub">Escanea el QR o escribe el código de 5 caracteres.</p><div class="scannerbox"><div class="scannericon">▦</div><b>Escáner de cupones</b><p class="sub" style="margin:0">Permite el acceso a la cámara o introduce el código manualmente.</p><div id="reader" style="width:100%;max-width:420px;margin:auto"></div><div class="scanner-actions"><button class="btn" onclick="startScanner()">📷 Activar cámara</button><button class="btn secondary" onclick="stopScanner()">Detener cámara</button></div><div style="max-width:430px;margin:0 auto;width:100%;text-align:left"><label for="manualToken" style="display:block;font-size:12px;font-weight:800;margin:0 0 7px">Código corto del cupón</label><div style="display:flex;gap:7px"><input class="field" id="manualToken" placeholder="Ejemplo: L3413" maxlength="5" autocapitalize="characters"><button class="btn secondary" onclick="manualValidate()">Validar</button></div><p class="codehint">Si el cliente no puede mostrar el QR, escribe únicamente la letra y los cuatro números que aparecen en su cupón.</p></div><div id="scanResult"></div></div><div class="notice" style="margin-top:12px">Importante: primero se registra la lectura. Si el cupón es válido para este comercio, el empleado debe pulsar <b>Confirmar canje</b>. Un segundo intento será rechazado si ya fue utilizado. El código corto facilita la validación manual. Cada cupón puede utilizarse una sola vez.</div></div><div class="panel"><h2>Actividad reciente</h2><p class="sub">Lecturas y canjes de tu comercio, con fecha y hora.</p><div id="merchantActivity"></div></div></div></div></section>
+
+<!-- ADMINISTRADOR -->
+<section id="adminLoginView" class="view hidden"><div class="container"><div class="authbox"><div class="panel"><div class="authhead"><div class="brand"><div class="logo"><span>Cuponera</span><span class="offword">f</span><span class="offword">.</span></div></div><h2>Administrador</h2></div><form onsubmit="adminLogin(event)"><div class="formrow"><label>Usuario</label><input class="field" id="adminUser" required></div><div class="formrow"><label>Contraseña</label><input class="field" id="adminPass" type="password" required></div><button class="btn" style="width:100%">Ingresar</button></form></div></div></div></section>
+<section id="adminView" class="view hidden"><div class="container"><div class="sectionhead"><div><div class="eyebrow">Control central</div><h2>Administración Cuponeraf</h2><p class="sub">Visibilidad global de cupones, lecturas, intentos rechazados y canjes.</p></div></div><div class="grid3" id="adminMetrics"></div><div class="tabs" style="margin-top:20px"><button class="chip active" onclick="adminTab('scans',this)">Lecturas y validaciones</button><button class="chip" onclick="adminTab('coupons',this)">Todos los cupones</button><button class="chip" onclick="adminTab('merchants',this)">Comercios</button><button class="chip" onclick="adminTab('requests',this)">Solicitudes de comercios</button></div><div class="panel" id="adminContent"></div></div></section>
+</main>
+
+<footer><div class="footerin"><div class="brand"><div class="logo" style="color:white">Cuponera<span style="color:#ff9a52">f.</span></div><div class="tagline" style="color:#e9c8ad">descubre · ahorra · disfruta</div></div><p>© 2026 Cuponeraf · descubre · ahorra · disfruta</p><button class="linkbtn" style="color:#ffc08e" onclick="showView('adminLogin')">Administrador</button></div></footer>
+
+<!-- MODAL COMERCIO SOCIO CON PROTECCIÓN DE DATOS -->
+<div class="modalback" id="merchantRequestModal"><div class="modal modal-wide"><button class="x" onclick="closeMerchantRequest()" aria-label="Cerrar">×</button><div class="eyebrow">Crezcamos juntos</div><h2>Quiero ser comercio socio</h2><p class="sub">Cuéntanos sobre tu establecimiento. Revisaremos la información y nos pondremos en contacto contigo.</p><form id="merchantRequestForm" onsubmit="submitMerchantRequest(event)"><div class="formrow"><label for="bizName">Nombre del comercio</label><input class="field" id="bizName" required maxlength="120"></div><div class="grid2"><div class="formrow"><label for="bizEmail">Correo electrónico</label><input class="field" id="bizEmail" type="email" required maxlength="120" onblur="validateEmailOnBlur(this, 'bizEmailErr')"><div id="bizEmailErr" class="field-error">Ingresa un correo válido (evita correos genéricos o de prueba).</div></div><div class="formrow"><label for="bizPhone">Celular</label><input class="field" id="bizPhone" type="tel" required maxlength="25"></div></div><div class="formrow"><label for="bizAddress">Dirección del establecimiento</label><input class="field" id="bizAddress" required maxlength="220" placeholder="Calle, sector y ciudad"></div><div class="divider-title">Redes sociales <span class="muted">(opcionales)</span></div><div class="formrow"><label for="bizInstagram">Instagram</label><input class="field" id="bizInstagram" type="url" placeholder="https://instagram.com/tucomercio"></div><div class="formrow"><label for="bizTiktok">TikTok</label><input class="field" id="bizTiktok" type="url" placeholder="https://tiktok.com/@tucomercio"></div><div class="formrow"><label for="bizFacebook">Facebook</label><input class="field" id="bizFacebook" type="url" placeholder="https://facebook.com/tucomercio"></div><label class="consent-row"><input id="merchantPrivacyConsent" type="checkbox" required><span>He leído y acepto la <button type="button" class="linkbtn inline-link" onclick="openPrivacy()">Política de Protección de Datos Personales</button> y autorizo el tratamiento de datos para la gestión comercial.</span></label><button class="btn" style="width:100%;margin-top:14px">Enviar solicitud</button></form></div></div>
+
+<!-- MODAL POLÍTICA PRIVACIDAD -->
+<div class="modalback" id="privacyModal"><div class="modal modal-wide"><button class="x" onclick="closePrivacy()" aria-label="Cerrar">×</button><div class="eyebrow">Cuponeraf</div><h2>Política de Protección de Datos Personales</h2><div class="privacy-copy"><p><b>1. Responsable.</b> Cuponeraf, como responsable de esta plataforma, tratará los datos personales que proporciones al registrarte o solicitar una afiliación comercial. Antes de habilitar el servicio definitivo se publicarán los datos de identificación y contacto del responsable para que puedas ejercer tus derechos.</p><p><b>2. Datos tratados.</b> Para cuentas de clientes: nombres, apellidos, fecha de nacimiento, correo electrónico y, si decides proporcionarlo, número de celular. Para solicitudes de comercios: nombre comercial, correo, celular, dirección y enlaces a redes sociales que decidas compartir.</p><p><b>3. Finalidades.</b> Crear y administrar cuentas; identificar al usuario; emitir, mostrar y gestionar cupones; comunicar información operativa sobre cupones y solicitudes; evaluar posibles comercios socios y contactar a sus representantes. No se solicitarán datos que no sean necesarios para estas finalidades.</p><p><b>4. Base y consentimiento.</b> El tratamiento se realizará conforme a la Ley Orgánica de Protección de Datos Personales del Ecuador y su normativa aplicable. Cuando corresponda, se utilizará tu consentimiento libre, específico, informado e inequívoco, que puedes retirar sin efecto retroactivo sobre tratamientos anteriores legítimos.</p><p><b>5. Conservación y seguridad.</b> Los datos se conservarán durante el tiempo necesario para las finalidades descritas y para atender obligaciones legales o reclamaciones. Se aplicarán medidas razonables de seguridad y acceso limitado. No se venderán tus datos personales.</p><p><b>6. Derechos.</b> Puedes solicitar acceso, rectificación y actualización, eliminación, oposición, portabilidad, suspensión del tratamiento y retirar tu consentimiento, de acuerdo con los requisitos y excepciones legales. También puedes presentar una reclamación ante la Superintendencia de Protección de Datos Personales del Ecuador.</p><p><b>7. Comunicaciones y terceros.</b> Los datos podrán ser tratados por proveedores tecnológicos que presten servicios necesarios para operar la plataforma, bajo las condiciones y garantías que correspondan. No se utilizarán para publicidad de terceros ajena a Cuponeraf sin la base legal aplicable.</p><p><b>8. Contacto y cambios.</b> Se habilitará un canal de contacto del responsable para solicitudes de privacidad. Esta política podrá actualizarse; se informarán los cambios relevantes y, cuando la ley lo exija, se solicitará nuevamente el consentimiento.</p><p class="notice">Esta política es una versión inicial para la demostración. Antes de recopilar datos reales, completa la identificación y el correo de contacto del responsable, define plazos de conservación y proveedores/transferencias aplicables, y realiza una revisión legal de cumplimiento.</p></div></div></div>
+
+<!-- MODAL PASO ADICIONAL: PLANES DE SUSCRIPCIÓN Y PAGO -->
+<div class="modalback" id="paymentModal"><div class="modal modal-wide"><button class="x" onclick="closePaymentModal()">×</button><div class="eyebrow">Tu información se ha registrado</div><h2>Paso final: Elige tu plan</h2><p class="sub">A continuación procedemos con la activación de tu plan suscrito.</p>
+<div class="grid3" style="margin-bottom:15px">
+  <div class="plan-card selected" id="cardPlanFree" onclick="selectPlan('free')">
+    <h4>Plan Gratis</h4>
+    <div class="price">$0</div>
+    <p>5 cupones disponibles</p>
+  </div>
+  <div class="plan-card" id="cardPlanMonthly" onclick="selectPlan('monthly')">
+    <h4>Plan Mensual</h4>
+    <div class="price">$2.99</div>
+    <p>Cupones ilimitados</p>
+  </div>
+  <div class="plan-card" id="cardPlanAnnual" onclick="selectPlan('annual')">
+    <h4>Plan Anual</h4>
+    <div class="price">$19.99</div>
+    <p>Duración de 1 año (Acceso total)</p>
+  </div>
+</div>
+
+<div id="paymentDetailsBox" class="panel hidden" style="background:#fffaf6;border-color:#f4dfc8;text-align:center">
+  <div class="eyebrow">PAGOS POR TRANSFERENCIA</div>
+  <h3 style="margin:5px 0">Escanea el QR para realizar tu pago</h3>
+  <p class="sub" style="margin-bottom:10px">Banco Pichincha · Cta. Corriente No. 2100849201 · Cuponeraf S.A.</p>
+  <div style="background:#fff;padding:12px;display:inline-block;border-radius:12px;border:1px solid var(--line)">
+    <!-- Foto del QR de pago -->
+    <svg width="150" height="150" viewBox="0 0 100 100" style="display:block;margin:auto">
+      <rect width="100" height="100" fill="#fff"/>
+      <path d="M10 10h30v30h-30zM60 10h30v30h-30zM10 60h30v30h-30z" fill="#252525"/>
+      <path d="M15 15h20v20h-20zM65 15h20v20h-20zM15 65h20v20h-20z" fill="#fff"/>
+      <path d="M20 20h10v10h-10zM70 20h10v10h-10zM20 70h10v10h-10z" fill="#f47721"/>
+      <path d="M45 10h10v30h-10zM10 45h30v10h-30zM50 50h40v40h-40z" fill="#252525"/>
+    </svg>
+  </div>
+  <p class="codehint" style="margin-top:10px">Una vez realizada la transferencia, haz clic en el botón inferior para validar tu cuenta.</p>
+</div>
+
+<button class="btn" style="width:100%;margin-top:18px" onclick="confirmRegistrationAndPlan()">Finalizar registro</button>
+</div></div>
+
+<!-- NUEVO MODAL DE NOTIFICACIÓN DE REGISTRO / PAGO CLIENTE -->
+<div class="modalback" id="clientSuccessModal"><div class="modal" style="text-align:center"><button class="x" onclick="closeClientSuccessModal()">×</button><div class="eyebrow">¡Registro exitoso!</div><h2 style="margin:12px 0">Felicidades, se ha enviado tu pago</h2><p class="sub" style="margin-bottom:20px">Tu cuenta estará activa en 30 minutos mientras validamos la información.</p><button class="btn" style="width:100%" onclick="closeClientSuccessModal()">Entendido</button></div></div>
+
+<!-- NUEVO MODAL DE NOTIFICACIÓN DE SOLICITUD DE COMERCIO -->
+<div class="modalback" id="merchantSuccessModal"><div class="modal" style="text-align:center"><button class="x" onclick="closeMerchantSuccessModal()">×</button><div class="eyebrow">Solicitud enviada</div><h2 style="margin:12px 0">¡Gracias por tu interés!</h2><p class="sub" style="margin-bottom:20px">Gracias por tener interés en Cuponeraf, la cuponera digital en Quito. Ahora revisaremos tu solicitud y te enviaremos una respuesta en 5 días para analizar y tener colaboración sobre Cuponeraf.</p><button class="btn" style="width:100%" onclick="closeMerchantSuccessModal()">Entendido</button></div></div>
+
+<div class="floating-promo" id="floatingPromo"><button class="promo-close" onclick="hideFloatingPromo()" aria-label="Ocultar aviso">×</button><span class="promo-dot">●</span><span>Registro gratuito hasta el <b>31 de diciembre de 2026</b>. Desde el 1 de enero de 2027 se aplicará una tarifa mínima.</span></div>
+
+<div class="modalback" id="couponModal"><div class="modal"><button class="x" onclick="closeModal()">×</button><div class="eyebrow">Tu beneficio está listo</div><h2 id="couponShop"></h2><p id="couponOffer" class="muted"></p><div class="couponbox"><img id="couponQr" class="qr" alt="QR del cupón"><div class="couponcode" id="couponCode"></div></div><p class="sub">Muestra este QR al empleado del establecimiento. El cupón se marcará como utilizado solo cuando el comercio confirme el canje.</p><button class="btn" style="width:100%" onclick="closeModal()">Entendido</button><div class="demo">Código QR de demostración. No representa todavía un cupón respaldado por servidor.</div></div></div><div class="toast" id="toast"></div>
+
+<script>
+const DEMO={client:{user:'cliente',pass:'cliente'},merchant:{user:'comercio',pass:'comercio',id:'m1',name:'Burger House',branch:'La Carolina'},admin:{user:'admin',pass:'admin'}};
+const offers=[
+{id:'p1',merchantId:'m1',shop:'Burger House',branch:'La Carolina',category:'burger',discount:'30% OFF',offer:'30% de descuento en hamburguesas seleccionadas',emoji:'🍔',rating:'4.8',expires:'30 nov. 2026',description:'Hamburguesas artesanales y papas crocantes.'},
+{id:'p2',merchantId:'m2',shop:'Pizza Nostra',branch:'Iñaquito',category:'pizza',discount:'2x1',offer:'2x1 en pizzas medianas',emoji:'🍕',rating:'4.7',expires:'25 nov. 2026',description:'Dos pizzas medianas por el precio de una.'},
+{id:'p3',merchantId:'m3',shop:'Café Aroma',branch:'González Suárez',category:'cafe',discount:'20% OFF',offer:'20% de descuento en desayunos y brunch',emoji:'☕',rating:'4.9',expires:'30 nov. 2026',description:'Café de especialidad, desayunos y brunch.'},
+{id:'p4',merchantId:'m4',shop:'Dulce Momento',branch:'El Batán',category:'dessert',discount:'25% OFF',offer:'25% de descuento en postres seleccionados',emoji:'🍰',rating:'4.6',expires:'28 nov. 2026',description:'Pasteles, cheesecakes y postres para compartir.'},
+{id:'p5',merchantId:'m5',shop:'La Parrilla Urbana',branch:'Centro Norte',category:'burger',discount:'15% OFF',offer:'15% de descuento en sándwiches',emoji:'🥪',rating:'4.5',expires:'20 nov. 2026',description:'Sándwiches y sabores a la parrilla.'},
+{id:'p6',merchantId:'m6',shop:'Matcha & Miel',branch:'La Floresta',category:'cafe',discount:'2x1',offer:'2x1 en bebidas seleccionadas',emoji:'🥐',rating:'4.8',expires:'30 nov. 2026',description:'Bebidas especiales y repostería artesanal.'}
+];
+
+const mapShops = [
+  {name:'Burger House', cat:'🍔 Hamburguesas', lat:-0.1742, lng:-78.4845, address:'Av. Shyris y NNUU (La Carolina)'},
+  {name:'Pizza Nostra', cat:'🍕 Pizza', lat:-0.1710, lng:-78.4870, address:'Av. Amazonas y Japón'},
+  {name:'Café Aroma', cat:'☕ Cafetería', lat:-0.1790, lng:-78.4820, address:'Av. 6 de Diciembre y Orellana'},
+  {name:'Dulce Momento', cat:'🍰 Repostería', lat:-0.1660, lng:-78.4800, address:'Av. Gaspar de Villarroel'},
+  {name:'La Parrilla Urbana', cat:'🥩 Carnes y Asados', lat:-0.1755, lng:-78.4890, address:'Av. República y Eloy Alfaro'},
+  {name:'Matcha & Miel', cat:'🥐 Repostería & Café', lat:-0.1820, lng:-78.4850, address:'Av. Coruña y Whymper'},
+  {name:'Bicentenario Tacos', cat:'🌮 Comida Mexicana', lat:-0.1480, lng:-78.4880, address:'Av. de la Prensa y Curaray'},
+  {name:'Quito Brew Co.', cat:'🍺 Cervecería Artesanal', lat:-0.1550, lng:-78.4860, address:'Av. Amazonas cerca al Parque Bicentenario'},
+  {name:'Sushi Express', cat:'🍣 Sushi & Asian', lat:-0.1690, lng:-78.4830, address:'Calle Portugal y Shyris'},
+  {name:'Donas & Bagels', cat:'🍩 Cafetería', lat:-0.1760, lng:-78.4805, address:'Calle Moscú y República de El Salvador'},
+  {name:'Wok Norte', cat:'🥢 Comida Asiática', lat:-0.1520, lng:-78.4900, address:'Av. La Prensa y Chiriboga'},
+  {name:'La Crepería', cat:'🥞 Postres', lat:-0.1725, lng:-78.4855, address:'Av. República de El Salvador'},
+  {name:'Empanadas El Sol', cat:'🥟 Comida Rápida', lat:-0.1450, lng:-78.4895, address:'Sector Florida / Bicentenario Norte'},
+  {name:'Heladería Tradición', cat:'🍦 Heladería', lat:-0.1630, lng:-78.4850, address:'Av. 10 de Agosto y Tomás de Berlanga'},
+  {name:'Tacos & Burritos', cat:'🌮 Mexicana', lat:-0.1785, lng:-78.4790, address:'Av. 6 de Diciembre y Bellavista'},
+  {name:'Chicken & Grill', cat:'🍗 Pollos a la Brasa', lat:-0.1580, lng:-78.4835, address:'Av. Zamora y de la Prensa'},
+  {name:'Green Salad Bar', cat:'🥗 Comida Saludable', lat:-0.1748, lng:-78.4828, address:'Calle Luxemburgo y Holanda'},
+  {name:'Pasta Mia', cat:'🍝 Italiana', lat:-0.1675, lng:-78.4815, address:'Av. Eloy Alfaro y de los Granados'}
+];
+
+let activeCat='all',currentUser=null,html5Qr=null,pendingCoupon=null,leafletMap=null,selectedPlan='free',pendingUserData=null;
+const get=(k,d=[])=>{try{return JSON.parse(localStorage.getItem('cuponeraf_demo_v3_'+k))??d}catch{return d}};
+const put=(k,v)=>localStorage.setItem('cuponeraf_demo_v3_'+k,JSON.stringify(v));
+let coupons=get('coupons',[]),events=get('events',[]),registeredUsers=get('users',[]),merchantRequests=get('merchantRequests',[]);
+function save(){put('coupons',coupons);put('events',events);put('users',registeredUsers);put('merchantRequests',merchantRequests)}
+function uid(){return 'CO-'+(crypto.randomUUID?crypto.randomUUID():Math.random().toString(36).slice(2)+Date.now()).replaceAll('-','').slice(0,24).toUpperCase()}
+function makeShortCode(){const letters='ABCDEFGHJKLMNPQRSTUVWXYZ';let code;do{const bytes=new Uint8Array(5);if(window.crypto?.getRandomValues)crypto.getRandomValues(bytes);else for(let i=0;i<5;i++)bytes[i]=Math.floor(Math.random()*256);code=letters[bytes[0]%letters.length]+String((bytes[1]*256+bytes[2])%10000).padStart(4,'0')}while(coupons.some(c=>c.shortCode===code));return code}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function toast(t){const x=document.getElementById('toast');x.textContent=t;x.classList.add('show');setTimeout(()=>x.classList.remove('show'),3500)}
+
+// Validador de correo corregido para permitir hotmail, outlook y gmail correctamente
+function isValidRealEmail(email) {
+  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if(!re.test(email)) return false;
+  
+  const lower = email.toLowerCase().trim();
+  const fakeDomains = ['correo.com', 'ejemplo.com', 'test.com', 'prueba.com', 'falso.com', 'domain.com', 'mailinator.com', 'yopmail.com'];
+  const fakeUsers = ['correo', 'usuario', 'user', 'test', 'prueba', 'admin', 'cliente', 'asdf'];
+  
+  const parts = lower.split('@');
+  const user = parts[0];
+  const domain = parts[1];
+  
+  if (fakeDomains.includes(domain)) return false;
+  if (fakeUsers.includes(user)) return false;
+  
+  return true;
+}
+
+function validateEmailOnBlur(inputEl, errElId) {
+  const val = inputEl.value.trim();
+  const errBox = document.getElementById(errElId);
+  if (val && !isValidRealEmail(val)) {
+    if(errBox) errBox.style.display = 'block';
+  } else {
+    if(errBox) errBox.style.display = 'none';
+  }
+}
+
+// Validación inmediata de contraseñas al reescribir
+function validatePasswordMatch() {
+  const p1 = document.getElementById('regPassword').value;
+  const p2 = document.getElementById('regPassword2').value;
+  const errBox = document.getElementById('regPassMatchErr');
+  if(p2 && p1 !== p2) {
+    if(errBox) errBox.style.display = 'block';
+  } else {
+    if(errBox) errBox.style.display = 'none';
+  }
+}
+
+function updateNavHeader() {
+  const container = document.getElementById('navRightContainer');
+  const mainNav = document.getElementById('mainNav');
+  if(!container) return;
+  
+  if(!currentUser || currentUser.role === 'client') {
+    if(mainNav) mainNav.style.display = 'flex';
+  } else {
+    if(mainNav) mainNav.style.display = 'none';
+  }
+
+  if(!currentUser) {
+    container.innerHTML = `<span class="location muted">📍 Quito, Ecuador</span><button class="btn secondary small" onclick="openClientAccount()">Mi cuenta</button><button class="btn small" onclick="showView('merchantLogin')">Acceso comercios</button>`;
+  } else if(currentUser.role === 'client') {
+    container.innerHTML = `<span class="location muted">📍 Quito</span><button class="btn secondary small" onclick="showView('client')">👤 Mi cuenta (${esc(currentUser.name.split(' ')[0])})</button><button class="btn small red" onclick="logout()">Cerrar sesión</button>`;
+  } else if(currentUser.role === 'merchant') {
+    container.innerHTML = `<span class="location muted">📍 Quito</span><button class="btn secondary small" onclick="showView('merchant')">🏪 ${esc(currentUser.name)}</button><button class="btn small red" onclick="logout()">Cerrar sesión</button>`;
+  } else if(currentUser.role === 'admin') {
+    container.innerHTML = `<button class="btn secondary small" onclick="showView('admin')">⚙️ Admin</button><button class="btn small red" onclick="logout()">Cerrar sesión</button>`;
+  }
+}
+
+function showView(name){
+  document.querySelectorAll('.view').forEach(v=>v.classList.add('hidden'));
+  const el=document.getElementById(name+'View');
+  if(el)el.classList.remove('hidden');
+  window.scrollTo({top:0,behavior:'smooth'});
+  
+  if(name==='home') {
+    initMap();
+  }
+  if(name==='merchant')renderMerchant();
+  if(name==='admin')renderAdmin('scans');
+  if(name==='client')renderClient();
+  updateNavHeader();
+}
+
+function initMap(){
+  if(leafletMap) return;
+  const mapElem = document.getElementById('mapContainer');
+  if(!mapElem) return;
+
+  leafletMap = L.map('mapContainer').setView([-0.1650, -78.4840], 13);
+  
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '© OpenStreetMap'
+  }).addTo(leafletMap);
+
+  mapShops.forEach(s => {
+    L.marker([s.lat, s.lng]).addTo(leafletMap)
+      .bindPopup(`<div class="map-popup"><b>${s.name}</b><span>${s.cat}</span><br><small>${s.address}</small></div>`);
+  });
+}
+
+function setCat(b){document.querySelectorAll('.chip[data-cat]').forEach(x=>x.classList.remove('active'));b.classList.add('active');activeCat=b.dataset.cat;filterCards()}
+function filterCards(){const q=(document.getElementById('searchInput').value||'').toLowerCase();let n=0;document.querySelectorAll('.offer-card').forEach(c=>{const ok=(activeCat==='all'||c.dataset.cat===activeCat)&&(!q||c.innerText.toLowerCase().includes(q));c.classList.toggle('hidden',!ok);if(ok)n++});document.getElementById('empty').classList.toggle('hidden',n>0)}
+function renderOffers(){document.getElementById('cards').innerHTML=offers.map(o=>`<article class="card offer-card" data-cat="${o.category}"><div class="cardvisual"><span class="off">${o.discount}</span>${o.emoji}</div><div class="cardbody"><div class="cardtitle"><h3>${o.shop}</h3><span class="rating">★ ${o.rating}</span></div><p>${o.description}</p><p>📍 ${o.branch}, Quito</p><div class="cardfoot"><small>Válido hasta ${o.expires}</small><button class="btn small" onclick="claim('${o.id}')">Obtener cupón</button></div></div></article>`).join('')}
+document.getElementById('searchInput').addEventListener('input',filterCards);
+
+function toggleClientRegister(show){
+  const panel = document.getElementById('clientRegisterPanel');
+  panel.classList.toggle('hidden', !show);
+  if(show) {
+    document.getElementById('clientRegisterForm').reset();
+    document.querySelectorAll('#clientRegisterPanel .field-error').forEach(e => e.style.display = 'none');
+    document.getElementById('regFirstName').focus();
+  }
+}
+
+function openPrivacy(){document.getElementById('privacyModal').classList.add('show')}
+function closePrivacy(){document.getElementById('privacyModal').classList.remove('show')}
+
+function registerClientStep1(e){
+  e.preventDefault();
+  const first=document.getElementById('regFirstName').value.trim(),
+        last=document.getElementById('regLastName').value.trim(),
+        birth=document.getElementById('regBirth').value,
+        email=document.getElementById('regEmail').value.trim().toLowerCase(),
+        phone=document.getElementById('regPhone').value.trim(),
+        pass=document.getElementById('regPassword').value,
+        pass2=document.getElementById('regPassword2').value;
+
+  if(!isValidRealEmail(email)){
+    toast('Ingresa un correo válido.');
+    return;
+  }
+  if(pass.length<8){toast('La contraseña debe tener al menos 8 caracteres');return}
+  if(pass!==pass2){toast('Las contraseñas no coinciden');return}
+  if(!document.getElementById('privacyConsent').checked){toast('Debes aceptar la política de protección de datos');return}
+  if(registeredUsers.some(u=>u.email===email)||email===DEMO.client.email){toast('Ya existe una cuenta con ese correo');return}
+  if(!birth||new Date(birth)>new Date()){toast('Verifica la fecha de nacimiento');return}
+  
+  pendingUserData = {email,first,last,birth,phone,password:pass,createdAt:new Date().toISOString(),privacyAcceptedAt:new Date().toISOString()};
+  document.getElementById('paymentModal').classList.add('show');
+}
+
+function selectPlan(planType) {
+  selectedPlan = planType;
+  document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('selected'));
+  if(planType === 'free') document.getElementById('cardPlanFree').classList.add('selected');
+  if(planType === 'monthly') document.getElementById('cardPlanMonthly').classList.add('selected');
+  if(planType === 'annual') document.getElementById('cardPlanAnnual').classList.add('selected');
+
+  const payBox = document.getElementById('paymentDetailsBox');
+  if(planType === 'free') {
+    payBox.classList.add('hidden');
+  } else {
+    payBox.classList.remove('hidden');
+  }
+}
+
+function closePaymentModal(){
+  document.getElementById('paymentModal').classList.remove('show');
+}
+
+function closeClientSuccessModal(){
+  document.getElementById('clientSuccessModal').classList.remove('show');
+  showView('client');
+}
+
+function closeMerchantSuccessModal(){
+  document.getElementById('merchantSuccessModal').classList.remove('show');
+  showView('home');
+}
+
+function confirmRegistrationAndPlan(){
+  if(!pendingUserData) return;
+  registeredUsers.push(pendingUserData);
+  save();
+
+  closePaymentModal();
+  document.getElementById('clientUserPage').value = pendingUserData.email;
+  document.getElementById('clientPassPage').value = pendingUserData.password;
+  
+  currentUser = {
+    role:'client',
+    user: pendingUserData.email,
+    name: pendingUserData.first + ' ' + pendingUserData.last
+  };
+
+  toggleClientRegister(false);
+  document.getElementById('clientSuccessModal').classList.add('show');
+  pendingUserData = null;
+}
+
+function openMerchantRequest(){
+  document.getElementById('merchantRequestForm').reset();
+  document.querySelectorAll('#merchantRequestModal .field-error').forEach(e => e.style.display = 'none');
+  document.getElementById('merchantRequestModal').classList.add('show');
+}
+function closeMerchantRequest(){document.getElementById('merchantRequestModal').classList.remove('show')}
+
+function submitMerchantRequest(e){
+  e.preventDefault();
+  const email = document.getElementById('bizEmail').value.trim();
+  if(!isValidRealEmail(email)){
+    toast('Ingresa un correo válido.');
+    return;
+  }
+  if(!document.getElementById('merchantPrivacyConsent').checked){
+    toast('Debes aceptar la Política de Protección de Datos Personales.');
+    return;
+  }
+  const req={id:uid(),name:document.getElementById('bizName').value.trim(),email:email,phone:document.getElementById('bizPhone').value.trim(),address:document.getElementById('bizAddress').value.trim(),instagram:document.getElementById('bizInstagram').value.trim(),tiktok:document.getElementById('bizTiktok').value.trim(),facebook:document.getElementById('bizFacebook').value.trim(),status:'PENDIENTE',createdAt:new Date().toISOString()};
+  merchantRequests.unshift(req);
+  save();
+  document.getElementById('merchantRequestForm').reset();
+  closeMerchantRequest();
+  document.getElementById('merchantSuccessModal').classList.add('show');
+}
+
+function hideFloatingPromo(){document.getElementById('floatingPromo').classList.add('hidden');localStorage.setItem('cuponeraf_promo_hidden','1')}
+if(localStorage.getItem('cuponeraf_promo_hidden')==='1')document.getElementById('floatingPromo').classList.add('hidden');
+
+function openClientAccount(){if(currentUser?.role==='client'){showView('client');return}pendingCoupon=null;showView('clientLogin')}
+
+function clientLogin(e){
+  e.preventDefault();
+  const u=document.getElementById('clientUserPage').value.trim().toLowerCase(),p=document.getElementById('clientPassPage').value;
+  const account=registeredUsers.find(x=>x.email===u&&x.password===p);
+  const demoOk=(u==='cliente@demo.com'&&p===DEMO.client.pass)||(u===DEMO.client.user&&p===DEMO.client.pass);
+  if(!account&&!demoOk){toast('Correo o contraseña incorrectos');return}
+  currentUser={role:'client',user:account?account.email:DEMO.client.user,name:account?account.first+' '+account.last:'Cliente de prueba'};
+  const id=pendingCoupon;
+  pendingCoupon=null;
+  if(id){createCoupon(id)}else{showView('client');toast('Sesión iniciada')}
+}
+
+function closeModal(){document.getElementById('couponModal').classList.remove('show');document.getElementById('couponQr').classList.remove('hidden');document.getElementById('couponCode').classList.remove('hidden');document.querySelector('#couponModal .couponbox').innerHTML='<img id="couponQr" class="qr" alt="QR del cupón"><div class="couponcode" id="couponCode"></div>';document.querySelector('#couponModal .sub').classList.remove('hidden');document.querySelector('#couponModal .modal .btn[onclick="closeModal()"]')?.classList.remove('hidden')}
+function claim(id){pendingCoupon=id;if(currentUser?.role==='client'){createCoupon(id);return}showView('clientLogin');toast('Inicia sesión o regístrate para obtener tu cupón')}
+function createCoupon(id){const o=offers.find(x=>x.id===id);if(!o||currentUser?.role!=='client')return;const createdAt=new Date();const c={id:uid(),token:uid(),shortCode:makeShortCode(),promotionId:id,merchantId:o.merchantId,merchant:o.shop,branch:o.branch,offer:o.offer,discount:o.discount,client:currentUser.user,createdAt:createdAt.toISOString(),expiresAt:'2026-11-30T23:59:59',status:'ACTIVE'};coupons.push(c);save();showView('client');toast('Cupón generado correctamente') }
+function renderClient(){document.getElementById('clientWelcome').textContent='Hola, '+(currentUser?.name||'cliente')+'. Aquí puedes consultar tus cupones.';const mine=coupons.filter(c=>c.client===currentUser?.user);document.getElementById('myCoupons').innerHTML=mine.length?mine.map(c=>`<div class="panel couponbox"><span class="status ${c.status==='ACTIVE'?'s-active':c.status==='REDEEMED'?'s-redeemed':'s-expired'}">${c.status==='ACTIVE'?'DISPONIBLE':c.status==='REDEEMED'?'CANJEADO':'VENCIDO'}</span><h3>${esc(c.merchant)}</h3><p class="sub">${esc(c.offer)}</p><p class="codehint">Sucursal: ${esc(c.branch)} · Emitido: ${new Date(c.createdAt).toLocaleDateString('es-EC')}</p><div class="qrholder" id="qr-${c.id}"></div><div class="codehint">Código corto para el comercio</div><div class="shortcode">${esc(c.shortCode||'CÓDIGO ANTIGUO')}</div><p class="demo">${c.status==='ACTIVE'?'Muestra el QR o facilita este código al empleado.':c.status==='REDEEMED'?'Canjeado: '+(c.redeemedAt?new Date(c.redeemedAt).toLocaleString('es-EC'):''):'Este cupón ya venció.'}</p></div>`).join(''):'<div class="panel"><h3>Aún no tienes cupones</h3><p class="sub">Explora las promociones y obtén tu primer beneficio.</p><button class="btn" onclick="showView(\'home\')">Explorar promociones</button></div>';if(window.QRCode){mine.forEach(c=>{const el=document.getElementById('qr-'+c.id);if(el)new QRCode(el,{text:'CUPONEROFF|'+c.token,width:190,height:190,colorDark:'#252525',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M})})}else{mine.forEach(c=>{const el=document.getElementById('qr-'+c.id);if(el)el.textContent='QR no disponible. Usa el código corto de abajo.'})}}
+function merchantLogin(e){e.preventDefault();if(document.getElementById('merchantUser').value!==DEMO.merchant.user||document.getElementById('merchantPass').value!==DEMO.merchant.pass){toast('Credenciales incorrectas');return}currentUser={role:'merchant',merchantId:DEMO.merchant.id,name:DEMO.merchant.name};showView('merchant')}
+function adminLogin(e){e.preventDefault();if(document.getElementById('adminUser').value!==DEMO.admin.user||document.getElementById('adminPass').value!==DEMO.admin.pass){toast('Credenciales incorrectas');return}currentUser={role:'admin',user:'admin'};showView('admin')}
+
+function logout(){
+  stopScanner();
+  currentUser=null;
+  showView('home');
+  toast('Sesión cerrada');
+}
+
+function logEvent(token,result,detail,coupon){events.unshift({id:uid(),token,merchantId:currentUser?.merchantId||'m1',merchant:currentUser?.name||'Administrador',actor:currentUser?.user||'empleado-demo',result,detail,couponId:coupon?.id||null,at:new Date().toISOString()});save()}
+function validateToken(input){const entered=(input||'').trim().toUpperCase();if(!entered){toast('Introduce o escanea un código');return}const isShort=/^[A-Z][0-9]{4}$/.test(entered);const c=coupons.find(x=>isShort?x.shortCode===entered:x.token===entered);const eventCode=c?.shortCode||entered;if(!c){logEvent(eventCode,'NOT_FOUND','Código no reconocido',null);showScanResult('error','Código no reconocido','No encontramos un cupón con ese código. Verifica los caracteres e inténtalo nuevamente.');return}if(c.merchantId!==currentUser.merchantId){logEvent(eventCode,'WRONG_MERCHANT','Cupón de otro comercio',c);showScanResult('error','Cupón de otro comercio','Este cupón pertenece a '+esc(c.merchant)+'. No puedes validarlo desde este establecimiento.');return}if(c.status==='REDEEMED'){logEvent(eventCode,'ALREADY_REDEEMED','Cupón ya utilizado',c);showScanResult('error','Cupón ya utilizado','Este cupón fue canjeado el '+new Date(c.redeemedAt).toLocaleString('es-EC')+'. No se puede volver a utilizar.');return}if(c.status!=='ACTIVE'){logEvent(eventCode,'INACTIVE','Cupón inactivo',c);showScanResult('error','Cupón no disponible','El estado actual es '+c.status+'.');return}if(c.expiresAt&&Date.now()>new Date(c.expiresAt).getTime()){c.status='EXPIRED';save();logEvent(eventCode,'EXPIRED','Cupón vencido',c);showScanResult('error','Cupón vencido','La vigencia de este cupón terminó.');return}logEvent(eventCode,'READ_VALID','Lectura válida; pendiente de confirmación',c);pendingCoupon=c.id;showScanResult('valid','Cupón válido',`<b>${esc(c.offer)}</b><br>Comercio: ${esc(c.merchant)}<br>Cliente: ${esc(c.client)}<br>Código: <b>${esc(c.shortCode||'—')}</b><br>Emitido: ${new Date(c.createdAt).toLocaleString('es-EC')}<br><br><button class="btn green" onclick="confirmRedeem('${c.id}')">Confirmar canje</button> <button class="btn secondary small" onclick="clearScanResult()">Cancelar</button>`)}
+function showScanResult(type,title,html){const box=document.getElementById('scanResult');box.innerHTML=`<div class="result ${type==='valid'?'notice green':'notice red'}"><h3>${type==='valid'?'✓':'✕'} ${title}</h3><p>${html}</p></div>`}
+function clearScanResult(){document.getElementById('scanResult').innerHTML='';pendingCoupon=null}
+function confirmRedeem(id){const c=coupons.find(x=>x.id===id);if(!c||c.status!=='ACTIVE'){toast('El cupón ya no está disponible');clearScanResult();return}if(c.merchantId!==currentUser.merchantId){toast('Comercio no autorizado');return}c.status='REDEEMED';c.redeemedAt=new Date().toISOString();c.redeemedBy=currentUser.user||'empleado-demo';logEvent(c.shortCode||c.token,'REDEEMED','Canje confirmado',c);save();showScanResult('valid','Canje confirmado','El cupón quedó inhabilitado. El cliente ya no podrá volver a utilizarlo.');renderMerchant();toast('Canje registrado correctamente')}
+function manualValidate(){const input=document.getElementById('manualToken');validateToken(input.value);input.value=''}
+async function startScanner(){if(!currentUser||currentUser.role!=='merchant'){toast('Inicia sesión como comercio');return}if(!window.Html5Qrcode){toast('No se pudo cargar el lector QR. Usa el código manual.');return}try{if(!html5Qr)html5Qr=new Html5Qrcode('reader');await html5Qr.start({facingMode:'environment'},{fps:10,qrbox:{width:230,height:230}},decoded=>{stopScanner();const value=decoded.includes('|')?decoded.split('|').pop():decoded;document.getElementById('manualToken').value='';validateToken(value)},()=>{});toast('Cámara activada. Enfoca el QR del cliente.')}catch(e){toast('No se pudo activar la cámara. Revisa permisos y usa HTTPS o localhost.')}}
+async function stopScanner(){if(html5Qr){try{if(html5Qr.isScanning)await html5Qr.stop();}catch(e){} }}
+function renderMerchant(){const mine=coupons.filter(c=>c.merchantId===currentUser.merchantId),ev=events.filter(x=>x.merchantId===currentUser.merchantId);document.getElementById('merchantTitle').textContent=currentUser.name+' · La Carolina';document.getElementById('merchantMetrics').innerHTML=`<div class="metric"><span>Cupones canjeados</span><strong>${mine.filter(c=>c.status==='REDEEMED').length}</strong></div><div class="metric"><span>Cupones activos emitidos</span><strong>${mine.filter(c=>c.status==='ACTIVE').length}</strong></div><div class="metric"><span>Lecturas registradas</span><strong>${ev.length}</strong></div>`;document.getElementById('merchantActivity').innerHTML=ev.length?ev.slice(0,12).map(x=>`<div class="logline"><div><b>${esc(x.result)}</b><br><span class="muted">${esc(x.detail)}</span></div><div class="right muted">${new Date(x.at).toLocaleDateString('es-EC')}<br>${new Date(x.at).toLocaleTimeString('es-EC')}</div></div>`).join(''):'<p class="sub">Todavía no hay lecturas. Escanea un cupón para comenzar.</p>'}
+function renderAdmin(tab){const redeemed=coupons.filter(c=>c.status==='REDEEMED').length;document.getElementById('adminMetrics').innerHTML=`<div class="metric"><span>Cupones emitidos</span><strong>${coupons.length}</strong></div><div class="metric"><span>Canjes confirmados</span><strong>${redeemed}</strong></div><div class="metric"><span>Lecturas / intentos</span><strong>${events.length}</strong></div>`;const buttons=document.querySelectorAll('#adminView .tabs .chip');buttons.forEach(b=>b.classList.toggle('active',(tab==='scans'&&b.textContent.includes('Lecturas'))||(tab==='coupons'&&b.textContent.includes('cupones'))||(tab==='merchants'&&b.textContent.includes('Comercios'))||(tab==='requests'&&b.textContent.includes('Solicitudes'))));const el=document.getElementById('adminContent');if(tab==='scans'){el.innerHTML='<h2>Registro global de lecturas y validaciones</h2><p class="sub">Cada lectura queda registrada con fecha, hora, comercio, resultado y detalle.</p><div class="tablewrap"><table><thead><tr><th>Fecha y hora</th><th>Comercio</th><th>Usuario</th><th>Código</th><th>Resultado</th><th>Detalle</th></tr></thead><tbody>'+events.map(x=>`<tr><td>${new Date(x.at).toLocaleString('es-EC')}</td><td>${esc(x.merchant)}</td><td>${esc(x.actor)}</td><td>${esc(x.token.slice(0,15))}</td><td><span class="status ${x.result==='REDEEMED'?'s-redeemed':x.result==='READ_VALID'?'s-active':'s-rejected'}">${esc(x.result)}</span></td><td>${esc(x.detail)}</td></tr>`).join('')+'</tbody></table></div>'+(events.length?'':'<p class="sub">Aún no hay eventos registrados.</p>')}else if(tab==='coupons'){el.innerHTML='<h2>Todos los cupones</h2><div class="tablewrap"><table><thead><tr><th>Código corto</th><th>Cliente</th><th>Comercio</th><th>Creación</th><th>Estado</th><th>Canje</th></tr></thead><tbody>'+coupons.map(c=>`<tr><td>${esc(c.shortCode||c.token.slice(0,17))}</td><td>${esc(c.client)}</td><td>${esc(c.merchant)}</td><td>${new Date(c.createdAt).toLocaleString('es-EC')}</td><td><span class="status ${c.status==='ACTIVE'?'s-active':'s-redeemed'}">${c.status}</span></td><td>${c.redeemedAt?new Date(c.redeemedAt).toLocaleString('es-EC'):'—'}</td></tr>`).join('')+'</tbody></table></div>'+(coupons.length?'':'<p class="sub">Aún no se han generado cupones.</p>')}else if(tab==='requests'){el.innerHTML='<h2>Solicitudes de comercios</h2><p class="sub">Contactos interesados en formar parte de Cuponeraf.</p><div class="tablewrap"><table><thead><tr><th>Fecha</th><th>Comercio</th><th>Correo</th><th>Celular</th><th>Dirección</th><th>Redes</th></tr></thead><tbody>'+merchantRequests.map(r=>`<tr><td>${new Date(r.createdAt).toLocaleDateString('es-EC')}</td><td>${esc(r.name)}</td><td>${esc(r.email)}</td><td>${esc(r.phone)}</td><td>${esc(r.address)}</td><td>${[r.instagram,r.tiktok,r.facebook].filter(Boolean).map(esc).join('<br>')||'—'}</td></tr>`).join('')+'</tbody></table></div>'+(merchantRequests.length?'':'<p class="sub">Todavía no hay solicitudes.</p>')}else{el.innerHTML='<h2>Comercios de demostración</h2><div class="tablewrap"><table><thead><tr><th>Comercio</th><th>Sucursal</th><th>Promoción</th><th>Cuenta demo</th></tr></thead><tbody>'+offers.map(o=>`<tr><td>${o.shop}</td><td>${o.branch}</td><td>${o.discount}</td><td>${o.merchantId==='m1'?'comercio / comercio':'No habilitada en esta demo'}</td></tr>`).join('')+'</tbody></table></div>'}}
+function adminTab(tab,b){renderAdmin(tab)}
+
+renderOffers();
+initMap();
+updateNavHeader();
+</script></body></html>
