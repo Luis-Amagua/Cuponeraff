@@ -109,6 +109,7 @@ th{color:#806c5c;background:#fffaf6;font-size:9px;text-transform:uppercase;lette
 .modalback.show{display:flex}
 .modal{background:#fff;border-radius:16px;padding:20px;width:100%;max-width:400px;max-height:85vh;overflow-y:auto;position:relative}
 .modal.modal-wide{max-width:580px}
+.modal.modal-centered{text-align:center}
 .x{position:absolute;right:10px;top:6px;border:0;background:none;font-size:22px;color:#777;cursor:pointer}
 .toast{position:fixed;bottom:15px;left:50%;transform:translateX(-50%);background:#24211f;color:white;padding:10px 14px;border-radius:10px;z-index:50;font-size:11px;box-shadow:0 6px 20px #0003;display:none}
 .toast.show{display:block}
@@ -138,13 +139,11 @@ th{color:#806c5c;background:#fffaf6;font-size:9px;text-transform:uppercase;lette
 .plan-card .price{font-size:18px;font-weight:950;color:var(--orange-dark);margin:4px 0}
 .plan-card p{font-size:10px;color:var(--muted);margin:0}
 
-/* Contenedor con ojito para contraseñas */
 .password-wrapper{position:relative;display:flex;align-items:center}
 .password-wrapper input{padding-right:38px}
 .toggle-password{position:absolute;right:10px;background:none;border:0;cursor:pointer;font-size:15px;color:var(--muted);padding:4px}
 .toggle-password:hover{color:var(--ink)}
 
-/* Pantallas grandes / Computadora */
 @media(min-width:769px){
   .nav{padding:14px 22px}
   .hero{padding:48px 22px}
@@ -160,10 +159,10 @@ th{color:#806c5c;background:#fffaf6;font-size:9px;text-transform:uppercase;lette
 }
 </style></head>
 <body>
-<header><div class="nav"><button class="brand brand-home" onclick="goHome()" aria-label="Ir a Inicio"><span class="logo"><span>Cuponera</span><span class="offword">f</span><span class="offword">.</span></span><span class="tagline">descubre <b>·</b> ahorra <b>·</b> disfruta</span></button><nav id="mainNav"><a href="#" onclick="goHome();return false">Explorar</a><a href="#mapa" onclick="goHome();setTimeout(()=>document.getElementById('mapa').scrollIntoView(),50);return false">Mapa de Comercios</a><a href="#como" onclick="goHome();setTimeout(()=>document.getElementById('como').scrollIntoView(),50);return false">Cómo funciona</a></nav><div class="navright" id="navRightContainer"><span class="location muted">📍 Quito, Ecuador</span><button class="btn secondary small" onclick="openClientAccount()">Mi cuenta</button><button class="btn small" onclick="showView('merchantLogin')">Acceso comercios</button></div></div></header>
+<header><div class="nav"><button class="brand brand-home" onclick="goHome()" aria-label="Ir a Inicio"><span class="logo"><span>Cuponera</span><span class="offword">f</span><span class="offword">.</span></span><span class="tagline">descubre <b>·</b> ahorra <b>·</b> disfruta</span></button><nav id="mainNav"><a href="#" onclick="goHome();return false">Explorar</a><a href="#mapa" onclick="goHome();setTimeout(()=>document.getElementById('mapa').scrollIntoView(),50);return false">Mapa de Comercios</a><a href="#como" onclick="goHome();setTimeout(()=>document.getElementById('como').scrollIntoView(),50);return false">Cómo funciona</a></nav><div class="navright" id="navRightContainer"><button class="btn secondary small" onclick="openClientAccount()">Mi cuenta</button><button class="btn small" onclick="showView('merchantLogin')">Acceso comercios</button></div></div></header>
 <main>
 <section id="homeView" class="view">
-<div class="hero"><div class="hero-inner"><div><div class="eyebrow">Beneficios para disfrutar más</div><h1>Descubre.<br><em>Ahorra.</em><br>Disfruta.</h1><p>Encuentra restaurantes seleccionados en Quito, aprovecha promociones especiales y presenta tu cupón digital al momento de pagar.</p><div class="search"><input id="searchInput" placeholder="Busca hamburguesas, pizza, café..."><button class="btn" onclick="filterCards()">Buscar</button></div></div><div class="hero-art"><span>🍔🍕☕</span></div></div></div>
+<div class="hero"><div class="hero-inner"><div><div class="eyebrow">Beneficios para disfrutar más</div><h1>Descubre.<br><em>Ahorra.</em><br>Disfruta.</h1><p>Encuentra restaurantes seleccionados en <b>Quito</b>, aprovecha promociones especiales y presenta tu cupón digital al momento de pagar.</p><div class="search"><input id="searchInput" placeholder="Busca hamburguesas, pizza, café..."><button class="btn" onclick="filterCards()">Buscar</button></div></div><div class="hero-art"><span>🍔🍕☕</span></div></div></div>
 <div class="container" id="offers"><div class="sectionhead"><div><div class="eyebrow">OFERTAS CERCA DE TI</div><h2>Tu próximo lugar favorito</h2><p class="sub">Comercios aliados y descuentos para disfrutar en persona.</p></div></div><div class="categories"><button class="chip active" data-cat="all" onclick="setCat(this)">Todos</button><button class="chip" data-cat="burger" onclick="setCat(this)">🍔 Hamburguesas</button><button class="chip" data-cat="pizza" onclick="setCat(this)">🍕 Pizza</button><button class="chip" data-cat="cafe" onclick="setCat(this)">☕ Cafeterías</button><button class="chip" data-cat="dessert" onclick="setCat(this)">🍰 Postres</button></div><div class="cards" id="cards"></div><p id="empty" class="muted hidden">No encontramos promociones con esa búsqueda.</p></div>
 
 <div class="container" id="mapa" style="padding-top:10px;">
@@ -318,13 +317,14 @@ th{color:#806c5c;background:#fffaf6;font-size:9px;text-transform:uppercase;lette
 <button class="btn" style="width:100%;margin-top:18px" onclick="confirmRegistrationAndPlan()">Validar el pago</button>
 </div></div>
 
-<div class="modalback" id="clientSuccessModal"><div class="modal" style="text-align:center"><button class="x" onclick="closeClientSuccessModal()"></button><div class="eyebrow">¡Registro exitoso!</div><h2 style="margin:12px 0">Felicidades, se ha enviado tu pago</h2><p class="sub" style="margin-bottom:20px">Tu cuenta estará activa en 30 minutos mientras validamos la información.</p><button class="btn" style="width:100%" onclick="closeClientSuccessModal()">Entendido</button></div></div>
+<div class="modalback" id="clientSuccessModal"><div class="modal modal-centered"><button class="x" onclick="closeClientSuccessModal()"></button><div class="eyebrow">¡Registro exitoso!</div><h2 style="margin:12px 0">Felicidades, se ha enviado tu pago</h2><p class="sub" style="margin-bottom:20px">Tu cuenta estará activa en 30 minutos mientras validamos la información.</p><button class="btn" style="width:100%" onclick="closeClientSuccessModal()">Entendido</button></div></div>
 
-<div class="modalback" id="merchantSuccessModal"><div class="modal" style="text-align:center"><button class="x" onclick="closeMerchantSuccessModal()"></button><div class="eyebrow">Solicitud enviada</div><h2 style="margin:12px 0">¡Gracias por tu interés!</h2><p class="sub" style="margin-bottom:20px">Gracias por tener interés en Cuponeraf, la cuponera digital en Quito. Ahora revisaremos tu solicitud y te enviaremos una respuesta en 5 días para analizar y tener colaboración sobre Cuponeraf.</p><button class="btn" style="width:100%" onclick="closeMerchantSuccessModal()">Entendido</button></div></div>
+<div class="modalback" id="merchantSuccessModal"><div class="modal modal-centered"><button class="x" onclick="closeMerchantSuccessModal()"></button><div class="eyebrow">Solicitud enviada</div><h2 style="margin:12px 0">¡Gracias por tu interés!</h2><p class="sub" style="margin-bottom:20px">Gracias por tener interés en Cuponeraf, la cuponera digital en Quito. Ahora revisaremos tu solicitud y te enviaremos una respuesta en 5 días para analizar y tener colaboración sobre Cuponeraf.</p><button class="btn" style="width:100%" onclick="closeMerchantSuccessModal()">Entendido</button></div></div>
 
 <div class="floating-promo" id="floatingPromo"><button class="promo-close" onclick="hideFloatingPromo()" aria-label="Ocultar aviso"></button><span class="promo-dot">●</span><span>Registro gratuito hasta el <b>31 de diciembre de 2026</b>. Desde el 1 de enero de 2027 se aplicará una tarifa mínima.</span></div>
 
-<div class="modalback" id="couponModal"><div class="modal"><button class="x" onclick="closeModal()"></button><div class="eyebrow">Tu beneficio está listo</div><h2 id="couponShop"></h2><p id="couponOffer" class="muted"></p><div class="couponbox"><div class="qrholder" id="couponQr"></div></div><p class="codehint" style="text-align:center">Código corto para el comercio</p><div class="shortcode" id="couponShortCodeText"></div><p class="sub" id="couponExpiryText" style="text-align:center;margin-top:8px"></p><button class="btn" style="width:100%;margin-top:10px" onclick="closeModal()">Entendido</button><div class="demo">Código QR de demostración. No representa todavía un cupón respaldado por servidor.</div></div></div><div class="toast" id="toast"></div>
+<!-- MODAL CUPÓN TOTALMENTE CENTRADO -->
+<div class="modalback" id="couponModal"><div class="modal modal-centered"><button class="x" onclick="closeModal()"></button><div class="eyebrow">Tu beneficio está listo</div><h2 id="couponShop" style="margin:8px 0 4px"></h2><p id="couponOffer" class="muted" style="margin-bottom:12px"></p><div class="couponbox"><div class="qrholder" id="couponQr"></div></div><p class="codehint" style="margin-top:10px">Código corto para el comercio</p><div class="shortcode" id="couponShortCodeText"></div><p class="sub" id="couponExpiryText" style="margin-top:8px"></p><button class="btn" style="width:100%;margin-top:10px" onclick="closeModal()">Entendido</button><div class="demo">Código QR de demostración. No representa todavía un cupón respaldado por servidor.</div></div></div><div class="toast" id="toast"></div>
 
 <script>
 const DEMO={client:{user:'cliente',pass:'cliente'},merchant:{user:'comercio',pass:'comercio',id:'m1',name:'Burger House',branch:'La Carolina'},admin:{user:'admin',pass:'admin'}};
@@ -368,7 +368,6 @@ function makeShortCode(){const letters='ABCDEFGHJKLMNPQRSTUVWXYZ';let code;do{co
 function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function toast(t){const x=document.getElementById('toast');x.textContent=t;x.classList.add('show');setTimeout(()=>x.classList.remove('show'),3500)}
 
-// Función para alternar la visibilidad de la contraseña con el ícono del ojito
 function togglePasswordVisibility(inputId, btnEl) {
   const input = document.getElementById(inputId);
   if (!input) return;
@@ -454,11 +453,11 @@ function updateNavHeader() {
   }
 
   if(!currentUser) {
-    container.innerHTML = `<span class="location muted">📍 Quito, Ecuador</span><button class="btn secondary small" onclick="openClientAccount()">Mi cuenta</button><button class="btn small" onclick="showView('merchantLogin')">Acceso comercios</button>`;
+    container.innerHTML = `<button class="btn secondary small" onclick="openClientAccount()">Mi cuenta</button><button class="btn small" onclick="showView('merchantLogin')">Acceso comercios</button>`;
   } else if(currentUser.role === 'client') {
-    container.innerHTML = `<span class="location muted">📍 Quito</span><button class="btn secondary small" onclick="showView('client')">👤 Mi cuenta (${esc(currentUser.name.split(' ')[0])})</button><button class="btn small red" onclick="logout()">Cerrar sesión</button>`;
+    container.innerHTML = `<button class="btn secondary small" onclick="showView('client')">👤 Mi cuenta (${esc(currentUser.name.split(' ')[0])})</button><button class="btn small red" onclick="logout()">Cerrar sesión</button>`;
   } else if(currentUser.role === 'merchant') {
-    container.innerHTML = `<span class="location muted">📍 Quito</span><button class="btn secondary small" onclick="showView('merchant')">🏪 ${esc(currentUser.name)}</button><button class="btn small red" onclick="logout()">Cerrar sesión</button>`;
+    container.innerHTML = `<button class="btn secondary small" onclick="showView('merchant')">🏪 ${esc(currentUser.name)}</button><button class="btn small red" onclick="logout()">Cerrar sesión</button>`;
   } else if(currentUser.role === 'admin') {
     container.innerHTML = `<button class="btn secondary small" onclick="showView('admin')">⚙️ Admin</button><button class="btn small red" onclick="logout()">Cerrar sesión</button>`;
   }
