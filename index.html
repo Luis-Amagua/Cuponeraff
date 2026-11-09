@@ -232,7 +232,7 @@ th{color:#806c5c;background:#fffaf6;font-size:9px;text-transform:uppercase;lette
   <p id="empty" class="muted hidden">No encontramos promociones con esa búsqueda.</p>
 </div>
 
-<!-- MAPA INTERACTIVO (Movido antes de Más Promociones) -->
+<!-- MAPA INTERACTIVO (Colocado antes de Más Promociones) -->
 <div class="container" id="mapa" style="padding-top:10px;">
   <div class="sectionhead">
     <div>
@@ -244,7 +244,7 @@ th{color:#806c5c;background:#fffaf6;font-size:9px;text-transform:uppercase;lette
   <div id="mapContainer"></div>
 </div>
 
-<!-- MÁS PROMOCIONES (Tres fotos de grandes cadenas / Sin textos innecesarios) -->
+<!-- MÁS PROMOCIONES -->
 <div class="container promo-banner-section">
   <div class="sectionhead" style="margin-bottom:8px">
     <div>
@@ -357,7 +357,6 @@ th{color:#806c5c;background:#fffaf6;font-size:9px;text-transform:uppercase;lette
   <button class="btn" style="width:100%">Iniciar sesión</button>
 </form>
 <div class="auth-switch">¿Tienes un comercio? <button class="linkbtn" onclick="openMerchantRequest()">Quiero ser comercio socio</button></div>
-<!-- Texto corregido con el formato uniforme de la plataforma -->
 <p class="auth-switch" style="margin-top:10px;color:var(--muted)">¿Aún no formas parte de Cuponeraff? Cuéntanos sobre tu negocio. Revisaremos tu solicitud y nos pondremos en contacto contigo.</p>
 </div></div></div></section>
 
@@ -407,8 +406,8 @@ th{color:#806c5c;background:#fffaf6;font-size:9px;text-transform:uppercase;lette
 
 <div class="modalback" id="privacyModal"><div class="modal modal-wide"><button class="x" onclick="closePrivacy()" aria-label="Cerrar">×</button><div class="eyebrow">Cuponeraff</div><h2>Política de Protección de Datos Personales</h2><div class="privacy-copy"><p><b>1. Responsable.</b> Cuponeraff, como responsable de esta plataforma, tratará los datos personales que proporciones al registrarte o solicitar una afiliación comercial.</p><p><b>2. Datos tratados.</b> Nombres, apellidos, fecha de nacimiento, correo electrónico y celular.</p><p><b>3. Finalidades.</b> Crear y administrar cuentas; identificar al usuario; emitir y gestionar cupones.</p><p><b>4. Base y consentimiento.</b> Tratamiento conforme a la Ley Orgánica de Protección de Datos Personales del Ecuador.</p><p><b>5. Conservación.</b> Datos conservados el tiempo necesario para las finalidades descritas.</p><p><b>6. Derechos.</b> Puedes solicitar acceso, rectificación y eliminación de tus datos.</p></div></div></div>
 
-<!-- MODAL PASO FINAL CON BOTÓN DE CIERRE -->
-<div class="modalback" id="paymentModal"><div class="modal modal-wide"><button class="x" onclick="closePaymentModal()" aria-label="Cerrar">×</button><div class="eyebrow">Tu información se ha registrado</div><h2>Paso final: Elige tu plan</h2><p class="sub">A continuación procedemos con la activación de tu plan suscrito.</p>
+<!-- MODAL PASO FINAL CON BOTÓN DINÁMICO -->
+<div class="modalback" id="paymentModal"><div class="modal modal-wide"><button class="x" onclick="closePaymentModal()" aria-label="Cerrar">×</button><div class="eyebrow">Tu información se ha registrado</div><h2>Paso final: Elige tu plan</h2><p class="sub">A continuación procedemos con la activación de tu cuenta.</p>
 <div class="grid3" style="margin-bottom:15px">
   <div class="plan-card selected" id="cardPlanFree" onclick="selectPlan('free')">
     <h4>Plan Free</h4>
@@ -446,12 +445,12 @@ th{color:#806c5c;background:#fffaf6;font-size:9px;text-transform:uppercase;lette
   </div>
 </div>
 
-<button class="btn" style="width:100%;margin-top:18px" onclick="confirmRegistrationAndPlan()">Validar el pago</button>
+<button class="btn" id="planActionBtn" style="width:100%;margin-top:18px" onclick="confirmRegistrationAndPlan()">Continuar</button>
 </div></div>
 
-<div class="modalback" id="clientSuccessModal"><div class="modal modal-centered"><button class="x" onclick="closeClientSuccessModal()"></button><div class="eyebrow">¡Registro exitoso!</div><h2 style="margin:12px 0">Felicidades, se ha enviado tu pago</h2><p class="sub" style="margin-bottom:20px">Tu cuenta estará activa en 30 minutos mientras validamos la información.</p><button class="btn" style="width:100%" onclick="closeClientSuccessModal()">Entendido</button></div></div>
+<div class="modalback" id="clientSuccessModal"><div class="modal modal-centered"><button class="x" onclick="closeClientSuccessModal()"></button><div class="eyebrow">¡Registro exitoso!</div><h2 style="margin:12px 0">Felicidades, tu cuenta está lista</h2><p class="sub" style="margin-bottom:20px">Ya puedes disfrutar de tus cupones y beneficios.</p><button class="btn" style="width:100%" onclick="closeClientSuccessModal()">Entendido</button></div></div>
 
-<div class="modalback" id="merchantSuccessModal"><div class="modal modal-centered"><button class="x" onclick="closeMerchantSuccessModal()"></button><div class="eyebrow">Solicitud enviada</div><h2 style="margin:12px 0">¡Gracias por tu interés!</h2><p class="sub" style="margin-bottom:20px">Gracias por tener interés en Cuponeraff, la cuponera digital en Quito. Ahora revisaremos tu solicitud y te enviaremos una respuesta en 5 días para analizar y tener colaboración sobre Cuponeraff.</p><button class="btn" style="width:100%" onclick="closeMerchantSuccessModal()">Entendido</button></div></div>
+<div class="modalback" id="merchantSuccessModal"><div class="modal modal-centered"><button class="x" onclick="closeMerchantSuccessModal()"></button><div class="eyebrow">Solicitud enviada</div><h2 style="margin:12px 0">¡Gracias por tu interés!</h2><p class="sub" style="margin-bottom:20px">Gracias por tener interés en Cuponeraff, la cuponera digital en Quito. Ahora revisaremos tu solicitud y te enviaremos una respuesta en 5 días.</p><button class="btn" style="width:100%" onclick="closeMerchantSuccessModal()">Entendido</button></div></div>
 
 <div class="floating-promo" id="floatingPromo"><button class="promo-close" onclick="hideFloatingPromo()" aria-label="Ocultar aviso"></button><span class="promo-dot">●</span><span>Registro gratuito hasta el <b>31 de diciembre de 2026</b>. Desde el 1 de enero de 2027 se aplicará una tarifa mínima.</span></div>
 
@@ -459,12 +458,15 @@ th{color:#806c5c;background:#fffaf6;font-size:9px;text-transform:uppercase;lette
 <div class="modalback" id="couponModal"><div class="modal modal-centered"><button class="x" onclick="closeModal()"></button><div class="eyebrow">Tu beneficio está listo</div><h2 id="couponShop" style="margin:8px 0 4px"></h2><p id="couponOffer" class="muted" style="margin-bottom:12px"></p><div class="couponbox"><div class="qrholder" id="couponQr"></div></div><p class="codehint" style="margin-top:10px">Código corto para el comercio</p><div class="shortcode" id="couponShortCodeText"></div><p class="sub" id="couponExpiryText" style="margin-top:8px"></p><button class="btn" style="width:100%;margin-top:10px" onclick="closeModal()">Entendido</button><div class="demo">Código QR oficial.</div></div></div><div class="toast" id="toast"></div>
 
 <script>
-// CONFIGURACIÓN DE SUPABASE (Si no está conectado, usa memoria local automática)
+// CONFIGURACIÓN DE SUPABASE (Respaldo en memoria local integrado)
 const SUPABASE_URL = 'https://rrflbkkrhmayutwubfon.supabase.co/rest/v1/';
 const SUPABASE_KEY = 'sb_publishable_RoM1wH4v0woX81X2lglBzQ_eE3dxIQd';
 const _supabase = window.supabase ? supabase.createClient(SUPABASE_URL, SUPABASE_KEY, { auth: { persistSession: true }, db: { schema: 'public' } }) : null;
 
 const DEMO={client:{user:'cliente@cuponeraff.com',pass:'cliente'},merchant:{user:'comercio',pass:'comercio',id:'m1',name:'Burger House',branch:'La Carolina'},admin:{user:'admin',pass:'admin'}};
+
+// Almacenamiento local en memoria estricto por usuario para evitar cruces
+let globalCouponsStorage = [];
 
 let offers=[
 {id:'p1',merchantId:'m1',shop:'Burger House',branch:'La Carolina',category:'burger',discount:'30% OFF',offer:'30% de descuento en hamburguesas seleccionadas',image:'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600&auto=format&fit=crop&q=80',rating:'4.8',expires:'30 nov. 2026',description:'Hamburguesas artesanales y papas crocantes.'},
@@ -484,7 +486,7 @@ const mapShops = [
   {name:'Matcha & Miel', cat:'🥐 Repostería & Café', lat:-0.1820, lng:-78.4850, address:'Av. Coruña y Whymper'}
 ];
 
-let activeCat='all',currentUser=null,html5Qr=null,pendingCoupon=null,leafletMap=null,selectedPlan='free',pendingUserData=null,myCouponsData=[];
+let activeCat='all',currentUser=null,html5Qr=null,pendingCoupon=null,leafletMap=null,selectedPlan='free',pendingUserData=null;
 
 function uid(){return 'CO-'+(crypto.randomUUID?crypto.randomUUID():Math.random().toString(36).slice(2)+Date.now()).replaceAll('-','').slice(0,24).toUpperCase()}
 function makeShortCode(){const letters='ABCDEFGHJKLMNPQRSTUVWXYZ';let code;do{const bytes=new Uint8Array(5);if(window.crypto?.getRandomValues)crypto.getRandomValues(bytes);else for(let i=0;i<5;i++)bytes[i]=Math.floor(Math.random()*256);code=letters[bytes[0]%letters.length]+String((bytes[1]*256+bytes[2])%10000).padStart(4,'0')}while(false);return code}
@@ -583,9 +585,9 @@ function initMap(){
   }
 
   leafletMap = L.map('mapContainer').setView([-0.1650, -78.4840], 13);
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
-    attribution: '&copy; OpenStreetMap &copy; CARTO'
+    attribution: '&copy; OpenStreetMap contributors'
   }).addTo(leafletMap);
 
   mapShops.forEach(s => {
@@ -644,13 +646,6 @@ async function registerClientStep1(e){
   if(pass!==pass2){toast('Las contraseñas no coinciden');return}
   if(!document.getElementById('privacyConsent').checked){toast('Debes aceptar la política de protección de datos');return}
   
-  if(_supabase) {
-    try {
-      const { data: existing } = await _supabase.from('users').select('email').eq('email', email);
-      if(existing && existing.length > 0) { toast('Ya existe una cuenta con ese correo'); return; }
-    } catch(err) { console.warn('Supabase offline, continuando en memoria'); }
-  }
-  
   pendingUserData = {
     email,
     first,
@@ -662,6 +657,8 @@ async function registerClientStep1(e){
     status: 'activo',
     created_at: new Date().toISOString()
   };
+  
+  selectPlan('free');
   document.getElementById('paymentModal').classList.add('show');
 }
 
@@ -673,10 +670,14 @@ function selectPlan(planType) {
   if(planType === 'annual') document.getElementById('cardPlanAnnual').classList.add('selected');
 
   const payBox = document.getElementById('paymentDetailsBox');
+  const actionBtn = document.getElementById('planActionBtn');
+  
   if(planType === 'free') {
     payBox.classList.add('hidden');
+    actionBtn.textContent = 'Continuar';
   } else {
     payBox.classList.remove('hidden');
+    actionBtn.textContent = 'Validar el pago';
   }
 }
 
@@ -698,7 +699,7 @@ async function confirmRegistrationAndPlan(){
   if(_supabase) {
     try {
       await _supabase.from('users').insert([pendingUserData]);
-    } catch(err) { console.warn('Guardado en memoria local por fallo de red en Supabase'); }
+    } catch(err) {}
   }
 
   closePaymentModal();
@@ -757,7 +758,7 @@ async function submitMerchantRequest(e){
   if(_supabase) {
     try {
       await _supabase.from('merchant_requests').insert([req]);
-    } catch(err) { console.warn('Solicitud guardada localmente'); }
+    } catch(err) {}
   }
 
   document.getElementById('merchantRequestForm').reset();
@@ -856,11 +857,12 @@ async function createCoupon(id){
       await _supabase.from('coupons').insert([c]);
     } catch(e) {}
   }
-  myCouponsData.push(c);
+  globalCouponsStorage.push(c);
 }
 
 function openCouponModal(cId) {
-  const c = myCouponsData.find(x => x.id === cId);
+  const userCoupons = globalCouponsStorage.filter(x => x.client === currentUser.user.toLowerCase());
+  const c = userCoupons.find(x => x.id === cId);
   if(!c) return;
   document.getElementById('couponShop').textContent = c.merchant;
   document.getElementById('couponOffer').textContent = c.offer;
@@ -884,15 +886,21 @@ async function renderClient(){
 
   if(_supabase && currentUser?.user) {
     try {
-      await new Promise(r => setTimeout(r, 200));
       const { data } = await _supabase.from('coupons').select('*').eq('client', currentUser.user.toLowerCase());
-      if(data && data.length > 0) {
-        myCouponsData = data;
+      if(data) {
+        data.forEach(dbC => {
+          if(!globalCouponsStorage.some(existing => existing.id === dbC.id)) {
+            globalCouponsStorage.push(dbC);
+          }
+        });
       }
     } catch(e) {}
   }
 
-  document.getElementById('myCoupons').innerHTML=myCouponsData.length?myCouponsData.map(c=>`
+  // Filtrado estricto por usuario actual en minúsculas
+  const myCoupons = globalCouponsStorage.filter(c => c.client === currentUser.user.toLowerCase());
+
+  document.getElementById('myCoupons').innerHTML = myCoupons.length ? myCoupons.map(c=>`
     <div class="panel couponbox" style="text-align:left">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
         <span class="status ${c.status==='ACTIVE'?'s-active':c.status==='REDEEMED'?'s-redeemed':'s-expired'}">${c.status==='ACTIVE'?'DISPONIBLE':c.status==='REDEEMED'?'CANJEADO':'VENCIDO'}</span>
@@ -905,7 +913,7 @@ async function renderClient(){
         ${c.status==='ACTIVE' ? `<button class="btn small" onclick="openCouponModal('${c.id}')">Ver cupón 🔍</button>` : `<span class="muted" style="font-size:11px">Usado</span>`}
       </div>
     </div>
-  `).join(''):'<div class="panel"><h3>Aún no tienes cupones</h3><p class="sub">Explora las promociones y obtén tu primer beneficio.</p><button class="btn" onclick="showView(\'home\')">Explorar promociones</button></div>';
+  `).join('') : '<div class="panel"><h3>Aún no tienes cupones</h3><p class="sub">Explora las promociones y obtén tu primer beneficio.</p><button class="btn" onclick="showView(\'home\')">Explorar promociones</button></div>';
 }
 
 async function merchantLogin(e){
@@ -974,7 +982,7 @@ async function validateToken(input){
     } catch(e){}
   }
   if(!c) {
-    c = myCouponsData.find(x => x.short_code === entered || x.token === entered);
+    c = globalCouponsStorage.find(x => x.short_code === entered || x.token === entered);
   }
 
   const eventCode = c?.short_code || entered;
@@ -993,7 +1001,7 @@ function showScanResult(type,title,html){const box=document.getElementById('scan
 function clearScanResult(){document.getElementById('scanResult').innerHTML='';pendingCoupon=null}
 
 async function confirmRedeem(id){
-  let c = myCouponsData.find(x => x.id === id);
+  let c = globalCouponsStorage.find(x => x.id === id);
   if(_supabase) {
     try {
       const { data } = await _supabase.from('coupons').select('*').eq('id', id).limit(1);
