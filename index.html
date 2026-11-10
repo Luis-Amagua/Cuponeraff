@@ -69,6 +69,9 @@ nav{display:flex;gap:15px;align-items:center}nav a{color:#555;text-decoration:no
 .cardfoot{border-top:1px solid var(--line);padding-top:10px;display:flex;align-items:center;justify-content:space-between;gap:6px}
 .cardfoot small{color:#888;font-size:10px}
 
+.userpill{background:#edf8f0;color:#237342;padding:4px 8px;border-radius:6px;font-size:10px;font-weight:900}
+.userpill.green{background:#e1f5fe;color:#0277bd}
+
 .promo-banner-section{background:#fff;padding:25px 0}
 .promo-gallery{display:grid;grid-template-columns:1fr;gap:12px;margin-top:12px}
 .promo-thumb{height:180px;border-radius:14px;overflow:hidden;border:1px solid var(--line);position:relative;box-shadow:0 4px 12px rgba(0,0,0,0.06)}
@@ -506,7 +509,7 @@ th{color:#806c5c;background:#fffaf6;font-size:9px;text-transform:uppercase;lette
 <button class="btn" id="planActionBtn" style="width:100%;margin-top:18px" onclick="confirmRegistrationAndPlan()">Continuar</button>
 </div></div>
 
-<!-- MODAL EDICIÓN Y REGISTRO ADMINISTRATIVO DE COMERCIO -->
+<!-- MODAL EDICIÓN Y REGISTRO ADMINISTRATIVO DE COMERCIO (ID y Contraseña bloqueados) -->
 <div class="modalback" id="adminMerchantEditModal">
   <div class="modal modal-wide">
     <button class="x" onclick="closeAdminMerchantModal()" aria-label="Cerrar">×</button>
@@ -516,12 +519,12 @@ th{color:#806c5c;background:#fffaf6;font-size:9px;text-transform:uppercase;lette
     <form onsubmit="saveMerchantFromAdmin(event)">
       <input type="hidden" id="editReqId">
       <div class="grid2">
-        <div class="formrow"><label>ID del comercio</label><input class="field" id="editMerchId" required></div>
+        <div class="formrow"><label>ID del comercio (Bloqueado)</label><input class="field" id="editMerchId" readonly style="background:#f5f5f5;color:#666"></div>
         <div class="formrow"><label>Nombre del comercio</label><input class="field" id="editMerchName" required></div>
       </div>
       <div class="grid2">
         <div class="formrow"><label>Usuario de acceso</label><input class="field" id="editMerchUser" required></div>
-        <div class="formrow"><label>Contraseña inicial</label><input class="field" id="editMerchPass" type="password" required value="comercio123"></div>
+        <div class="formrow"><label>Contraseña inicial (Bloqueada)</label><input class="field" id="editMerchPass" type="text" readonly style="background:#f5f5f5;color:#666"></div>
       </div>
       <div class="formrow"><label>Sucursal / Dirección corta</label><input class="field" id="editMerchBranch" required></div>
       <div class="grid2">
@@ -542,7 +545,6 @@ th{color:#806c5c;background:#fffaf6;font-size:9px;text-transform:uppercase;lette
 <div class="modalback" id="couponModal"><div class="modal modal-centered"><button class="x" onclick="closeModal()"></button><div class="eyebrow">Tu beneficio está listo</div><h2 id="couponShop" style="margin:8px 0 4px"></h2><p id="couponOffer" class="muted" style="margin-bottom:12px"></p><div class="couponbox"><div class="qrholder" id="couponQr"></div></div><p class="codehint" style="margin-top:10px">Código corto para el comercio</p><div class="shortcode" id="couponShortCodeText"></div><p class="sub" id="couponExpiryText" style="margin-top:8px"></p><button class="btn" style="width:100%;margin-top:10px" onclick="closeModal()">Entendido</button></div></div><div class="toast" id="toast"></div>
 
 <script>
-// CONFIGURACIÓN DE SUPABASE (Asegúrate de colocar tu URL y Anon Key reales)
 const SUPABASE_URL = 'https://rrflbkkrhmayutwubfon.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_RoM1wH4v0woX81X2lglBzQ_eE3dxIQd';
 const _supabase = window.supabase ? supabase.createClient(SUPABASE_URL, SUPABASE_KEY, { auth: { persistSession: true }, db: { schema: 'public' } }) : null;
@@ -739,17 +741,18 @@ async function confirmRegistrationAndPlan(){
   pendingUserData.status = selectedPlan !== 'free' ? 'pendiente_pago' : 'activo';
   if(selectedPlan !== 'free') pendingUserData.comprobante_digits = document.getElementById('comprobanteDigits').value.trim();
 
-  // Inserción asegurada y robusta en la tabla `users` de Supabase
   if(_supabase) {
     try {
       const { error } = await _supabase.from('users').insert([pendingUserData]);
       if(error) {
         console.error('Error al guardar en Supabase:', error);
-        toast('Error al registrar usuario en la base de datos.');
+        toast('Error al registrar usuario en la base de datos: ' + error.message);
         return;
       }
     } catch(err) {
       console.error('Excepción de red:', err);
+      toast('Excepción al conectar con la base de datos.');
+      return;
     }
   }
 
@@ -953,7 +956,7 @@ function renderMerchantPromos() {
         <div class="cardtitle"><h3>${o.shop}</h3><span class="rating">★ ${o.rating}</span></div>
         <p>${o.offer}</p>
         <p>📍 ${o.branch}, Quito</p>
-        <div class="cardfoot"><small>Válido hasta ${o.expires}</small><span class="userpill">Campaña Activa</span></div>
+        <div class="cardfoot"><small>Válido hasta ${o.expires}</small><span class="userpill green">Campaña Activa</span></div>
       </div>
     </article>
   `).join('');
@@ -1096,7 +1099,9 @@ async function renderAdmin(tab){
   }else if(tab==='merchants'){
     el.innerHTML='<h2>Comercios registrados</h2><div class="tablewrap"><table><thead><tr><th>ID</th><th>Nombre</th><th>Usuario</th><th>Sucursal</th><th>Ubicación (Lat, Lng)</th></tr></thead><tbody>'+merchants.map(m=>`<tr><td>${esc(m.id)}</td><td>${esc(m.name)}</td><td>${esc(m.username)}</td><td>${esc(m.branch||'Principal')}</td><td>${m.lat||'-0.1742'}, ${m.lng||'-78.4845'}</td></tr>`).join('')+'</tbody></table></div>';
   }else if(tab==='requests'){
-    el.innerHTML='<h2>Solicitudes de comercios socios</h2><div class="tablewrap"><table><thead><tr><th>Fecha</th><th>Comercio</th><th>Correo</th><th>Celular</th><th>Acción</th></tr></thead><tbody>'+merchantRequests.map(r=>`<tr><td>${formatEcuadorDate(r.created_at)}</td><td>${esc(r.name)}</td><td>${esc(r.email)}</td><td>${esc(r.phone)}</td><td><button class="btn small" onclick="openAdminMerchantModal('${r.id}','${esc(r.name)}','${esc(r.address)}')">Editar y Registrar Comercio</button></td></tr>`).join('')+'</tbody></table></div>';
+    // Solo muestra solicitudes con status PENDIENTE
+    const pendingReqs = merchantRequests.filter(r => !r.status || r.status.toUpperCase() === 'PENDIENTE');
+    el.innerHTML='<h2>Solicitudes de comercios socios</h2><div class="tablewrap"><table><thead><tr><th>Fecha</th><th>Comercio</th><th>Correo</th><th>Celular</th><th>Acción</th></tr></thead><tbody>'+(pendingReqs.length ? pendingReqs.map(r=>`<tr><td>${formatEcuadorDate(r.created_at)}</td><td>${esc(r.name)}</td><td>${esc(r.email)}</td><td>${esc(r.phone)}</td><td><button class="btn small" onclick="openAdminMerchantModal('${r.id}','${esc(r.name)}','${esc(r.address)}')">Editar y Registrar Comercio</button></td></tr>`).join('') : '<tr><td colspan="5" style="text-align:center">No hay solicitudes pendientes.</td></tr>')+'</tbody></table></div>';
   }else if(tab==='createMerchant'){
     el.innerHTML=`
       <h2>Crear comercio manualmente</h2>
@@ -1148,6 +1153,7 @@ function openAdminMerchantModal(reqId, name, address) {
   document.getElementById('editMerchId').value = 'm_' + Math.floor(Math.random()*1000);
   document.getElementById('editMerchName').value = name;
   document.getElementById('editMerchUser').value = name.toLowerCase().replace(/\s+/g,'');
+  document.getElementById('editMerchPass').value = 'comercio123';
   document.getElementById('editMerchBranch').value = address || 'Quito';
   document.getElementById('adminMerchantEditModal').classList.add('show');
 }
@@ -1169,14 +1175,18 @@ async function saveMerchantFromAdmin(e) {
   if(_supabase) {
     try {
       await _supabase.from('merchants').insert([newMerch]);
-      if(reqId) await _supabase.from('merchant_requests').update({ status: 'APROBADO' }).eq('id', reqId);
-    } catch(e) {}
+      if(reqId) {
+        await _supabase.from('merchant_requests').update({ status: 'APROBADO' }).eq('id', reqId);
+      }
+    } catch(e) {
+      console.error(e);
+    }
   }
   
   mapShops.push({ name: newMerch.name, cat: 'Aliado socio', lat: newMerch.lat, lng: newMerch.lng, address: newMerch.branch });
   
   closeAdminMerchantModal();
-  toast('Comercio editado y registrado con éxito');
+  toast('Comercio aprobado y registrado con éxito');
   renderAdmin('merchants');
 }
 
