@@ -311,7 +311,7 @@ th{color:#806c5c;background:#fffaf6;font-size:9px;text-transform:uppercase;lette
 </section>
 
 <!-- LOGIN DE CLIENTE -->
-<section id="clientLoginView" class="view hidden"><div class="container"><div class="authbox"><div class="panel"><div class="authhead"><div class="brand"><div class="logo"><span>Cuponera</span><span class="offword">ff</span><span class="offword">.</span></div><div class="tagline">cuenta cliente</div></div><h2>Accede a tu cuenta</h2><p class="sub"><b>Inicia sesión o crea tu cuenta para obtener tu cupón.</b></p></div>
+<section id="clientLoginView" class="view hidden"><div class="container"><div class="authbox"><div class="panel"><div class="authhead"><div class="brand"><div class="logo"><span>Cuponera</span><span class="offword">ff</span><span class="offword">.</span></div></div><h2>Accede a tu cuenta</h2><p class="sub"><b>Inicia sesión o crea tu cuenta para obtener tu cupón.</b></p></div>
 <form id="clientLoginForm" onsubmit="clientLogin(event)">
   <div class="formrow"><label for="clientUserPage">Correo electrónico</label><input class="field" id="clientUserPage" type="email" required value="cliente@cuponeraff.com" autocomplete="username"></div>
   <div class="formrow">
@@ -327,7 +327,7 @@ th{color:#806c5c;background:#fffaf6;font-size:9px;text-transform:uppercase;lette
 <div class="auth-switch">¿Todavía no tienes cuenta? <button class="linkbtn" onclick="openClientRegisterModal()">Regístrate</button></div>
 </div></div></div></section>
 
-<section id="clientView" class="view hidden"><div class="container"><div class="sectionhead"><div><div class="eyebrow">Mi Cuenta</div><h2>Mis cupones</h2><p class="sub" id="clientWelcome"></p></div></div><div class="notice blue" id="clientPlanInfoBox"></div><div class="notice blue" style="margin-top:8px">Tu cupón es de un solo uso. Presiona «Ver cupón» para mostrar el QR en el comercio al pagar.</div><div class="sec-title"><h3>Cupones disponibles</h3><span class="count" id="availCount"></span></div>
+<section id="clientView" class="view hidden"><div class="container"><div class="sectionhead"><div><div class="eyebrow">Mi Cuenta</div><h2>Mis cupones</h2><p class="sub" id="clientWelcome"></p></div></div><div class="notice blue" id="clientPlanInfoBox"></div><div class="sec-title"><h3>Cupones disponibles</h3><span class="count" id="availCount"></span></div>
 
 <div id="myCoupons" class="cards"></div>
 <div class="sec-title" style="margin-top:30px"><h3>Historial de cupones</h3><span class="count" id="historyCount"></span></div>
@@ -610,15 +610,6 @@ let offers=[
 {id:'p6',merchantId:'m6',shop:'Matcha & Miel',branch:'La Floresta',category:'cafe',discount:'2x1',offer:'2x1 en bebidas seleccionadas',image:'https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=600&auto=format&fit=crop&q=80',rating:'4.8',expires:'30 nov. 2026',description:'Bebidas especiales y repostería artesanal.',expiresISO:'2026-11-30',active:true,validAt:'Todas las sucursales',terms:['Válido únicamente con consumo en el local.','No aplica a domicilio.','Aplica solo en bebidas seleccionadas.','No aplica promoción sobre promoción ni es acumulable con otras ofertas.']}
 ];
 
-const mapShops = [
-  {name:'Burger House', cat:'🍔 Hamburguesas', lat:-0.1742, lng:-78.4845, address:'Av. Shyris y NNUU (La Carolina)'},
-  {name:'Pizza Nostra', cat:'🍕 Pizza', lat:-0.1710, lng:-78.4870, address:'Av. Amazonas y Japón'},
-  {name:'Café Aroma', cat:'☕ Cafetería', lat:-0.1790, lng:-78.4820, address:'Av. 6 de Diciembre y Orellana'},
-  {name:'Dulce Momento', cat:'🍰 Repostería', lat:-0.1660, lng:-78.4800, address:'Av. Gaspar de Villarroel'},
-  {name:'La Parrilla Urbana', cat:'🥩 Carnes y Asados', lat:-0.1755, lng:-78.4890, address:'Av. República y Eloy Alfaro'},
-  {name:'Matcha & Miel', cat:'🥐 Repostería & Café', lat:-0.1820, lng:-78.4850, address:'Av. Coruña y Whymper'}
-];
-
 let activeCat='all',currentUser=null,html5Qr=null,pendingCoupon=null,leafletMap=null,selectedPlan='free',pendingUserData=null;
 
 function uid(){return 'CO-'+(crypto.randomUUID?crypto.randomUUID():Math.random().toString(36).slice(2)+Date.now()).replaceAll('-','').slice(0,24).toUpperCase()}
@@ -799,16 +790,54 @@ function showView(name){
   updateNavHeader();
 }
 
-function initMap(){
+async function initMap(){
   const mapElem = document.getElementById('mapContainer');
   if(!mapElem) return;
-  if(leafletMap) { leafletMap.invalidateSize(); return; }
+  
+  if(leafletMap) { 
+    leafletMap.invalidateSize(); 
+    return; 
+  }
 
+  // 1. Inicializamos el mapa centrado en Quito
   leafletMap = L.map('mapContainer').setView([-0.1650, -78.4840], 13);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '&copy; OpenStreetMap' }).addTo(leafletMap);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { 
+    maxZoom: 19, 
+    attribution: '© OpenStreetMap' 
+  }).addTo(leafletMap);
 
-  mapShops.forEach(s => {
-    L.marker([s.lat, s.lng]).addTo(leafletMap).bindPopup(`<div class="map-popup"><b>${s.name}</b><span>${s.cat}</span><br><small>${s.address}</small></div>`);
+  let shopsToRender = [];
+
+  // 2. Consultamos los comercios directamente desde Supabase
+  if(_supabase) {
+    try {
+      const { data, error } = await _supabase.from('merchants').select('*');
+      if(data && data.length > 0) {
+        shopsToRender = data.map(m => ({
+          name: m.name,
+          cat: 'Aliado socio',
+          lat: m.lat,
+          lng: m.lng,
+          address: m.branch || 'Quito'
+        }));
+      }
+    } catch(err) {
+      console.error('Error al obtener comercios para el mapa:', err);
+    }
+  }
+
+  // 3. Si por alguna razón Supabase falla o está vacío, usamos el arreglo local como respaldo
+  if(shopsToRender.length === 0 && typeof mapShops !== 'undefined') {
+    shopsToRender = mapShops;
+  }
+
+  // 4. Pintamos los marcadores dinámicamente en el mapa
+  shopsToRender.forEach(s => {
+    if(s.lat && s.lng) {
+      L.marker([s.lat, s.lng])
+        .addTo(leafletMap)
+        .bindPopup(`<div class="map-popup"><b>${esc(s.name)}</b><span>${esc(s.cat)}</span><br><small>${esc(s.address)}</small></div>`);
+    }
   });
 }
 
@@ -1051,7 +1080,7 @@ function couponCardHTML(c, available){
 }
 
 async function renderClient(){
-  document.getElementById('clientWelcome').textContent='Hola, '+(currentUser?.name||'cliente')+'. Aquí puedes consultar tus cupones.';
+  document.getElementById('clientWelcome').textContent='Hola, '+(currentUser?.name||'cliente')+'. Recuerda que el  cupón es de un solo uso. Presiona «Ver cupón» para mostrar el QR en el comercio al pagar.';
   const planName = currentUser?.plan === 'monthly' ? 'Plan Mensual ($2.99)' : currentUser?.plan === 'annual' ? 'Plan Anual ($19.99)' : 'Plan Free (10 cupones)';
   const startDate = currentUser?.createdAt ? new Date(currentUser.createdAt).toLocaleDateString('es-EC') : 'Reciente';
   const statusMsg = currentUser?.status === 'pendiente_pago' ? ' · <span style="color:var(--orange)">Pago pendiente de aprobación por admin</span>' : '';
