@@ -1391,16 +1391,7 @@ async function renderAdmin(tab){
   }
 
   else if(tab==='createMerchant'){
-  // Calculamos el siguiente ID automático basado en los comercios actuales (ej. m7)
-  let nextId = 'm1';
-  if(typeof merchantsList !== 'undefined' && merchantsList.length > 0) {
-    const maxNum = merchantsList.reduce((max, m) => {
-      const match = m.id && m.id.match(/^m(\d+)$/);
-      return match ? Math.max(max, parseInt(match[1])) : max;
-    }, 0);
-    nextId = 'm' + (maxNum + 1);
-  }
-
+  // 1. Dibujamos el formulario con un estado de carga inicial en el ID
   el.innerHTML=`
     <h2>Crear comercio manualmente</h2>
     <p class="sub">Registra un comercio en el sistema. El ID y la contraseña se generan automáticamente.</p>
@@ -1408,7 +1399,7 @@ async function renderAdmin(tab){
       <div class="grid2">
         <div class="formrow">
           <label>ID Único (Automático)</label>
-          <input class="field" id="directMerchId" value="${nextId}" readonly style="background-color: #f1f5f9; cursor: not-allowed;">
+          <input class="field" id="directMerchId" value="Cargando..." readonly style="background-color: #f1f5f9; cursor: not-allowed; font-weight: bold;">
         </div>
         <div class="formrow">
           <label>Nombre del comercio</label>
@@ -1465,6 +1456,30 @@ async function renderAdmin(tab){
       <button class="btn green" style="margin-top:10px;width:100%">Guardar comercio en Supabase</button>
     </form>
   `;
+
+  // 2. Consultamos de forma asíncrona a Supabase para calcular el siguiente ID real
+  (async () => {
+    let nextId = 'm1';
+    if(_supabase) {
+      try {
+        const { data, error } = await _supabase.from('merchants').select('id');
+        if(data && data.length > 0) {
+          // Buscamos el número más alto extrayendo los dígitos después de la 'm' (ej. m11 -> 11)
+          const maxNum = data.reduce((max, m) => {
+            if (!m.id) return max;
+            const match = m.id.match(/^m(\d+)$/i);
+            return match ? Math.max(max, parseInt(match[1], 10)) : max;
+          }, 0);
+          nextId = 'm' + (maxNum + 1);
+        }
+      } catch(err) {
+        console.error('Error al calcular el siguiente ID en Supabase:', err);
+      }
+    }
+    // Asignamos el ID calculado al input bloqueado
+    const idField = document.getElementById('directMerchId');
+    if(idField) idField.value = nextId;
+  })();
 }
   else if(tab==='clientPayments'){
     const pendingClients = users.filter(u => u.plan !== 'free' && u.status === 'pendiente_pago');
