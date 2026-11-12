@@ -826,15 +826,15 @@ async function initMap(){
     }
   }
 
-  // 3. Pintamos los marcadores en el mapa con el formato visual solicitado
+ // 3. Pintamos los marcadores en el mapa con saltos de línea claros
   shopsToRender.forEach(s => {
     if(s.lat && s.lng) {
       L.marker([s.lat, s.lng])
         .addTo(leafletMap)
         .bindPopup(`
           <div class="map-popup">
-            <b>${esc(s.name)}</b>
-            <span>${esc(s.cat)}</span>
+            <b>${esc(s.name)}</b><br>
+            <span>${esc(s.cat)}</span><br>
             <small>${esc(s.address)}</small>
           </div>
         `);
