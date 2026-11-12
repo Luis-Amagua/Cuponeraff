@@ -241,24 +241,24 @@ th{color:#806c5c;background:#fffaf6;font-size:9px;text-transform:uppercase;lette
   </div>
 </div>
 
-<div class="container" id="offers">
-  <div class="sectionhead">
-    <div>
-      <div class="eyebrow">OFERTAS CERCA DE TI</div>
-      <h2>Tu próximo lugar favorito</h2>
-      <p class="sub">Promociones para disfrutar en el establecimiento.</p>
+  <div class="container" id="offers">
+    <div class="sectionhead">
+      <div>
+        <div class="eyebrow">OFERTAS CERCA DE TI</div>
+        <h2>Tu próximo lugar favorito</h2>
+        <p class="sub">Promociones para disfrutar en el establecimiento.</p>
+      </div>
     </div>
+    <div class="categories">
+      <button class="chip active" data-cat="all" onclick="setCat(this)">Todos</button>
+      <button class="chip" data-cat="burger" onclick="setCat(this)">🍔 Hamburguesas</button>
+      <button class="chip" data-cat="pizza" onclick="setCat(this)">🍕 Pizza</button>
+      <button class="chip" data-cat="cafe" onclick="setCat(this)">☕ Cafeterías</button>
+      <button class="chip" data-cat="dessert" onclick="setCat(this)">🍰 Postres</button>
+    </div>
+    <div class="cards" id="cards"></div>
+    <p id="empty" class="muted hidden">No encontramos promociones con esa búsqueda.</p>
   </div>
-  <div class="categories">
-    <button class="chip active" data-cat="all" onclick="setCat(this)">Todos</button>
-    <button class="chip" data-cat="burger" onclick="setCat(this)">🍔 Hamburguesas</button>
-    <button class="chip" data-cat="pizza" onclick="setCat(this)">🍕 Pizza</button>
-    <button class="chip" data-cat="cafe" onclick="setCat(this)">☕ Cafeterías</button>
-    <button class="chip" data-cat="dessert" onclick="setCat(this)">🍰 Postres</button>
-  </div>
-  <div class="cards" id="cards"></div>
-  <p id="empty" class="muted hidden">No encontramos promociones con esa búsqueda.</p>
-</div>
 
 <!-- MAPA INTERACTIVO -->
 <div class="container" id="mapa" style="padding-top:10px;">
@@ -600,7 +600,7 @@ const _supabase = window.supabase ? supabase.createClient(SUPABASE_URL, SUPABASE
 const DEMO={client:{user:'cliente@cuponeraff.com',pass:'cliente'},merchant:{user:'comercio',pass:'comercio',id:'m1',name:'Burger House',branch:'La Carolina'},admin:{user:'admin',pass:'admin'}};
 
 let globalCouponsStorage = [];
-
+let offers = []; // Variable global donde se almacenarán las promos de Supabase
 let activeCat='all',currentUser=null,html5Qr=null,pendingCoupon=null,leafletMap=null,selectedPlan='free',pendingUserData=null;
 
 function uid(){return 'CO-'+(crypto.randomUUID?crypto.randomUUID():Math.random().toString(36).slice(2)+Date.now()).replaceAll('-','').slice(0,24).toUpperCase()}
@@ -836,16 +836,51 @@ async function initMap(){
 function setCat(b){document.querySelectorAll('.chip[data-cat]').forEach(x=>x.classList.remove('active'));b.classList.add('active');activeCat=b.dataset.cat;filterCards()}
 function filterCards(){const q=(document.getElementById('searchInput').value||'').toLowerCase();let n=0;document.querySelectorAll('.offer-card').forEach(c=>{const ok=(activeCat==='all'||c.dataset.cat===activeCat)&&(!q||c.innerText.toLowerCase().includes(q));c.classList.toggle('hidden',!ok);if(ok)n++});document.getElementById('empty').classList.toggle('hidden',n>0)}
 
-async function renderOffers(){
-  let activeOffers = [];
+function renderOffers() {
+  const cardsContainer = document.getElementById('cards');
+  const emptyMessage = document.getElementById('empty');
+  if(!cardsContainer) return;
+
+  // Filtramos las activas
+  const activeOffers = offers.filter(o => o.active !== false);
+
+  if (activeOffers.length === 0) {
+    cardsContainer.innerHTML = '';
+    if (emptyMessage) emptyMessage.classList.remove('hidden');
+    return;
+  }
+
+  // Función para inicializar y cargar los datos desde Supabase
+async function initAppData() {
   if (_supabase) {
     try {
-      const { data, error } = await _supabase.from('promotions').select('*').eq('active', true);
-      if (data) activeOffers = data;
-    } catch(e) {
-      console.error('Error cargando promociones:', e);
+      const { data, error } = await _supabase.from('promotions').select('*');
+      if (data && data.length > 0) {
+        offers = data; // Llenamos el arreglo global con los datos de Supabase
+      }
+    } catch (err) {
+      console.error('Error al conectar con Supabase para cargar ofertas:', err);
     }
   }
+  
+  // Una vez cargados los datos, renderizamos las ofertas en el HTML que pegaste
+  renderOffers();
+}
+
+  if (emptyMessage) emptyMessage.classList.add('hidden');
+
+  cardsContainer.innerHTML = activeOffers.map(o => `
+    <article class="card offer-card" data-cat="${o.category || 'all'}">
+      <div class="cardvisual"><span class="off">${o.discount}</span><img src="${o.image}" alt="${o.shop}"></div>
+      <div class="cardbody">
+        <div class="cardtitle"><h3>${o.shop}</h3><span class="rating">★ ${o.rating || '4.5'}</span></div>
+        <p>${o.description || o.offer}</p>
+        <p>📍 ${o.branch}, Quito</p>
+        <div class="cardfoot"><small>Válido hasta ${o.expires}</small><button class="btn small" onclick="claim('${o.id}')">Obtener cupón</button></div>
+      </div>
+    </article>
+  `).join('');
+}
 
   const cardsContainer = document.getElementById('cards');
   if (!cardsContainer) return;
@@ -1609,7 +1644,10 @@ async function approveClientPayment(email){
 
 function adminTab(tab,b){renderAdmin(tab)}
 
-renderOffers();
-initMap();
-updateNavHeader();
+window.addEventListener('DOMContentLoaded', () => {
+  initAppData(); // Esta función se encarga de traer los datos y llamar a renderOffers() internamente
+  initMap();
+  updateNavHeader();
+});
+
 </script></body></html>
