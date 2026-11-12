@@ -1388,28 +1388,85 @@ async function renderAdmin(tab){
     // Solo muestra solicitudes con status PENDIENTE
     const pendingReqs = merchantRequests.filter(r => !r.status || r.status.toUpperCase() === 'PENDIENTE');
     el.innerHTML='<h2>Solicitudes de comercios socios</h2><div class="tablewrap"><table><thead><tr><th>Fecha</th><th>Comercio</th><th>Correo</th><th>Celular</th><th>Acción</th></tr></thead><tbody>'+(pendingReqs.length ? pendingReqs.map(r=>`<tr><td>${formatEcuadorDate(r.created_at)}</td><td>${esc(r.name)}</td><td>${esc(r.email)}</td><td>${esc(r.phone)}</td><td><button class="btn small" onclick="openAdminMerchantModal('${r.id}','${esc(r.name)}','${esc(r.address)}')">Editar y Registrar Comercio</button></td></tr>`).join('') : '<tr><td colspan="5" style="text-align:center">No hay solicitudes pendientes.</td></tr>')+'</tbody></table></div>';
-  }else if(tab==='createMerchant'){
-    el.innerHTML=`
-      <h2>Crear comercio manualmente</h2>
-      <p class="sub">Registra un comercio aprobado en el sistema asignando sus coordenadas.</p>
-      <form onsubmit="adminCreateMerchantDirect(event)">
-        <div class="grid2">
-          <div class="formrow"><label>ID Único (Ej. m7)</label><input class="field" id="directMerchId" required></div>
-          <div class="formrow"><label>Nombre del comercio</label><input class="field" id="directMerchName" required></div>
+  }
+
+  else if(tab==='createMerchant'){
+  // Calculamos el siguiente ID automático basado en los comercios actuales (ej. m7)
+  let nextId = 'm1';
+  if(typeof merchantsList !== 'undefined' && merchantsList.length > 0) {
+    const maxNum = merchantsList.reduce((max, m) => {
+      const match = m.id && m.id.match(/^m(\d+)$/);
+      return match ? Math.max(max, parseInt(match[1])) : max;
+    }, 0);
+    nextId = 'm' + (maxNum + 1);
+  }
+
+  el.innerHTML=`
+    <h2>Crear comercio manualmente</h2>
+    <p class="sub">Registra un comercio en el sistema. El ID y la contraseña se generan automáticamente.</p>
+    <form onsubmit="adminCreateMerchantDirect(event)">
+      <div class="grid2">
+        <div class="formrow">
+          <label>ID Único (Automático)</label>
+          <input class="field" id="directMerchId" value="${nextId}" readonly style="background-color: #f1f5f9; cursor: not-allowed;">
         </div>
-        <div class="grid2">
-          <div class="formrow"><label>Usuario de acceso</label><input class="field" id="directMerchUser" required></div>
-          <div class="formrow"><label>Contraseña</label><input class="field" id="directMerchPass" type="password" required></div>
+        <div class="formrow">
+          <label>Nombre del comercio</label>
+          <input class="field" id="directMerchName" placeholder="Ej. Don Burger" required>
         </div>
-        <div class="formrow"><label>Sucursal / Dirección</label><input class="field" id="directMerchBranch" required></div>
-        <div class="grid2">
-          <div class="formrow"><label>Latitud</label><input class="field" id="directMerchLat" type="number" step="any" required value="-0.1742"></div>
-          <div class="formrow"><label>Longitud</label><input class="field" id="directMerchLng" type="number" step="any" required value="-78.4845"></div>
+      </div>
+      
+      <div class="grid2">
+        <div class="formrow">
+          <label>Usuario de acceso</label>
+          <input class="field" id="directMerchUser" placeholder="Ej. donburger" required>
         </div>
-        <button class="btn green" style="margin-top:10px;width:100%">Guardar comercio</button>
-      </form>
-    `;
-  }else if(tab==='clientPayments'){
+        <div class="formrow">
+          <label>Contraseña (Predeterminada)</label>
+          <input class="field" id="directMerchPass" type="text" value="comercio123" readonly style="background-color: #f1f5f9; cursor: not-allowed;">
+        </div>
+      </div>
+
+      <div class="grid2">
+        <div class="formrow">
+          <label>Categoría (Selecciona una)</label>
+          <select class="field" id="directMerchCategory" required>
+            <option value="" disabled selected>-- Elige una categoría --</option>
+            <option value="🍔 Hamburguesas">🍔 Hamburguesas</option>
+            <option value="🍕 Pizza">🍕 Pizza</option>
+            <option value="☕ Cafetería">☕ Cafetería</option>
+            <option value="🍰 Repostería">🍰 Repostería</option>
+            <option value="🥩 Carnes y Asados">🥩 Carnes y Asados</option>
+            <option value="🥐 Repostería & Café">🥐 Repostería & Café</option>
+          </select>
+        </div>
+        <div class="formrow">
+          <label>Sucursal / Zona</label>
+          <input class="field" id="directMerchBranch" placeholder="Ej. La Carolina" required>
+        </div>
+      </div>
+
+      <div class="formrow">
+        <label>Dirección física (Calles)</label>
+        <input class="field" id="directMerchAddress" placeholder="Ej. Av. Shyris y NNUU" required>
+      </div>
+
+      <div class="grid2">
+        <div class="formrow">
+          <label>Latitud</label>
+          <input class="field" id="directMerchLat" type="number" step="any" required value="-0.1742">
+        </div>
+        <div class="formrow">
+          <label>Longitud</label>
+          <input class="field" id="directMerchLng" type="number" step="any" required value="-78.4845">
+        </div>
+      </div>
+
+      <button class="btn green" style="margin-top:10px;width:100%">Guardar comercio en Supabase</button>
+    </form>
+  `;
+}
+  else if(tab==='clientPayments'){
     const pendingClients = users.filter(u => u.plan !== 'free' && u.status === 'pendiente_pago');
     el.innerHTML=`
       <h2>Aprobación de pagos de clientes</h2>
@@ -1476,22 +1533,36 @@ async function saveMerchantFromAdmin(e) {
   renderAdmin('merchants');
 }
 
-async function adminCreateMerchantDirect(e){
-  e.preventDefault();
-  const newMerch = {
-    id: document.getElementById('directMerchId').value.trim(),
+async function adminCreateMerchantDirect(event) {
+  event.preventDefault();
+  
+  const newMerchant = {
+    id: document.getElementById('directMerchId').value,
     name: document.getElementById('directMerchName').value.trim(),
-    username: document.getElementById('directMerchUser').value.trim(),
+    username: document.getElementById('directMerchUser').value.trim().toLowerCase(),
     password: document.getElementById('directMerchPass').value,
     branch: document.getElementById('directMerchBranch').value.trim(),
+    category: document.getElementById('directMerchCategory').value,
+    address: document.getElementById('directMerchAddress').value.trim(),
     lat: parseFloat(document.getElementById('directMerchLat').value),
     lng: parseFloat(document.getElementById('directMerchLng').value)
   };
 
-  if(_supabase) { try { await _supabase.from('merchants').insert([newMerch]); } catch(e) {} }
-  mapShops.push({ name: newMerch.name, cat: 'Aliado socio', lat: newMerch.lat, lng: newMerch.lng, address: newMerch.branch });
-  toast('Comercio creado con éxito');
-  renderAdmin('merchants');
+  if (!_supabase) {
+    alert('No hay conexión con Supabase.');
+    return;
+  }
+
+  const { error } = await _supabase.from('merchants').insert([newMerchant]);
+
+  if (error) {
+    console.error('Error al guardar en Supabase:', error);
+    alert('Hubo un error al guardar el comercio: ' + error.message);
+  } else {
+    alert('¡Comercio creado con éxito!');
+    // Aquí puedes recargar tu lista de comercios o limpiar la vista
+    if (typeof loadAdminMerchants === 'function') loadAdminMerchants();
+  }
 }
 
 async function approveClientPayment(email){
