@@ -815,10 +815,10 @@ async function initMap(){
       if(data && data.length > 0) {
         shopsToRender = data.map(m => ({
           name: m.name,
-          cat: 'Aliado socio',
+          cat: m.category || 'Aliado socio',
           lat: m.lat,
           lng: m.lng,
-          address: m.branch || 'Quito'
+          address: m.address || m.branch || 'Quito'
         }));
       }
     } catch(err) {
@@ -826,17 +826,18 @@ async function initMap(){
     }
   }
 
-  // 3. Si por alguna razón Supabase falla o está vacío, usamos el arreglo local como respaldo
-  if(shopsToRender.length === 0 && typeof mapShops !== 'undefined') {
-    shopsToRender = mapShops;
-  }
-
-  // 4. Pintamos los marcadores dinámicamente en el mapa
+  // 3. Pintamos los marcadores en el mapa con el formato visual solicitado
   shopsToRender.forEach(s => {
     if(s.lat && s.lng) {
       L.marker([s.lat, s.lng])
         .addTo(leafletMap)
-        .bindPopup(`<div class="map-popup"><b>${esc(s.name)}</b><span>${esc(s.cat)}</span><br><small>${esc(s.address)}</small></div>`);
+        .bindPopup(`
+          <div class="map-popup">
+            <b>${esc(s.name)}</b>
+            <span>${esc(s.cat)}</span>
+            <small>${esc(s.address)}</small>
+          </div>
+        `);
     }
   });
 }
