@@ -218,7 +218,7 @@ th{color:#806c5c;background:#fffaf6;font-size:9px;text-transform:uppercase;lette
     <div>
       <div class="eyebrow">Beneficios para disfrutar más</div>
       <h1>Descubre.<br><em>Ahorra.</em><br>Disfruta.</h1>
-      <p>Encuentra restaurantes seleccionados en <b>Quito</b>, aprovecha promociones especiales y presenta tu cupón digital al momento de pagar.</p>
+      <p>Encuentra restaurantes en Quito, aprovecha promociones especiales y presenta tu cupón digital antes de realizar tu pedido.</p>
       
       <div class="social-proof">
         <div class="avatar-group">
@@ -246,7 +246,7 @@ th{color:#806c5c;background:#fffaf6;font-size:9px;text-transform:uppercase;lette
     <div>
       <div class="eyebrow">OFERTAS CERCA DE TI</div>
       <h2>Tu próximo lugar favorito</h2>
-      <p class="sub">Comercios aliados y descuentos para disfrutar en persona.</p>
+      <p class="sub">Promociones para disfrutar en el establecimiento.</p>
     </div>
   </div>
   <div class="categories">
@@ -328,7 +328,7 @@ th{color:#806c5c;background:#fffaf6;font-size:9px;text-transform:uppercase;lette
 </div></div></div></section>
 
 <section id="clientView" class="view hidden"><div class="container"><div class="sectionhead"><div><div class="eyebrow">Mi Cuenta</div><h2>Mis cupones</h2><p class="sub" id="clientWelcome"></p></div></div><div class="notice blue" id="clientPlanInfoBox"></div><div class="notice blue" style="margin-top:8px">Tu cupón es de un solo uso. Presiona «Ver cupón» para mostrar el QR en el comercio al pagar.</div><div class="sec-title"><h3>Cupones disponibles</h3><span class="count" id="availCount"></span></div>
-<p class="sub" style="margin-bottom:12px">Ordenados por fecha de solicitud: primero el más reciente.</p>
+
 <div id="myCoupons" class="cards"></div>
 <div class="sec-title" style="margin-top:30px"><h3>Historial de cupones</h3><span class="count" id="historyCount"></span></div>
 <p class="sub" style="margin-bottom:12px">Cupones canjeados, vencidos o que ya no están disponibles.</p>
@@ -348,7 +348,7 @@ th{color:#806c5c;background:#fffaf6;font-size:9px;text-transform:uppercase;lette
   <button class="btn" style="width:100%">Iniciar sesión</button>
 </form>
 <div class="auth-switch">¿Tienes un comercio? <button class="linkbtn" onclick="openMerchantRequest()">Quiero ser comercio socio</button></div>
-<p class="auth-switch" style="margin-top:10px;color:var(--muted);text-align:justify">¿Aún no formas parte de Cuponeraff? Cuéntanos sobre tu negocio. Revisaremos tu solicitud y nos pondremos en contacto contigo.</p>
+<p class="auth-switch" style="margin-top:10px;color:var(--muted);text-align:justify">¿Aún no eres parte de Cuponeraff? Cuéntanos sobre tu negocio y te contactaremos para que formes parte de nuestra comunidad.</p>
 </div></div></div></section>
 
 <!-- PORTAL COMERCIO -->
@@ -740,7 +740,7 @@ function stackedDailyChart(dayKeys,series){
     });
     if((n-1-i)%every===0)g+='<text x="'+cx.toFixed(1)+'" y="'+(H-10)+'" text-anchor="middle" font-size="10" fill="#806c5c">'+fmt(dk)+'</text>';
   });
-  return '<svg class="chartsvg" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Cupones canjeados por día">'+g+'</svg>'+legendHTML(series.map(x=>({name:x.name,color:x.color})))+'<p class="codehint" style="margin-bottom:0">Últimos '+n+' días · Fecha de Ecuador.</p>';
+  return '<svg class="chartsvg" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Cupones canjeados por día">'+g+'</svg>'+legendHTML(series.map(x=>({name:x.name,color:x.color})))+'<p class="codehint" style="margin-bottom:0">Últimos '+n+' días</p>';
 }
 
 function togglePasswordVisibility(inputId, btnEl) {
