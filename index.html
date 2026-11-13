@@ -1829,64 +1829,89 @@ function fillPromotionMerchantData() {
 }
 
 
+
 async function adminCreatePromotion(event) {
   event.preventDefault();
 
-  if (!_supabase) {
-    toast('No hay conexión con Supabase.');
-    return;
+  try {
+    // 1. Verificar conexión con Supabase
+    if (!_supabase) {
+      toast('No hay conexión con Supabase.');
+      return;
+    }
+
+    // 2. Obtener y validar el ID de la promoción
+    const promotionId = document.getElementById('promoId').value;
+
+    if (!promotionId || promotionId === 'Cargando...') {
+      toast('El ID de la promoción todavía no está generado.');
+      return;
+    }
+
+    // 3. Obtener y validar el comercio seleccionado
+    const merchantId = document.getElementById('promoMerchantId').value;
+
+    if (!merchantId) {
+      toast('Primero debes seleccionar un comercio.');
+      return;
+    }
+
+    // 4. Obtener los términos y condiciones
+    const terms = document.getElementById('promoTerms').value
+      .split('\n')
+      .map(t => t.trim())
+      .filter(t => t.length > 0);
+
+    // 5. Construir el registro de la promoción
+    const newPromotion = {
+      id: promotionId,
+      merchant_id: merchantId,
+      shop: document.getElementById('promoShop').value,
+      branch: document.getElementById('promoBranch').value || null,
+      category: document.getElementById('promoCategory').value || null,
+      discount: document.getElementById('promoDiscount').value.trim(),
+      offer: document.getElementById('promoOffer').value.trim(),
+      image: document.getElementById('promoImage').value.trim(),
+      rating: document.getElementById('promoRating').value
+        ? parseFloat(document.getElementById('promoRating').value)
+        : null,
+      expires: document.getElementById('promoExpires').value.trim() || null,
+      description: document.getElementById('promoDescription').value.trim() || null,
+      expires_iso: document.getElementById('promoExpiresISO').value,
+      active: document.getElementById('promoActive').value === 'true',
+      valid_at: document.getElementById('promoValidAt').value.trim() || null,
+      terms: terms
+    };
+
+    // 6. Guardar en Supabase
+    const { error } = await _supabase
+      .from('promotions')
+      .insert([newPromotion]);
+
+    if (error) {
+      console.error('Error guardando promoción:', error);
+      toast('Error al guardar: ' + error.message);
+      return;
+    }
+
+    // 7. Confirmar registro exitoso
+    toast('¡Promoción creada correctamente!');
+
+    // 8. Actualizar las promociones de la página principal
+    await loadOffers();
+
+    // 9. Recargar formulario y generar el siguiente ID
+    renderAdmin('addPromotion');
+
+  } catch (error) {
+    console.error('Error inesperado:', error);
+    toast('Ocurrió un error: ' + error.message);
   }
-
-  const merchantId = document.getElementById('promoMerchantId').value;
-
-  if (!merchantId) {
-    toast('Primero debes seleccionar un comercio.');
-    return;
-  }
-
-  const terms = document.getElementById('promoTerms').value
-    .split('\n')
-    .map(t => t.trim())
-    .filter(t => t.length > 0);
-
-  const newPromotion = {
-    id: document.getElementById('promoId').value,
-    merchant_id: merchantId,
-    shop: document.getElementById('promoShop').value,
-    branch: document.getElementById('promoBranch').value || null,
-    category: document.getElementById('promoCategory').value || null,
-    discount: document.getElementById('promoDiscount').value.trim(),
-    offer: document.getElementById('promoOffer').value.trim(),
-    image: document.getElementById('promoImage').value.trim(),
-    rating: document.getElementById('promoRating').value
-      ? parseFloat(document.getElementById('promoRating').value)
-      : null,
-    expires: document.getElementById('promoExpires').value.trim() || null,
-    description: document.getElementById('promoDescription').value.trim() || null,
-    expires_iso: document.getElementById('promoExpiresISO').value,
-    active: document.getElementById('promoActive').value === 'true',
-    valid_at: document.getElementById('promoValidAt').value.trim() || null,
-    terms: terms
-  };
-
-  const { error } = await _supabase
-    .from('promotions')
-    .insert([newPromotion]);
-
-  if (error) {
-    console.error('Error guardando promoción:', error);
-    toast('Error al guardar: ' + error.message);
-    return;
-  }
-
-  toast('¡Promoción creada correctamente!');
-
-  // Actualizar las promociones de la página principal
-  await loadOffers();
-
-  // Volver a cargar el formulario y generar el siguiente ID
-  renderAdmin('addPromotion');
 }
+
+// Hacer disponible la función para el formulario HTML
+window.adminCreatePromotion = adminCreatePromotion;
+
 
 
 function adminTab(tab,b){renderAdmin(tab)}
