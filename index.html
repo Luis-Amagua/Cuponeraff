@@ -8,7 +8,6 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
 :root{--orange:#f47721;--orange-dark:#df5e0c;--cream:#fff7ef;--ink:#252525;--muted:#777;--line:#f0e5dc;--green:#198754;--red:#e64a38;--blue:#2868a8}
 *{box-sizing:border-box}body{margin:0;font-family:Inter,Arial,sans-serif;color:var(--ink);background:#fff;overflow-x:hidden}button,input{font:inherit}button{cursor:pointer}
@@ -71,8 +70,7 @@ nav{display:flex;gap:15px;align-items:center}nav a{color:#555;text-decoration:no
 .cardfoot small{color:#888;font-size:10px}
 
 .userpill{background:#edf8f0;color:#237342;padding:4px 8px;border-radius:6px;font-size:10px;font-weight:900}
-.userpill.green{background:#e9f7ed;color:#198754}
-.userpill.red{background:#ffeded;color:#e64a38}
+.userpill.green{background:#e1f5fe;color:#0277bd}
 
 .promo-banner-section{background:#fff;padding:25px 0}
 .promo-gallery{display:grid;grid-template-columns:1fr;gap:12px;margin-top:12px}
@@ -126,8 +124,6 @@ th{color:#806c5c;background:#fffaf6;font-size:9px;text-transform:uppercase;lette
 .couponbox{text-align:center}
 .shortcode{font-size:22px;letter-spacing:3px;font-weight:950;color:var(--orange-dark);background:#fff1e5;border:1px dashed #f2b47f;border-radius:10px;padding:10px 14px;display:inline-block;margin:6px auto}
 .codehint{font-size:10px;color:#806c5c;line-height:1.4}
-.tc-box{background:#fffaf6;border:1px solid #f0e5dc;border-radius:8px;padding:8px 10px;font-size:10px;color:#685b52;line-height:1.4;text-align:left;margin-top:8px}
-.tc-box b{color:var(--orange-dark)}
 .logline{font-size:11px;padding:8px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:8px}
 .right{text-align:right}
 .modalback{position:fixed;inset:0;background:#17120fc9;z-index:20;display:none;align-items:center;justify-content:center;padding:14px}
@@ -164,15 +160,38 @@ th{color:#806c5c;background:#fffaf6;font-size:9px;text-transform:uppercase;lette
 .plan-card p{font-size:10px;color:var(--muted);margin:0}
 
 .password-wrapper{position:relative;display:flex;align-items:center}
-.password-wrapper input{padding-right:48px}
-.toggle-password{position:absolute;right:8px;background:none;border:0;cursor:pointer;font-size:10px;font-weight:800;color:var(--muted);padding:4px 6px;border-radius:6px}
-.toggle-password:hover{color:var(--ink);background:#f5f0eb}
+.password-wrapper input{padding-right:38px}
+.toggle-password{position:absolute;right:10px;background:none;border:0;cursor:pointer;font-size:15px;color:var(--muted);padding:4px}
+.toggle-password:hover{color:var(--ink)}
 
-.chart-card{border:1px solid var(--line);border-radius:14px;padding:14px;background:#fff;box-shadow:0 4px 14px #1b130b08}
-.chart-card h3{margin:0 0 4px;font-size:14px}
-.chart-box{position:relative;height:240px;width:100%;margin-top:10px}
-.section-divider{margin:24px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
-.section-divider h3{margin:0;font-size:16px;color:var(--ink)}
+/* ===== Términos y condiciones ===== */
+.terms-mini{background:#fffaf6;border:1px solid #f4dfc8;border-radius:10px;padding:9px 11px;margin-bottom:12px;font-size:10.5px;line-height:1.45;color:#6b5a4c;text-align:left}
+.terms-mini b.tt,.terms-box b.tt{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:#8b6b57;margin-bottom:4px}
+.terms-mini ul,.terms-box ul{margin:0;padding-left:16px}
+.terms-mini li,.terms-box li{margin:2px 0}
+.terms-valid{margin-top:6px;font-weight:800;color:var(--orange-dark)}
+.terms-box{text-align:left;background:#fffaf6;border:1px solid #f4dfc8;border-radius:10px;padding:10px 12px;margin-top:12px;font-size:11px;line-height:1.45;color:#6b5a4c}
+.sec-title{display:flex;align-items:baseline;gap:8px;margin:22px 0 4px}
+.sec-title h3{margin:0;font-size:17px}
+.sec-title .count{font-size:11px;color:var(--muted);font-weight:700}
+/* ===== Estado de campaña ===== */
+.userpill.ok{background:#e1f5e8;color:#157347}
+.userpill.off{background:#ffeaea;color:#c0392b}
+/* ===== Gráficos ===== */
+.grid4{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.chartbox{border:1px solid var(--line);border-radius:12px;padding:14px;margin-top:14px;background:#fff}
+.chartbox h3{margin:0 0 2px;font-size:14px}
+.hbar-row{display:grid;grid-template-columns:minmax(90px,36%) 1fr 34px;gap:8px;align-items:center;margin:8px 0;font-size:11px}
+.hbar-label{font-weight:700;color:#4a3f37;line-height:1.25;word-break:break-word}
+.hbar-track{background:#f6eee7;border-radius:6px;height:16px;overflow:hidden}
+.hbar-fill{height:100%;border-radius:6px}
+.hbar-val{font-weight:900;text-align:right}
+.hbar-pair{display:grid;gap:3px}
+.hbar-val.two{line-height:19px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:10px;font-size:10.5px;color:#5f5751}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.chart-empty{padding:22px 10px;text-align:center;color:var(--muted);font-size:12px;background:#fffaf6;border:1px dashed #f0c6a5;border-radius:10px}
+.chartsvg{width:100%;height:auto;display:block}
 
 @media(min-width:769px){
   .nav{padding:14px 22px}
@@ -184,6 +203,7 @@ th{color:#806c5c;background:#fffaf6;font-size:9px;text-transform:uppercase;lette
   .steps{grid-template-columns:repeat(3,1fr);gap:14px}
   .grid2{grid-template-columns:1fr 1fr;gap:16px}
   .grid3{grid-template-columns:repeat(3,1fr);gap:13px}
+  .grid4{grid-template-columns:repeat(4,1fr);gap:13px}
   .sectionhead{flex-direction:row;align-items:flex-end}
   .footerin{flex-direction:row;align-items:center}
   #mapContainer{height:380px}
@@ -198,7 +218,7 @@ th{color:#806c5c;background:#fffaf6;font-size:9px;text-transform:uppercase;lette
     <div>
       <div class="eyebrow">Beneficios para disfrutar más</div>
       <h1>Descubre.<br><em>Ahorra.</em><br>Disfruta.</h1>
-      <p>Encuentra restaurantes seleccionados en <b>Quito</b>, aprovecha promociones especiales y presenta tu cupón digital al momento de pagar.</p>
+      <p>Encuentra restaurantes en Quito, aprovecha promociones especiales y presenta tu cupón digital antes de realizar tu pedido.</p>
       
       <div class="social-proof">
         <div class="avatar-group">
@@ -226,7 +246,7 @@ th{color:#806c5c;background:#fffaf6;font-size:9px;text-transform:uppercase;lette
     <div>
       <div class="eyebrow">OFERTAS CERCA DE TI</div>
       <h2>Tu próximo lugar favorito</h2>
-      <p class="sub">Comercios aliados y descuentos para disfrutar en persona.</p>
+      <p class="sub">Promociones para disfrutar en el establecimiento.</p>
     </div>
   </div>
   <div class="categories">
@@ -291,14 +311,14 @@ th{color:#806c5c;background:#fffaf6;font-size:9px;text-transform:uppercase;lette
 </section>
 
 <!-- LOGIN DE CLIENTE -->
-<section id="clientLoginView" class="view hidden"><div class="container"><div class="authbox"><div class="panel"><div class="authhead"><div class="brand"><div class="logo"><span>Cuponera</span><span class="offword">ff</span><span class="offword">.</span></div><div class="tagline">cuenta cliente</div></div><h2>Accede a tu cuenta</h2><p class="sub"><b>Inicia sesión o crea tu cuenta para obtener tu cupón.</b></p></div>
+<section id="clientLoginView" class="view hidden"><div class="container"><div class="authbox"><div class="panel"><div class="authhead"><div class="brand"><div class="logo"><span>Cuponera</span><span class="offword">ff</span><span class="offword">.</span></div></div><h2>Accede a tu cuenta</h2><p class="sub"><b>Inicia sesión o crea tu cuenta para obtener tu cupón.</b></p></div>
 <form id="clientLoginForm" onsubmit="clientLogin(event)">
   <div class="formrow"><label for="clientUserPage">Correo electrónico</label><input class="field" id="clientUserPage" type="email" required value="cliente@cuponeraff.com" autocomplete="username"></div>
   <div class="formrow">
     <label for="clientPassPage">Contraseña</label>
     <div class="password-wrapper">
       <input class="field" id="clientPassPage" type="password" required value="cliente" autocomplete="current-password">
-      <button type="button" class="toggle-password" onclick="togglePasswordVisibility('clientPassPage', this)">Ver</button>
+      <button type="button" class="toggle-password" onclick="togglePasswordVisibility('clientPassPage', this)">👁️</button>
     </div>
   </div>
   <div id="clientLoginErr" class="field-error" style="display:none;margin-bottom:8px">Usuario o contraseña incorrectos.</div>
@@ -307,31 +327,12 @@ th{color:#806c5c;background:#fffaf6;font-size:9px;text-transform:uppercase;lette
 <div class="auth-switch">¿Todavía no tienes cuenta? <button class="linkbtn" onclick="openClientRegisterModal()">Regístrate</button></div>
 </div></div></div></section>
 
-<section id="clientView" class="view hidden">
-  <div class="container">
-    <div class="sectionhead">
-      <div>
-        <div class="eyebrow">Mi Cuenta</div>
-        <h2>Mis cupones</h2>
-        <p class="sub" id="clientWelcome"></p>
-      </div>
-    </div>
-    <div class="notice blue" id="clientPlanInfoBox"></div>
-    <div class="notice blue" style="margin-top:8px">Tu cupón es de un solo uso. Presiona «Ver cupón» para mostrar el QR en el comercio al pagar.</div>
-    
-    <div class="section-divider">
-      <h3>Cupones disponibles</h3>
-      <small class="muted">Ordenados del más reciente al más antiguo</small>
-    </div>
-    <div id="myAvailableCoupons" class="cards"></div>
+<section id="clientView" class="view hidden"><div class="container"><div class="sectionhead"><div><div class="eyebrow">Mi Cuenta</div><h2>Mis cupones</h2><p class="sub" id="clientWelcome"></p></div></div><div class="notice blue" id="clientPlanInfoBox"></div><div class="sec-title"><h3>Cupones disponibles</h3><span class="count" id="availCount"></span></div>
 
-    <div class="section-divider" style="margin-top:32px">
-      <h3>Historial de cupones</h3>
-      <small class="muted">Canjeados, caducados o inactivos</small>
-    </div>
-    <div id="myHistoryCoupons" class="cards"></div>
-  </div>
-</section>
+<div id="myCoupons" class="cards"></div>
+<div class="sec-title" style="margin-top:30px"><h3>Historial de cupones</h3><span class="count" id="historyCount"></span></div>
+<p class="sub" style="margin-bottom:12px">Cupones canjeados, vencidos o que ya no están disponibles.</p>
+<div id="myCouponsHistory" class="cards"></div></div></section>
 
 <section id="merchantLoginView" class="view hidden"><div class="container"><div class="authbox"><div class="panel"><div class="authhead"><div class="brand"><div class="logo"><span>Cuponera</span><span class="offword">ff</span><span class="offword">.</span></div><div class="tagline"></div></div><h2>Acceso para comercios</h2></div>
 <form onsubmit="merchantLogin(event)">
@@ -340,14 +341,14 @@ th{color:#806c5c;background:#fffaf6;font-size:9px;text-transform:uppercase;lette
     <label for="merchantPass">Contraseña</label>
     <div class="password-wrapper">
       <input class="field" id="merchantPass" type="password" autocomplete="current-password" required placeholder="Contraseña">
-      <button type="button" class="toggle-password" onclick="togglePasswordVisibility('merchantPass', this)">Ver</button>
+      <button type="button" class="toggle-password" onclick="togglePasswordVisibility('merchantPass', this)">👁️</button>
     </div>
   </div>
   <div id="merchantLoginErr" class="field-error" style="display:none;margin-bottom:8px">Usuario o contraseña incorrectos.</div>
   <button class="btn" style="width:100%">Iniciar sesión</button>
 </form>
 <div class="auth-switch">¿Tienes un comercio? <button class="linkbtn" onclick="openMerchantRequest()">Quiero ser comercio socio</button></div>
-<p style="margin-top:10px;color:var(--muted);font-size:12px;line-height:1.5;text-align:justify">¿Aún no formas parte de Cuponeraff? Cuéntanos sobre tu negocio. Revisaremos tu solicitud y nos pondremos en contacto contigo.</p>
+<p class="auth-switch" style="margin-top:10px;color:var(--muted);text-align:justify">¿Aún no eres parte de Cuponeraff? Cuéntanos sobre tu negocio y te contactaremos para que formes parte de nuestra comunidad.</p>
 </div></div></div></section>
 
 <!-- PORTAL COMERCIO -->
@@ -361,13 +362,12 @@ th{color:#806c5c;background:#fffaf6;font-size:9px;text-transform:uppercase;lette
     </div>
     
     <div class="tabs">
-      <button class="chip active" onclick="switchMerchantTab('summary', this)">Validar cupones</button>
+      <button class="chip active" onclick="switchMerchantTab('validate', this)">Validar cupones</button>
+      <button class="chip" onclick="switchMerchantTab('exec', this)">Resumen ejecutivo</button>
       <button class="chip" onclick="switchMerchantTab('promos', this)">Promociones Activas</button>
-      <button class="chip" onclick="switchMerchantTab('executive', this)">Resumen ejecutivo</button>
     </div>
 
-    <!-- PESTAÑA 1: VALIDAR CUPONES -->
-    <div id="merchantTabSummary">
+    <div id="merchantTabValidate">
       <div class="grid2" style="align-items:start">
         <div class="panel">
           <h2>Validar cupón</h2>
@@ -401,30 +401,26 @@ th{color:#806c5c;background:#fffaf6;font-size:9px;text-transform:uppercase;lette
       </div>
     </div>
 
-    <!-- PESTAÑA 2: PROMOCIONES ACTIVAS -->
+    <div id="merchantTabExec" class="hidden">
+      <div class="grid4" id="merchantMetrics"></div>
+      <div class="panel" style="margin-top:17px">
+        <h2>Canjes por campaña</h2>
+        <p class="sub">Cantidad de cupones canjeados en cada una de tus campañas.</p>
+        <div id="merchantChartCampaigns"></div>
+      </div>
+      <div class="panel" style="margin-top:17px">
+        <h2>Canjes por día</h2>
+        <p class="sub">Cupones canjeados cada día. El color indica la campaña, así puedes comparar su efectividad en el tiempo.</p>
+        <div id="merchantChartDaily"></div>
+      </div>
+    </div>
+
     <div id="merchantTabPromos" class="hidden">
       <div class="panel" style="margin-bottom:15px">
         <h2>Campañas activas en Cuponeraff</h2>
-        <p class="sub">Estas son las promociones que tus clientes pueden visualizar actualmente y sus términos aplicables en local.</p>
+        <p class="sub">Estas son las promociones que tus clientes pueden visualizar actualmente.</p>
       </div>
       <div class="cards" id="merchantPromosGrid"></div>
-    </div>
-
-    <!-- PESTAÑA 3: RESUMEN EJECUTIVO -->
-    <div id="merchantTabExecutive" class="hidden">
-      <div class="grid3" id="merchantExecMetrics" style="margin-bottom:17px"></div>
-      <div class="grid2">
-        <div class="chart-card">
-          <h3>Cupones canjeados por campaña</h3>
-          <p class="sub" style="margin-bottom:6px">Total de canjes confirmados según cada promoción.</p>
-          <div class="chart-box"><canvas id="merchantBarChart"></canvas></div>
-        </div>
-        <div class="chart-card">
-          <h3>Evolución de canjes por día y campaña</h3>
-          <p class="sub" style="margin-bottom:6px">Efectividad diaria desglosada por campaña.</p>
-          <div class="chart-box"><canvas id="merchantTimeChart"></canvas></div>
-        </div>
-      </div>
     </div>
   </div>
 </section>
@@ -436,7 +432,7 @@ th{color:#806c5c;background:#fffaf6;font-size:9px;text-transform:uppercase;lette
     <label>Contraseña</label>
     <div class="password-wrapper">
       <input class="field" id="adminPass" type="password" required>
-      <button type="button" class="toggle-password" onclick="togglePasswordVisibility('adminPass', this)">Ver</button>
+      <button type="button" class="toggle-password" onclick="togglePasswordVisibility('adminPass', this)">👁️</button>
     </div>
   </div>
   <button class="btn" style="width:100%">Ingresar</button>
@@ -452,7 +448,7 @@ th{color:#806c5c;background:#fffaf6;font-size:9px;text-transform:uppercase;lette
         <p class="sub">Gestión general, creación/edición de comercios y aprobación de pagos.</p>
       </div>
     </div>
-    <div class="tabs" style="margin-top:16px">
+    <div class="tabs" style="margin-top:20px">
       <button class="chip active" onclick="adminTab('summary',this)">Resumen General</button>
       <button class="chip" onclick="adminTab('scans',this)">Lecturas y validaciones</button>
       <button class="chip" onclick="adminTab('coupons',this)">Todos los cupones</button>
@@ -498,14 +494,14 @@ th{color:#806c5c;background:#fffaf6;font-size:9px;text-transform:uppercase;lette
         <label for="regPassword">Contraseña</label>
         <div class="password-wrapper">
           <input class="field" id="regPassword" type="password" required minlength="8" autocomplete="new-password" placeholder="Mínimo 8 caracteres">
-          <button type="button" class="toggle-password" onclick="togglePasswordVisibility('regPassword', this)">Ver</button>
+          <button type="button" class="toggle-password" onclick="togglePasswordVisibility('regPassword', this)">👁️</button>
         </div>
       </div>
       <div class="formrow">
         <label for="regPassword2">Confirmar contraseña</label>
         <div class="password-wrapper">
           <input class="field" id="regPassword2" type="password" required minlength="8" autocomplete="new-password">
-          <button type="button" class="toggle-password" onclick="togglePasswordVisibility('regPassword2', this)">Ver</button>
+          <button type="button" class="toggle-password" onclick="togglePasswordVisibility('regPassword2', this)">👁️</button>
         </div>
       </div>
       <label class="consent-row"><input id="privacyConsent" type="checkbox" required><span>He leído y acepto la <button type="button" class="linkbtn inline-link" onclick="openPrivacy()">Política de Protección de Datos Personales</button>.</span></label>
@@ -588,26 +584,13 @@ th{color:#806c5c;background:#fffaf6;font-size:9px;text-transform:uppercase;lette
   </div>
 </div>
 
-<div class="modalback" id="clientSuccessModal"><div class="modal modal-centered"><button class="x" onclick="closeClientSuccessModal()">×</button><div class="eyebrow">¡Registro exitoso!</div><h2 style="margin:12px 0">Felicidades, tu cuenta está lista</h2><p class="sub" style="margin-bottom:20px">Ya puedes disfrutar de tus cupones y beneficios.</p><button class="btn" style="width:100%" onclick="closeClientSuccessModal()">Entendido</button></div></div>
-<div class="modalback" id="merchantSuccessModal"><div class="modal modal-centered"><button class="x" onclick="closeMerchantSuccessModal()">×</button><div class="eyebrow">Solicitud enviada</div><h2 style="margin:12px 0">¡Gracias por tu interés!</h2><p class="sub" style="margin-bottom:20px">Revisaremos tu solicitud y nos pondremos en contacto contigo.</p><button class="btn" style="width:100%" onclick="closeMerchantSuccessModal()">Entendido</button></div></div>
+<div class="modalback" id="clientSuccessModal"><div class="modal modal-centered"><button class="x" onclick="closeClientSuccessModal()"></button><div class="eyebrow">¡Registro exitoso!</div><h2 style="margin:12px 0">Felicidades, tu cuenta está lista</h2><p class="sub" style="margin-bottom:20px">Ya puedes disfrutar de tus cupones y beneficios.</p><button class="btn" style="width:100%" onclick="closeClientSuccessModal()">Entendido</button></div></div>
+<div class="modalback" id="merchantSuccessModal"><div class="modal modal-centered"><button class="x" onclick="closeMerchantSuccessModal()"></button><div class="eyebrow">Solicitud enviada</div><h2 style="margin:12px 0">¡Gracias por tu interés!</h2><p class="sub" style="margin-bottom:20px">Revisaremos tu solicitud y nos pondremos en contacto contigo.</p><button class="btn" style="width:100%" onclick="closeMerchantSuccessModal()">Entendido</button></div></div>
 
-<div class="floating-promo" id="floatingPromo"><button class="promo-close" onclick="hideFloatingPromo()" aria-label="Ocultar aviso">×</button><span class="promo-dot">●</span><span>Registro gratuito hasta el <b>31 de diciembre de 2026</b>.</span></div>
+<div class="floating-promo" id="floatingPromo"><button class="promo-close" onclick="hideFloatingPromo()" aria-label="Ocultar aviso"></button><span class="promo-dot">●</span><span>Registro gratuito hasta el <b>31 de diciembre de 2026</b>.</span></div>
 
 <!-- MODAL VER CUPÓN -->
-<div class="modalback" id="couponModal">
-  <div class="modal modal-centered">
-    <button class="x" onclick="closeModal()">×</button>
-    <div class="eyebrow">Tu beneficio está listo</div>
-    <h2 id="couponShop" style="margin:8px 0 4px"></h2>
-    <p id="couponOffer" class="muted" style="margin-bottom:12px"></p>
-    <div class="couponbox"><div class="qrholder" id="couponQr"></div></div>
-    <div class="shortcode" id="couponShortCodeText"></div>
-    <p class="sub" id="couponExpiryText" style="margin-top:8px;margin-bottom:8px"></p>
-    <div class="tc-box" id="couponModalTC"></div>
-    <button class="btn" style="width:100%;margin-top:12px" onclick="closeModal()">Entendido</button>
-  </div>
-</div>
-<div class="toast" id="toast"></div>
+<div class="modalback" id="couponModal"><div class="modal modal-centered"><button class="x" onclick="closeModal()"></button><div class="eyebrow">Tu beneficio está listo</div><h2 id="couponShop" style="margin:8px 0 4px"></h2><p id="couponOffer" class="muted" style="margin-bottom:12px"></p><div class="couponbox"><div class="qrholder" id="couponQr"></div></div><div class="shortcode" id="couponShortCodeText" style="margin-top:12px"></div><p class="sub" id="couponExpiryText" style="margin-top:8px"></p><div class="terms-box" id="couponTerms"></div><button class="btn" style="width:100%;margin-top:10px" onclick="closeModal()">Entendido</button></div></div><div class="toast" id="toast"></div>
 
 <script>
 const SUPABASE_URL = 'https://rrflbkkrhmayutwubfon.supabase.co';
@@ -617,44 +600,26 @@ const _supabase = window.supabase ? supabase.createClient(SUPABASE_URL, SUPABASE
 const DEMO={client:{user:'cliente@cuponeraff.com',pass:'cliente'},merchant:{user:'comercio',pass:'comercio',id:'m1',name:'Burger House',branch:'La Carolina'},admin:{user:'admin',pass:'admin'}};
 
 let globalCouponsStorage = [];
-let activeCharts = {};
 
 let offers=[
-  {id:'p1',merchantId:'m1',shop:'Burger House',branch:'La Carolina',category:'burger',discount:'30% OFF',offer:'30% de descuento en hamburguesas seleccionadas',image:'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600&auto=format&fit=crop&q=80',rating:'4.8',expires:'30 nov. 2026',description:'Hamburguesas artesanales y papas crocantes.',active:true,terms:'No aplica a domicilio, solo aplica con consumo en el restaurante. No aplica promoción sobre promoción. Válido en: Sucursal La Carolina.'},
-  {id:'p1b',merchantId:'m1',shop:'Burger House',branch:'La Carolina',category:'burger',discount:'2x1',offer:'2x1 en combos clásicos los martes',image:'https://images.unsplash.com/photo-1550547660-d9450f859349?w=600&auto=format&fit=crop&q=80',rating:'4.8',expires:'15 oct. 2026',description:'Dos hamburguesas clásicas con papas medianas.',active:false,terms:'Solo consumo en local los días martes. No acumulable con otras promociones ni feriados. Válido en: Todas las sucursales.'},
-  {id:'p2',merchantId:'m2',shop:'Pizza Nostra',branch:'Iñaquito',category:'pizza',discount:'2x1',offer:'2x1 en pizzas medianas',image:'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=600&auto=format&fit=crop&q=80',rating:'4.7',expires:'25 nov. 2026',description:'Dos pizzas medianas por el precio de una.',active:true,terms:'No aplica a domicilio, solo consumo en restaurante. No aplica promoción sobre promoción. Válido en: Sucursal Iñaquito.'},
-  {id:'p3',merchantId:'m3',shop:'Café Aroma',branch:'González Suárez',category:'cafe',discount:'20% OFF',offer:'20% de descuento en desayunos y brunch',image:'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=600&auto=format&fit=crop&q=80',rating:'4.9',expires:'30 nov. 2026',description:'Café de especialidad, desayunos y brunch.',active:true,terms:'Válido de lunes a viernes hasta las 12h00. Solo consumo en local. No aplica promoción sobre promoción. Válido en: Sucursal González Suárez.'},
-  {id:'p4',merchantId:'m4',shop:'Dulce Momento',branch:'El Batán',category:'dessert',discount:'25% OFF',offer:'25% de descuento en postres seleccionados',image:'https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=600&auto=format&fit=crop&q=80',rating:'4.6',expires:'28 nov. 2026',description:'Pasteles, cheesecakes y postres para compartir.',active:true,terms:'No aplica a domicilio ni pedidos para llevar. No acumulable con otras ofertas. Válido en: Todas las sucursales.'},
-  {id:'p5',merchantId:'m5',shop:'La Parrilla Urbana',branch:'Centro Norte',category:'burger',discount:'15% OFF',offer:'15% de descuento en sándwiches',image:'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=600&auto=format&fit=crop&q=80',rating:'4.5',expires:'20 nov. 2026',description:'Sándwiches y sabores a la parrilla.',active:true,terms:'Solo consumo en restaurante. No incluye bebidas alcohólicas ni aplica promoción sobre promoción. Válido en: Sucursal Centro Norte.'},
-  {id:'p6',merchantId:'m6',shop:'Matcha & Miel',branch:'La Floresta',category:'cafe',discount:'2x1',offer:'2x1 en bebidas seleccionadas',image:'https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=600&auto=format&fit=crop&q=80',rating:'4.8',expires:'30 nov. 2026',description:'Bebidas especiales y repostería artesanal.',active:true,terms:'Aplica en bebidas frías y calientes seleccionadas. Solo consumo en el local. Válido en: Sucursal La Floresta.'}
-];
-
-const mapShops = [
-  {name:'Burger House', cat:'🍔 Hamburguesas', lat:-0.1742, lng:-78.4845, address:'Av. Shyris y NNUU (La Carolina)'},
-  {name:'Pizza Nostra', cat:'🍕 Pizza', lat:-0.1710, lng:-78.4870, address:'Av. Amazonas y Japón'},
-  {name:'Café Aroma', cat:'☕ Cafetería', lat:-0.1790, lng:-78.4820, address:'Av. 6 de Diciembre y Orellana'},
-  {name:'Dulce Momento', cat:'🍰 Repostería', lat:-0.1660, lng:-78.4800, address:'Av. Gaspar de Villarroel'},
-  {name:'La Parrilla Urbana', cat:'🥩 Carnes y Asados', lat:-0.1755, lng:-78.4890, address:'Av. República y Eloy Alfaro'},
-  {name:'Matcha & Miel', cat:'🥐 Repostería & Café', lat:-0.1820, lng:-78.4850, address:'Av. Coruña y Whymper'}
+{id:'p1',merchantId:'m1',shop:'Burger House',branch:'La Carolina',category:'burger',discount:'30% OFF',offer:'30% de descuento en hamburguesas seleccionadas',image:'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600&auto=format&fit=crop&q=80',rating:'4.8',expires:'30 nov. 2026',description:'Hamburguesas artesanales y papas crocantes.',expiresISO:'2026-11-30',active:true,validAt:'Sucursal La Carolina',terms:['Válido únicamente con consumo en el restaurante.','No aplica para pedidos a domicilio ni para llevar.','Aplica solo en hamburguesas seleccionadas.','No aplica promoción sobre promoción ni es acumulable con otras ofertas.']},
+{id:'p2',merchantId:'m2',shop:'Pizza Nostra',branch:'Iñaquito',category:'pizza',discount:'2x1',offer:'2x1 en pizzas medianas',image:'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=600&auto=format&fit=crop&q=80',rating:'4.7',expires:'25 nov. 2026',description:'Dos pizzas medianas por el precio de una.',expiresISO:'2026-11-25',active:true,validAt:'Todas las sucursales',terms:['Válido únicamente con consumo en el restaurante.','No aplica para pedidos a domicilio ni para llevar.','Aplica solo en pizzas medianas.','No aplica promoción sobre promoción ni es acumulable con otras ofertas.']},
+{id:'p3',merchantId:'m3',shop:'Café Aroma',branch:'González Suárez',category:'cafe',discount:'20% OFF',offer:'20% de descuento en desayunos y brunch',image:'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=600&auto=format&fit=crop&q=80',rating:'4.9',expires:'30 nov. 2026',description:'Café de especialidad, desayunos y brunch.',expiresISO:'2026-11-30',active:true,validAt:'Sucursal González Suárez',terms:['Válido únicamente con consumo en el local.','No aplica a domicilio.','Aplica solo en desayunos y brunch.','No aplica promoción sobre promoción ni es acumulable con otras ofertas.']},
+{id:'p4',merchantId:'m4',shop:'Dulce Momento',branch:'El Batán',category:'dessert',discount:'25% OFF',offer:'25% de descuento en postres seleccionados',image:'https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=600&auto=format&fit=crop&q=80',rating:'4.6',expires:'28 nov. 2026',description:'Pasteles, cheesecakes y postres para compartir.',expiresISO:'2026-11-28',active:true,validAt:'Todas las sucursales',terms:['Válido únicamente con consumo en el local.','No aplica a domicilio ni para llevar.','Aplica solo en postres seleccionados.','No aplica promoción sobre promoción ni es acumulable con otras ofertas.']},
+{id:'p5',merchantId:'m5',shop:'La Parrilla Urbana',branch:'Centro Norte',category:'burger',discount:'15% OFF',offer:'15% de descuento en sándwiches',image:'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=600&auto=format&fit=crop&q=80',rating:'4.5',expires:'20 nov. 2026',description:'Sándwiches y sabores a la parrilla.',expiresISO:'2026-11-20',active:true,validAt:'Sucursal Centro Norte',terms:['Válido únicamente con consumo en el restaurante.','No aplica para pedidos a domicilio ni para llevar.','Aplica solo en sándwiches.','No aplica promoción sobre promoción ni es acumulable con otras ofertas.']},
+{id:'p6',merchantId:'m6',shop:'Matcha & Miel',branch:'La Floresta',category:'cafe',discount:'2x1',offer:'2x1 en bebidas seleccionadas',image:'https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=600&auto=format&fit=crop&q=80',rating:'4.8',expires:'30 nov. 2026',description:'Bebidas especiales y repostería artesanal.',expiresISO:'2026-11-30',active:true,validAt:'Todas las sucursales',terms:['Válido únicamente con consumo en el local.','No aplica a domicilio.','Aplica solo en bebidas seleccionadas.','No aplica promoción sobre promoción ni es acumulable con otras ofertas.']}
 ];
 
 let activeCat='all',currentUser=null,html5Qr=null,pendingCoupon=null,leafletMap=null,selectedPlan='free',pendingUserData=null;
 
 function uid(){return 'CO-'+(crypto.randomUUID?crypto.randomUUID():Math.random().toString(36).slice(2)+Date.now()).replaceAll('-','').slice(0,24).toUpperCase()}
 function makeShortCode(){const letters='ABCDEFGHJKLMNPQRSTUVWXYZ';let code;do{const bytes=new Uint8Array(5);if(window.crypto?.getRandomValues)crypto.getRandomValues(bytes);else for(let i=0;i<5;i++)bytes[i]=Math.floor(Math.random()*256);code=letters[bytes[0]%letters.length]+String((bytes[1]*256+bytes[2])%10000).padStart(4,'0')}while(false);return code}
-function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&','<':'<','>':'>','"':'"',"'":'''}[c]))}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function toast(t){const x=document.getElementById('toast');x.textContent=t;x.classList.add('show');setTimeout(()=>x.classList.remove('show'),3500)}
 
 function formatEcuadorDate(isoString) {
   if (!isoString) return '';
   return new Date(isoString).toLocaleString('es-EC', { timeZone: 'America/Guayaquil', year:'numeric', month:'short', day:'numeric', hour:'2-digit', minute:'2-digit', hour12:true });
-}
-
-function getOfferTerms(c) {
-  if (c.terms) return c.terms;
-  const o = offers.find(x => x.id === (c.promotion_id || c.promotionId) || (x.shop === c.merchant && x.offer === c.offer));
-  if (o && o.terms) return o.terms;
-  return `No aplica a domicilio, solo aplica con consumo en el restaurante. No aplica promoción sobre promoción. Válido en: Sucursal ${c.branch || 'Principal'}.`;
 }
 
 function translateResult(res) {
@@ -669,11 +634,111 @@ function translateResult(res) {
   return map[res] || res;
 }
 
+/* ===== Términos y condiciones, estado de campañas y gráficos ===== */
+const DEFAULT_TERMS=['Válido únicamente con consumo en el restaurante.','No aplica para pedidos a domicilio ni para llevar.','No aplica promoción sobre promoción ni es acumulable con otras ofertas.'];
+const CHART_COLORS=['#f47721','#2868a8','#198754','#8e44ad','#e64a38','#d4a017','#17a2b8','#6c757d'];
+function chartColor(i){return CHART_COLORS[i%CHART_COLORS.length]}
+
+function offerOfCoupon(c){return offers.find(o=>o.id===c.promotion_id)||null}
+function termsData(c){
+  const o=offerOfCoupon(c);
+  return {terms:(o&&o.terms&&o.terms.length)?o.terms:DEFAULT_TERMS, validAt:(o&&o.validAt)||('Sucursal '+(c.branch||''))};
+}
+function termsListHTML(terms,validAt){
+  return '<ul>'+terms.map(t=>'<li>'+esc(t)+'</li>').join('')+'</ul><div class="terms-valid">Válido en: '+esc(validAt)+'</div>';
+}
+function isCampaignActive(o){
+  if(!o||o.active===false)return false;
+  if(o.expiresISO&&Date.now()>new Date(o.expiresISO+'T23:59:59-05:00').getTime())return false;
+  return true;
+}
+function couponEffStatus(c){
+  const exp=c.expires_at||c.expiresAt;
+  if(c.status==='ACTIVE'&&exp&&Date.now()>new Date(exp).getTime())return 'EXPIRED';
+  return c.status;
+}
+function ecDayKey(v){
+  const d=new Date(v);
+  if(isNaN(d))return '';
+  return d.toLocaleDateString('en-CA',{timeZone:'America/Guayaquil'});
+}
+function redeemedDate(c,events){
+  const r=c.redeemed_at||c.redeemedAt;
+  if(r)return r;
+  const e=(events||[]).find(x=>x.result==='REDEEMED'&&x.coupon_id===c.id);
+  return e?e.at:(c.created_at||c.createdAt);
+}
+function campaignLabel(c){
+  const o=offerOfCoupon(c);
+  return (o&&o.offer)||c.offer||'Campaña';
+}
+
+function emptyChart(msg){return '<div class="chart-empty">'+esc(msg||'Aún no hay datos para mostrar.')+'</div>'}
+function legendHTML(entries){
+  return '<div class="legend">'+entries.map(e=>'<span><i style="background:'+e.color+'"></i>'+esc(e.name)+'</span>').join('')+'</div>';
+}
+function hBarChart(items){
+  if(!items.length||items.every(i=>!i.value))return emptyChart('Aún no hay canjes confirmados para mostrar.');
+  const max=Math.max(...items.map(i=>i.value),1);
+  return '<div>'+items.map(i=>'<div class="hbar-row"><div class="hbar-label">'+esc(i.label)+'</div><div class="hbar-track"><div class="hbar-fill" style="width:'+(i.value/max*100).toFixed(1)+'%;background:'+i.color+(i.value>0?';min-width:3px':'')+'"></div></div><div class="hbar-val">'+i.value+'</div></div>').join('')+'</div>';
+}
+function pairBarChart(items,nameA,colorA,nameB,colorB){
+  if(!items.length||items.every(i=>!i.a&&!i.b))return emptyChart('Aún no hay cupones emitidos para mostrar.');
+  const max=Math.max(...items.map(i=>Math.max(i.a,i.b)),1);
+  const bar=(v,c)=>'<div class="hbar-track"><div class="hbar-fill" style="width:'+(v/max*100).toFixed(1)+'%;background:'+c+(v>0?';min-width:3px':'')+'"></div></div>';
+  return '<div>'+items.map(i=>'<div class="hbar-row"><div class="hbar-label">'+esc(i.label)+'</div><div class="hbar-pair">'+bar(i.a,colorA)+bar(i.b,colorB)+'</div><div class="hbar-val two">'+i.a+'<br>'+i.b+'</div></div>').join('')+'</div>'
+    +legendHTML([{name:nameA,color:colorA},{name:nameB,color:colorB}]);
+}
+function buildDailySeries(items,names){
+  const MS=864e5, todayKey=ecDayKey(Date.now());
+  const rows=items.map(i=>({dk:ecDayKey(i.at),key:i.key})).filter(i=>i.dk);
+  let n=7;
+  if(rows.length){
+    const first=rows.map(i=>i.dk).sort()[0];
+    const diff=Math.round((Date.parse(todayKey+'T00:00:00Z')-Date.parse(first+'T00:00:00Z'))/MS);
+    n=Math.min(30,Math.max(7,diff+1));
+  }
+  const dayKeys=[];
+  for(let i=n-1;i>=0;i--)dayKeys.push(ecDayKey(Date.now()-i*MS));
+  const series=names.map((name,idx)=>({name,color:chartColor(idx),values:dayKeys.map(dk=>rows.filter(r=>r.dk===dk&&r.key===name).length)}));
+  return {dayKeys,series};
+}
+function stackedDailyChart(dayKeys,series){
+  const n=dayKeys.length;
+  const totals=dayKeys.map((_,i)=>series.reduce((sum,x)=>sum+x.values[i],0));
+  if(!totals.some(t=>t>0))return emptyChart('Aún no hay canjes confirmados para mostrar en el tiempo.');
+  const W=640,H=250,pl=34,pr=8,pt=10,pb=30;
+  const maxT=Math.max(...totals);
+  const step=Math.max(1,Math.ceil(maxT/4));
+  const yMax=Math.ceil(maxT/step)*step;
+  const iw=W-pl-pr, ih=H-pt-pb, bw=iw/n, barW=Math.min(34,bw*0.68);
+  const fmt=dk=>dk.slice(8)+'/'+dk.slice(5,7);
+  let g='';
+  for(let v=0;v<=yMax;v+=step){
+    const y=pt+ih-(v/yMax)*ih;
+    g+='<line x1="'+pl+'" x2="'+(W-pr)+'" y1="'+y+'" y2="'+y+'" stroke="#f0e5dc"/><text x="'+(pl-6)+'" y="'+(y+3)+'" text-anchor="end" font-size="10" fill="#806c5c">'+v+'</text>';
+  }
+  const every=Math.max(1,Math.ceil(n/10));
+  dayKeys.forEach((dk,i)=>{
+    const cx=pl+bw*i+bw/2;
+    let acc=0;
+    series.forEach(sr=>{
+      const v=sr.values[i];
+      if(!v)return;
+      const h=(v/yMax)*ih, y=pt+ih-((acc+v)/yMax)*ih;
+      acc+=v;
+      g+='<rect x="'+(cx-barW/2).toFixed(1)+'" y="'+y.toFixed(1)+'" width="'+barW.toFixed(1)+'" height="'+h.toFixed(1)+'" fill="'+sr.color+'" rx="2"><title>'+esc(sr.name)+': '+v+' canje(s) · '+fmt(dk)+'</title></rect>';
+    });
+    if((n-1-i)%every===0)g+='<text x="'+cx.toFixed(1)+'" y="'+(H-10)+'" text-anchor="middle" font-size="10" fill="#806c5c">'+fmt(dk)+'</text>';
+  });
+  return '<svg class="chartsvg" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Cupones canjeados por día">'+g+'</svg>'+legendHTML(series.map(x=>({name:x.name,color:x.color})))+'<p class="codehint" style="margin-bottom:0">Últimos '+n+' días</p>';
+}
+
 function togglePasswordVisibility(inputId, btnEl) {
   const input = document.getElementById(inputId);
   if (!input) return;
-  if (input.type === 'password') { input.type = 'text'; btnEl.textContent = 'Ocultar'; }
-  else { input.type = 'password'; btnEl.textContent = 'Ver'; }
+  if (input.type === 'password') { input.type = 'text'; btnEl.textContent = '🙈'; }
+  else { input.type = 'password'; btnEl.textContent = '👁️'; }
 }
 
 function validatePhoneInput(inputEl, errElId) {
@@ -725,16 +790,55 @@ function showView(name){
   updateNavHeader();
 }
 
-function initMap(){
+async function initMap(){
   const mapElem = document.getElementById('mapContainer');
   if(!mapElem) return;
-  if(leafletMap) { leafletMap.invalidateSize(); return; }
+  
+  if(leafletMap) { 
+    leafletMap.invalidateSize(); 
+    return; 
+  }
 
+  // 1. Inicializamos el mapa centrado en Quito
   leafletMap = L.map('mapContainer').setView([-0.1650, -78.4840], 13);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '© OpenStreetMap' }).addTo(leafletMap);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { 
+    maxZoom: 19, 
+    attribution: '© OpenStreetMap' 
+  }).addTo(leafletMap);
 
-  mapShops.forEach(s => {
-    L.marker([s.lat, s.lng]).addTo(leafletMap).bindPopup(`<div class="map-popup"><b>${s.name}</b><span>${s.cat}</span><br><small>${s.address}</small></div>`);
+  let shopsToRender = [];
+
+  // 2. Consultamos los comercios directamente desde Supabase
+  if(_supabase) {
+    try {
+      const { data, error } = await _supabase.from('merchants').select('*');
+      if(data && data.length > 0) {
+        shopsToRender = data.map(m => ({
+          name: m.name,
+          cat: m.category || 'Aliado socio',
+          lat: m.lat,
+          lng: m.lng,
+          address: m.address || m.branch || 'Quito'
+        }));
+      }
+    } catch(err) {
+      console.error('Error al obtener comercios para el mapa:', err);
+    }
+  }
+
+ // 3. Pintamos los marcadores en el mapa con saltos de línea claros
+  shopsToRender.forEach(s => {
+    if(s.lat && s.lng) {
+      L.marker([s.lat, s.lng])
+        .addTo(leafletMap)
+        .bindPopup(`
+          <div class="map-popup">
+            <b>${esc(s.name)}</b><br>
+            <span>${esc(s.cat)}</span><br>
+            <small>${esc(s.address)}</small>
+          </div>
+        `);
+    }
   });
 }
 
@@ -742,8 +846,7 @@ function setCat(b){document.querySelectorAll('.chip[data-cat]').forEach(x=>x.cla
 function filterCards(){const q=(document.getElementById('searchInput').value||'').toLowerCase();let n=0;document.querySelectorAll('.offer-card').forEach(c=>{const ok=(activeCat==='all'||c.dataset.cat===activeCat)&&(!q||c.innerText.toLowerCase().includes(q));c.classList.toggle('hidden',!ok);if(ok)n++});document.getElementById('empty').classList.toggle('hidden',n>0)}
 
 function renderOffers(){
-  const publicOffers = offers.filter(o => o.active !== false);
-  document.getElementById('cards').innerHTML=publicOffers.map(o=>`
+  document.getElementById('cards').innerHTML=offers.filter(isCampaignActive).map(o=>`
     <article class="card offer-card" data-cat="${o.category}">
       <div class="cardvisual"><span class="off">${o.discount}</span><img src="${o.image}" alt="${o.shop}"></div>
       <div class="cardbody">
@@ -928,7 +1031,7 @@ async function createCoupon(id){
   const expiresAtDate = new Date();
   expiresAtDate.setMonth(expiresAtDate.getMonth() + 1);
   
-  const c={ id: uid(), token: uid(), short_code: makeShortCode(), promotion_id: id, merchant_id: o.merchantId, merchant: o.shop, branch: o.branch, offer: o.offer, discount: o.discount, terms: o.terms, client: currentUser.user.toLowerCase(), created_at: createdAt.toISOString(), expires_at: expiresAtDate.toISOString(), status:'ACTIVE' };
+  const c={ id: uid(), token: uid(), short_code: makeShortCode(), promotion_id: id, merchant_id: o.merchantId, merchant: o.shop, branch: o.branch, offer: o.offer, discount: o.discount, client: currentUser.user.toLowerCase(), created_at: createdAt.toISOString(), expires_at: expiresAtDate.toISOString(), status:'ACTIVE' };
 
   if(_supabase) { try { await _supabase.from('coupons').insert([c]); } catch(e) {} }
   globalCouponsStorage.push(c);
@@ -942,7 +1045,8 @@ function openCouponModal(cId) {
   document.getElementById('couponOffer').textContent = c.offer;
   document.getElementById('couponShortCodeText').textContent = c.short_code || c.shortCode;
   document.getElementById('couponExpiryText').textContent = 'Válido hasta el ' + new Date(c.expires_at || c.expiresAt).toLocaleDateString('es-EC');
-  document.getElementById('couponModalTC').innerHTML = `<b>T&C (Términos y condiciones):</b> ${esc(getOfferTerms(c))}`;
+  const td = termsData(c);
+  document.getElementById('couponTerms').innerHTML = '<b class="tt">Términos y condiciones</b>' + termsListHTML(td.terms, td.validAt);
   
   const qrBox = document.getElementById('couponQr');
   qrBox.innerHTML = '';
@@ -950,8 +1054,34 @@ function openCouponModal(cId) {
   document.getElementById('couponModal').classList.add('show');
 }
 
+function couponCardHTML(c, available){
+  const st=couponEffStatus(c);
+  const cls=st==='ACTIVE'?'s-active':st==='REDEEMED'?'s-redeemed':'s-expired';
+  const lbl=st==='ACTIVE'?'DISPONIBLE':st==='REDEEMED'?'CANJEADO':'VENCIDO';
+  const td=termsData(c);
+  const terms=available?`<div class="terms-mini"><b class="tt">Términos y condiciones</b>${termsListHTML(td.terms,td.validAt)}</div>`:'';
+  const footer=available
+    ? `<button class="btn small" onclick="openCouponModal('${c.id}')">Ver cupón 🔍</button>`
+    : `<span class="muted" style="font-size:11px">${st==='REDEEMED'?'Usado':'No disponible'}</span>`;
+  return `
+    <div class="panel couponbox" style="text-align:left">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <span class="status ${cls}">${lbl}</span>
+        <small class="codehint">Sucursal: ${esc(c.branch)}</small>
+      </div>
+      <h3 style="margin:4px 0">${esc(c.merchant)}</h3>
+      <p class="sub" style="margin-bottom:6px">${esc(c.offer)}</p>
+      <small class="muted" style="display:block;margin-bottom:10px">Solicitado: ${formatEcuadorDate(c.created_at||c.createdAt)}</small>
+      ${terms}
+      <div style="display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);padding-top:10px">
+        <small class="muted">Caduca: ${new Date(c.expires_at||c.expiresAt).toLocaleDateString('es-EC')}</small>
+        ${footer}
+      </div>
+    </div>`;
+}
+
 async function renderClient(){
-  document.getElementById('clientWelcome').textContent='Hola, '+(currentUser?.name||'cliente')+'. Aquí puedes consultar tus cupones.';
+  document.getElementById('clientWelcome').textContent='Hola, '+(currentUser?.name||'cliente')+'. Recuerda que el  cupón es de un solo uso. Presiona «Ver cupón» para mostrar el QR en el comercio al pagar.';
   const planName = currentUser?.plan === 'monthly' ? 'Plan Mensual ($2.99)' : currentUser?.plan === 'annual' ? 'Plan Anual ($19.99)' : 'Plan Free (10 cupones)';
   const startDate = currentUser?.createdAt ? new Date(currentUser.createdAt).toLocaleDateString('es-EC') : 'Reciente';
   const statusMsg = currentUser?.status === 'pendiente_pago' ? ' · <span style="color:var(--orange)">Pago pendiente de aprobación por admin</span>' : '';
@@ -964,49 +1094,20 @@ async function renderClient(){
     } catch(e) {}
   }
 
-  const now = Date.now();
-  const myCoupons = globalCouponsStorage.filter(c => c.client === currentUser.user.toLowerCase()).map(c => {
-    const expTime = new Date(c.expires_at || c.expiresAt).getTime();
-    if (c.status === 'ACTIVE' && expTime && now > expTime) {
-      return { ...c, status: 'EXPIRED' };
-    }
-    return c;
-  });
+  const myCoupons = globalCouponsStorage.filter(c => c.client === currentUser.user.toLowerCase());
+  const byRecent = (a,b) => new Date(b.created_at||b.createdAt) - new Date(a.created_at||a.createdAt);
+  const available = myCoupons.filter(c => couponEffStatus(c)==='ACTIVE').sort(byRecent);
+  const history = myCoupons.filter(c => couponEffStatus(c)!=='ACTIVE').sort(byRecent);
 
-  // Ordenar por fecha de solicitud (más reciente primero)
-  myCoupons.sort((a, b) => new Date(b.created_at || b.createdAt || 0) - new Date(a.created_at || a.createdAt || 0));
+  document.getElementById('availCount').textContent = available.length ? '(' + available.length + ')' : '';
+  document.getElementById('historyCount').textContent = history.length ? '(' + history.length + ')' : '';
 
-  const availableCoupons = myCoupons.filter(c => c.status === 'ACTIVE');
-  const historyCoupons = myCoupons.filter(c => c.status !== 'ACTIVE');
+  const noneAtAll = '<div class="panel" style="grid-column:1/-1"><h3>Aún no tienes cupones</h3><p class="sub">Explora las promociones y obtén tu primer beneficio.</p><button class="btn" onclick="showView(\'home\')">Explorar promociones</button></div>';
+  const noneAvail = '<div class="panel" style="grid-column:1/-1"><h3>No tienes cupones disponibles</h3><p class="sub">Explora las promociones y obtén un nuevo beneficio.</p><button class="btn" onclick="showView(\'home\')">Explorar promociones</button></div>';
+  const noneHistory = '<div class="panel" style="grid-column:1/-1"><p class="sub" style="margin:0">Todavía no tienes cupones en tu historial.</p></div>';
 
-  const renderCouponCard = (c) => `
-    <div class="panel couponbox" style="text-align:left;display:flex;flex-direction:column;justify-content:space-between">
-      <div>
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-          <span class="status ${c.status==='ACTIVE'?'s-active':c.status==='REDEEMED'?'s-redeemed':'s-expired'}">${c.status==='ACTIVE'?'DISPONIBLE':c.status==='REDEEMED'?'CANJEADO':'CADUCADO'}</span>
-          <small class="codehint">Sucursal: ${esc(c.branch)}</small>
-        </div>
-        <h3 style="margin:4px 0">${esc(c.merchant)}</h3>
-        <p class="sub" style="margin-bottom:8px">${esc(c.offer)}</p>
-        <div class="tc-box" style="margin-bottom:12px"><b>T&C:</b> ${esc(getOfferTerms(c))}</div>
-      </div>
-      <div style="display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);padding-top:10px">
-        <div>
-          <small class="muted" style="display:block">Solicitado: ${formatEcuadorDate(c.created_at || c.createdAt)}</small>
-          <small class="muted">Caduca: ${new Date(c.expires_at||c.expiresAt).toLocaleDateString('es-EC')}</small>
-        </div>
-        ${c.status==='ACTIVE' ? `<button class="btn small" onclick="openCouponModal('${c.id}')">Ver cupón 🔍</button>` : `<span class="muted" style="font-size:11px;font-weight:700">${c.status==='REDEEMED'?'Canjeado':'No disponible'}</span>`}
-      </div>
-    </div>
-  `;
-
-  document.getElementById('myAvailableCoupons').innerHTML = availableCoupons.length 
-    ? availableCoupons.map(renderCouponCard).join('') 
-    : '<div class="panel"><h3>No tienes cupones disponibles</h3><p class="sub">Explora las promociones vigentes y obtén tu próximo beneficio.</p><button class="btn small" onclick="showView(\'home\')">Explorar promociones</button></div>';
-
-  document.getElementById('myHistoryCoupons').innerHTML = historyCoupons.length 
-    ? historyCoupons.map(renderCouponCard).join('') 
-    : '<div class="panel"><p class="sub" style="margin:0">Aún no tienes cupones canjeados o caducados en tu historial.</p></div>';
+  document.getElementById('myCoupons').innerHTML = available.length ? available.map(c=>couponCardHTML(c,true)).join('') : (myCoupons.length ? noneAvail : noneAtAll);
+  document.getElementById('myCouponsHistory').innerHTML = history.length ? history.map(c=>couponCardHTML(c,false)).join('') : noneHistory;
 }
 
 async function merchantLogin(e){
@@ -1032,160 +1133,42 @@ async function merchantLogin(e){
 
 function switchMerchantTab(tab, btnEl) {
   document.querySelectorAll('#merchantView .tabs .chip').forEach(b => b.classList.remove('active'));
-  btnEl.classList.add('active');
-  document.getElementById('merchantTabSummary').classList.add('hidden');
-  document.getElementById('merchantTabPromos').classList.add('hidden');
-  document.getElementById('merchantTabExecutive').classList.add('hidden');
+  if(btnEl) btnEl.classList.add('active');
+  const map = { validate:'Validate', exec:'Exec', promos:'Promos' };
+  Object.values(map).forEach(n => document.getElementById('merchantTab'+n).classList.add('hidden'));
+  document.getElementById('merchantTab'+(map[tab]||'Validate')).classList.remove('hidden');
+  if(tab === 'promos') renderMerchantPromos();
+}
 
-  if(tab === 'summary') {
-    document.getElementById('merchantTabSummary').classList.remove('hidden');
-  } else if(tab === 'promos') {
-    document.getElementById('merchantTabPromos').classList.remove('hidden');
-    renderMerchantPromos();
-  } else if(tab === 'executive') {
-    document.getElementById('merchantTabExecutive').classList.remove('hidden');
-    renderMerchantExecutive();
-  }
+function merchantCampaigns() {
+  return offers.filter(o => o.merchantId === currentUser.merchantId || o.shop.toLowerCase() === currentUser.name.toLowerCase());
 }
 
 function renderMerchantPromos() {
   const grid = document.getElementById('merchantPromosGrid');
-  const myOffers = offers.filter(o => o.merchantId === currentUser.merchantId || o.shop.toLowerCase() === currentUser.name.toLowerCase());
+  const myOffers = merchantCampaigns();
   
   if(!myOffers.length) {
-    grid.innerHTML = '<div class="panel"><p class="sub">No tienes campañas promocionales creadas en este momento.</p></div>';
+    grid.innerHTML = '<div class="panel"><p class="sub">No tienes campañas promocionales activas creadas en este momento.</p></div>';
     return;
   }
   
   grid.innerHTML = myOffers.map(o => {
-    const isAct = o.active !== false;
+    const active = isCampaignActive(o);
+    const terms = o.terms && o.terms.length ? o.terms : DEFAULT_TERMS;
+    const validAt = o.validAt || ('Sucursal ' + o.branch);
     return `
-      <article class="card">
-        <div class="cardvisual"><span class="off">${o.discount}</span><img src="${o.image}" alt="${o.shop}"></div>
-        <div class="cardbody">
-          <div class="cardtitle"><h3>${o.shop}</h3><span class="rating">★ ${o.rating}</span></div>
-          <p>${o.offer}</p>
-          <p>📍 ${o.branch}, Quito</p>
-          <div class="tc-box" style="margin-bottom:10px"><b>Términos y condiciones:</b> ${esc(o.terms || 'Aplica consumo en local. No acumulable con otras promociones.')}</div>
-          <div class="cardfoot">
-            <small>Válido hasta ${o.expires}</small>
-            <span class="userpill ${isAct ? 'green' : 'red'}">${isAct ? 'Campaña Activa' : 'Campaña inactiva'}</span>
-          </div>
-        </div>
-      </article>
-    `;
+    <article class="card">
+      <div class="cardvisual"><span class="off">${o.discount}</span><img src="${o.image}" alt="${o.shop}"></div>
+      <div class="cardbody">
+        <div class="cardtitle"><h3>${o.shop}</h3><span class="rating">★ ${o.rating}</span></div>
+        <p>${o.offer}</p>
+        <p>📍 ${o.branch}, Quito</p>
+        <div class="terms-mini"><b class="tt">Términos y condiciones</b>${termsListHTML(terms, validAt)}</div>
+        <div class="cardfoot"><small>Válido hasta ${o.expires}</small><span class="userpill ${active?'ok':'off'}">${active?'Campaña activa':'Campaña inactiva'}</span></div>
+      </div>
+    </article>`;
   }).join('');
-}
-
-function destroyChartIfExists(chartKey) {
-  if (activeCharts[chartKey]) {
-    activeCharts[chartKey].destroy();
-    delete activeCharts[chartKey];
-  }
-}
-
-async function renderMerchantExecutive() {
-  let mine = [];
-  if(_supabase) {
-    try {
-      const resCoupons = await _supabase.from('coupons').select('*').eq('merchant_id', currentUser.merchantId);
-      if(resCoupons.data) mine = resCoupons.data;
-    } catch(e){}
-  }
-  const localMine = globalCouponsStorage.filter(c => c.merchant_id === currentUser.merchantId);
-  localMine.forEach(lc => { if(!mine.some(x => x.id === lc.id)) mine.push(lc); });
-
-  const myOffers = offers.filter(o => o.merchantId === currentUser.merchantId || o.shop.toLowerCase() === currentUser.name.toLowerCase());
-  const redeemedCoupons = mine.filter(c => c.status === 'REDEEMED');
-  const activeCampaignsCount = myOffers.filter(o => o.active !== false).length;
-
-  document.getElementById('merchantExecMetrics').innerHTML = `
-    <div class="metric"><span>Cupones canjeados</span><strong>${redeemedCoupons.length}</strong></div>
-    <div class="metric"><span>Campañas activas</span><strong>${activeCampaignsCount}</strong></div>
-    <div class="metric"><span>Cupones emitidos totales</span><strong>${mine.length}</strong></div>
-  `;
-
-  if (!window.Chart) return;
-
-  // Datos para Gráfico 1: Barras por campaña
-  const campaignLabels = myOffers.length ? myOffers.map(o => o.offer) : ['Promoción General'];
-  const campaignCounts = myOffers.length 
-    ? myOffers.map(o => redeemedCoupons.filter(c => (c.promotion_id === o.id || c.offer === o.offer)).length)
-    : [redeemedCoupons.length];
-
-  destroyChartIfExists('merchantBar');
-  const ctxBar = document.getElementById('merchantBarChart');
-  if (ctxBar) {
-    activeCharts['merchantBar'] = new Chart(ctxBar, {
-      type: 'bar',
-      data: {
-        labels: campaignLabels.map(l => l.length > 26 ? l.slice(0, 26) + '...' : l),
-        datasets: [{
-          label: 'Cupones canjeados',
-          data: campaignCounts,
-          backgroundColor: ['#f47721', '#198754', '#2868a8', '#e64a38', '#8b5cf6'],
-          borderRadius: 6
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: { legend: { display: false } },
-        scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
-      }
-    });
-  }
-
-  // Datos para Gráfico 2: Evolución por día y campaña
-  const daySet = new Set();
-  const daysBack = 7;
-  for (let i = daysBack - 1; i >= 0; i--) {
-    const d = new Date();
-    d.setDate(d.getDate() - i);
-    daySet.add(d.toLocaleDateString('es-EC', { month: 'short', day: 'numeric' }));
-  }
-  redeemedCoupons.forEach(c => {
-    const dt = new Date(c.redeemed_at || c.created_at || Date.now());
-    daySet.add(dt.toLocaleDateString('es-EC', { month: 'short', day: 'numeric' }));
-  });
-  const dayLabels = Array.from(daySet);
-  const palette = ['#f47721', '#198754', '#2868a8', '#e64a38', '#9333ea'];
-
-  const timeDatasets = (myOffers.length ? myOffers : [{ id: 'all', offer: 'Campaña Principal' }]).map((off, idx) => {
-    const color = palette[idx % palette.length];
-    const dataPoints = dayLabels.map(dayStr => {
-      return redeemedCoupons.filter(c => {
-        const dtStr = new Date(c.redeemed_at || c.created_at || Date.now()).toLocaleDateString('es-EC', { month: 'short', day: 'numeric' });
-        const matchesOffer = off.id === 'all' || c.promotion_id === off.id || c.offer === off.offer;
-        return dtStr === dayStr && matchesOffer;
-      }).length;
-    });
-    return {
-      label: off.offer.length > 24 ? off.offer.slice(0, 24) + '...' : off.offer,
-      data: dataPoints,
-      backgroundColor: color,
-      borderColor: color,
-      borderWidth: 2,
-      tension: 0.3
-    };
-  });
-
-  destroyChartIfExists('merchantTime');
-  const ctxTime = document.getElementById('merchantTimeChart');
-  if (ctxTime) {
-    activeCharts['merchantTime'] = new Chart(ctxTime, {
-      type: 'bar',
-      data: { labels: dayLabels, datasets: timeDatasets },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-          x: { stacked: true },
-          y: { stacked: true, beginAtZero: true, ticks: { stepSize: 1 } }
-        }
-      }
-    });
-  }
 }
 
 function adminLogin(e){
@@ -1271,16 +1254,43 @@ async function startScanner(){
 
 async function stopScanner(){if(html5Qr){try{if(html5Qr.isScanning)await html5Qr.stop();}catch(e){}}}
 
+function renderMerchantExec(mine, ev){
+  const camps = merchantCampaigns();
+  const redeemed = mine.filter(c => c.status === 'REDEEMED');
+  const activeCoupons = mine.filter(c => couponEffStatus(c) === 'ACTIVE').length;
+  const activeCamps = camps.filter(isCampaignActive).length;
+
+  document.getElementById('merchantMetrics').innerHTML =
+    `<div class="metric"><span>Cupones canjeados</span><strong>${redeemed.length}</strong></div>`+
+    `<div class="metric"><span>Campañas activas</span><strong>${activeCamps}</strong></div>`+
+    `<div class="metric"><span>Cupones activos</span><strong>${activeCoupons}</strong></div>`+
+    `<div class="metric"><span>Lecturas</span><strong>${ev.length}</strong></div>`;
+
+  const names = [];
+  camps.forEach(o => { if(!names.includes(o.offer)) names.push(o.offer); });
+  redeemed.forEach(c => { const l = campaignLabel(c); if(!names.includes(l)) names.push(l); });
+
+  const items = names.map((n,i) => ({ label:n, value:redeemed.filter(c => campaignLabel(c) === n).length, color:chartColor(i) }));
+  document.getElementById('merchantChartCampaigns').innerHTML = hBarChart(items);
+
+  const daily = buildDailySeries(redeemed.map(c => ({ at:redeemedDate(c, ev), key:campaignLabel(c) })), names);
+  document.getElementById('merchantChartDaily').innerHTML = stackedDailyChart(daily.dayKeys, daily.series);
+}
+
 async function renderMerchant(){
-  let ev = [];
+  let mine = [], ev = [];
   if(_supabase) {
     try {
+      const resCoupons = await _supabase.from('coupons').select('*').eq('merchant_id', currentUser.merchantId);
+      if(resCoupons.data) mine = resCoupons.data;
       const resEvents = await _supabase.from('events').select('*').eq('merchant_id', currentUser.merchantId);
       if(resEvents.data) ev = resEvents.data;
     } catch(e){}
   }
+  globalCouponsStorage.forEach(c => { if(c.merchant_id === currentUser.merchantId && !mine.some(x => x.id === c.id)) mine.push(c); });
   
   document.getElementById('merchantTitle').textContent=currentUser.name+' · La Carolina';
+  renderMerchantExec(mine, ev);
   
   document.getElementById('merchantActivity').innerHTML=ev.length ? ev.slice(0,12).map(x=>`
     <div class="logline">
@@ -1290,12 +1300,61 @@ async function renderMerchant(){
   `).join('') : '<p class="sub">Todavía no hay lecturas.</p>';
 }
 
+function adminSummaryHTML(coupons, events, merchants){
+  const redeemedAll = coupons.filter(c => c.status === 'REDEEMED');
+
+  const nameById = {};
+  offers.forEach(o => { nameById[o.merchantId] = o.shop; });
+  merchants.forEach(m => { nameById[m.id] = m.name; });
+  coupons.forEach(c => { if(c.merchant_id && !nameById[c.merchant_id]) nameById[c.merchant_id] = c.merchant || c.merchant_id; });
+
+  const stats = Object.keys(nameById).map(id => ({
+    id, name: nameById[id],
+    issued: coupons.filter(c => c.merchant_id === id).length,
+    redeemed: coupons.filter(c => c.merchant_id === id && c.status === 'REDEEMED').length
+  })).sort((a,b) => b.redeemed - a.redeemed || b.issued - a.issued || a.name.localeCompare(b.name));
+
+  const TOP = 8;
+  const top = stats.slice(0, TOP), rest = stats.slice(TOP);
+  const topIds = new Set(top.map(x => x.id));
+  const note = rest.length ? `<p class="codehint" style="margin-bottom:0">Se muestran los ${TOP} comercios con más canjes.</p>` : '';
+
+  const rankItems = top.map((x,i) => ({ label:x.name, value:x.redeemed, color:chartColor(i) }));
+  const pairItems = top.map(x => ({ label:x.name, a:x.issued, b:x.redeemed }));
+  const dailyNames = top.map(x => x.name).concat(rest.length ? ['Otros'] : []);
+  const daily = buildDailySeries(redeemedAll.map(c => ({ at:redeemedDate(c, events), key: topIds.has(c.merchant_id) ? nameById[c.merchant_id] : 'Otros' })), dailyNames);
+
+  return `
+    <h2>Resumen General</h2>
+    <p class="sub">Panorama de todos los comercios de Cuponeraff.</p>
+    <div class="grid3">
+      <div class="metric"><span>Cupones emitidos</span><strong>${coupons.length}</strong></div>
+      <div class="metric"><span>Canjes confirmados</span><strong>${redeemedAll.length}</strong></div>
+      <div class="metric"><span>Lecturas</span><strong>${events.length}</strong></div>
+    </div>
+    <div class="chartbox">
+      <h3>1. ¿Qué comercio canjea más cupones?</h3>
+      <p class="sub">Ranking de comercios por cupones canjeados.</p>
+      ${hBarChart(rankItems)}${note}
+    </div>
+    <div class="chartbox">
+      <h3>2. ¿Cómo evolucionan los canjes en el tiempo?</h3>
+      <p class="sub">Canjes por día; cada color es un comercio.</p>
+      ${stackedDailyChart(daily.dayKeys, daily.series)}
+    </div>
+    <div class="chartbox">
+      <h3>3. Cupones emitidos vs. canjeados por comercio</h3>
+      <p class="sub">Compara cuántos cupones se solicitan y cuántos realmente se canjean.</p>
+      ${pairBarChart(pairItems, 'Emitidos', '#2868a8', 'Canjeados', '#f47721')}${note}
+    </div>
+  `;
+}
+
 async function renderAdmin(tab){
-  let coupons = [...globalCouponsStorage], events = [], merchantRequests = [], merchants = [], users = [];
+  let coupons = [], events = [], merchantRequests = [], merchants = [], users = [];
   if(_supabase) {
     try {
-      const r1 = await _supabase.from('coupons').select('*'); 
-      if(r1.data) r1.data.forEach(dc => { if(!coupons.some(x => x.id === dc.id)) coupons.push(dc); });
+      const r1 = await _supabase.from('coupons').select('*'); if(r1.data) coupons = r1.data;
       const r2 = await _supabase.from('events').select('*'); if(r2.data) events = r2.data;
       const r3 = await _supabase.from('merchant_requests').select('*'); if(r3.data) merchantRequests = r3.data;
       const r4 = await _supabase.from('merchants').select('*'); if(r4.data) merchants = r4.data;
@@ -1303,7 +1362,7 @@ async function renderAdmin(tab){
     } catch(e){}
   }
 
-  const redeemed = coupons.filter(c=>c.status==='REDEEMED');
+  globalCouponsStorage.forEach(c => { if(!coupons.some(x => x.id === c.id)) coupons.push(c); });
   
   const buttons=document.querySelectorAll('#adminView .tabs .chip');
   buttons.forEach(b=>b.classList.toggle('active',
@@ -1318,130 +1377,7 @@ async function renderAdmin(tab){
 
   const el=document.getElementById('adminContent');
   if(tab==='summary'){
-    el.innerHTML=`
-      <h2>Resumen General de Operaciones</h2>
-      <p class="sub">Métricas globales de emisión, lecturas y rendimiento por comercio aliado.</p>
-      <div class="grid3" style="margin-bottom:18px">
-        <div class="metric"><span>Cupones emitidos</span><strong>${coupons.length}</strong></div>
-        <div class="metric"><span>Canjes confirmados</span><strong>${redeemed.length}</strong></div>
-        <div class="metric"><span>Lecturas registradas</span><strong>${events.length}</strong></div>
-      </div>
-      <div class="grid3">
-        <div class="chart-card">
-          <h3>Canjes por comercio</h3>
-          <p class="sub" style="margin-bottom:4px">Total de cupones canjeados por establecimiento.</p>
-          <div class="chart-box"><canvas id="adminMerchantBarChart"></canvas></div>
-        </div>
-        <div class="chart-card">
-          <h3>Canjes en el tiempo por comercio</h3>
-          <p class="sub" style="margin-bottom:4px">Evolución diaria desglosada por aliado.</p>
-          <div class="chart-box"><canvas id="adminMerchantTimeChart"></canvas></div>
-        </div>
-        <div class="chart-card">
-          <h3>Emitidos vs. Canjeados</h3>
-          <p class="sub" style="margin-bottom:4px">Comparativa de conversión por comercio.</p>
-          <div class="chart-box"><canvas id="adminConversionChart"></canvas></div>
-        </div>
-      </div>
-    `;
-
-    if (window.Chart) {
-      const shopNamesSet = new Set(offers.map(o => o.shop));
-      merchants.forEach(m => shopNamesSet.add(m.name));
-      coupons.forEach(c => { if(c.merchant) shopNamesSet.add(c.merchant); });
-      const shopList = Array.from(shopNamesSet);
-      const palette = ['#f47721', '#198754', '#2868a8', '#e64a38', '#8b5cf6', '#f59e0b'];
-
-      const redeemedByShop = shopList.map(name => redeemed.filter(c => c.merchant === name).length);
-      const issuedByShop = shopList.map(name => coupons.filter(c => c.merchant === name).length);
-
-      // Gráfico 1: Canjes totales por comercio
-      destroyChartIfExists('adminShopBar');
-      const ctx1 = document.getElementById('adminMerchantBarChart');
-      if (ctx1) {
-        activeCharts['adminShopBar'] = new Chart(ctx1, {
-          type: 'bar',
-          data: {
-            labels: shopList,
-            datasets: [{
-              label: 'Cupones canjeados',
-              data: redeemedByShop,
-              backgroundColor: palette,
-              borderRadius: 6
-            }]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: { legend: { display: false } },
-            scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
-          }
-        });
-      }
-
-      // Gráfico 2: Canjes en el tiempo por comercio
-      const daySet = new Set();
-      for (let i = 6; i >= 0; i--) {
-        const d = new Date();
-        d.setDate(d.getDate() - i);
-        daySet.add(d.toLocaleDateString('es-EC', { month: 'short', day: 'numeric' }));
-      }
-      redeemed.forEach(c => {
-        const dt = new Date(c.redeemed_at || c.created_at || Date.now());
-        daySet.add(dt.toLocaleDateString('es-EC', { month: 'short', day: 'numeric' }));
-      });
-      const dayLabels = Array.from(daySet);
-
-      const timeDatasets = shopList.map((shopName, idx) => {
-        const color = palette[idx % palette.length];
-        return {
-          label: shopName,
-          data: dayLabels.map(dayStr => redeemed.filter(c => {
-            const dtStr = new Date(c.redeemed_at || c.created_at || Date.now()).toLocaleDateString('es-EC', { month: 'short', day: 'numeric' });
-            return c.merchant === shopName && dtStr === dayStr;
-          }).length),
-          borderColor: color,
-          backgroundColor: color,
-          tension: 0.3,
-          fill: false
-        };
-      });
-
-      destroyChartIfExists('adminShopTime');
-      const ctx2 = document.getElementById('adminMerchantTimeChart');
-      if (ctx2) {
-        activeCharts['adminShopTime'] = new Chart(ctx2, {
-          type: 'line',
-          data: { labels: dayLabels, datasets: timeDatasets },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
-          }
-        });
-      }
-
-      // Gráfico 3: Emitidos vs Canjeados por comercio
-      destroyChartIfExists('adminConv');
-      const ctx3 = document.getElementById('adminConversionChart');
-      if (ctx3) {
-        activeCharts['adminConv'] = new Chart(ctx3, {
-          type: 'bar',
-          data: {
-            labels: shopList,
-            datasets: [
-              { label: 'Emitidos', data: issuedByShop, backgroundColor: '#f4c7a1', borderRadius: 4 },
-              { label: 'Canjeados', data: redeemedByShop, backgroundColor: '#198754', borderRadius: 4 }
-            ]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
-          }
-        });
-      }
-    }
+    el.innerHTML=adminSummaryHTML(coupons,events,merchants);
   }else if(tab==='scans'){
     el.innerHTML='<h2>Registro global de lecturas</h2><div class="tablewrap"><table><thead><tr><th>Fecha Ecuador</th><th>Comercio</th><th>Usuario</th><th>Resultado</th></tr></thead><tbody>'+events.map(x=>`<tr><td>${formatEcuadorDate(x.at)}</td><td>${esc(x.merchant)}</td><td>${esc(x.actor)}</td><td>${translateResult(x.result)}</td></tr>`).join('')+'</tbody></table></div>';
   }else if(tab==='coupons'){
@@ -1449,30 +1385,103 @@ async function renderAdmin(tab){
   }else if(tab==='merchants'){
     el.innerHTML='<h2>Comercios registrados</h2><div class="tablewrap"><table><thead><tr><th>ID</th><th>Nombre</th><th>Usuario</th><th>Sucursal</th><th>Ubicación (Lat, Lng)</th></tr></thead><tbody>'+merchants.map(m=>`<tr><td>${esc(m.id)}</td><td>${esc(m.name)}</td><td>${esc(m.username)}</td><td>${esc(m.branch||'Principal')}</td><td>${m.lat||'-0.1742'}, ${m.lng||'-78.4845'}</td></tr>`).join('')+'</tbody></table></div>';
   }else if(tab==='requests'){
+    // Solo muestra solicitudes con status PENDIENTE
     const pendingReqs = merchantRequests.filter(r => !r.status || r.status.toUpperCase() === 'PENDIENTE');
     el.innerHTML='<h2>Solicitudes de comercios socios</h2><div class="tablewrap"><table><thead><tr><th>Fecha</th><th>Comercio</th><th>Correo</th><th>Celular</th><th>Acción</th></tr></thead><tbody>'+(pendingReqs.length ? pendingReqs.map(r=>`<tr><td>${formatEcuadorDate(r.created_at)}</td><td>${esc(r.name)}</td><td>${esc(r.email)}</td><td>${esc(r.phone)}</td><td><button class="btn small" onclick="openAdminMerchantModal('${r.id}','${esc(r.name)}','${esc(r.address)}')">Editar y Registrar Comercio</button></td></tr>`).join('') : '<tr><td colspan="5" style="text-align:center">No hay solicitudes pendientes.</td></tr>')+'</tbody></table></div>';
-  }else if(tab==='createMerchant'){
-    el.innerHTML=`
-      <h2>Crear comercio manualmente</h2>
-      <p class="sub">Registra un comercio aprobado en el sistema asignando sus coordenadas.</p>
-      <form onsubmit="adminCreateMerchantDirect(event)">
-        <div class="grid2">
-          <div class="formrow"><label>ID Único (Ej. m7)</label><input class="field" id="directMerchId" required></div>
-          <div class="formrow"><label>Nombre del comercio</label><input class="field" id="directMerchName" required></div>
+  }
+
+  else if(tab==='createMerchant'){
+  // 1. Dibujamos el formulario con un estado de carga inicial en el ID
+  el.innerHTML=`
+    <h2>Crear comercio manualmente</h2>
+    <p class="sub">Registra un comercio en el sistema. El ID y la contraseña se generan automáticamente.</p>
+    <form onsubmit="adminCreateMerchantDirect(event)">
+      <div class="grid2">
+        <div class="formrow">
+          <label>ID Único (Automático)</label>
+          <input class="field" id="directMerchId" value="Cargando..." readonly style="background-color: #f1f5f9; cursor: not-allowed; font-weight: bold;">
         </div>
-        <div class="grid2">
-          <div class="formrow"><label>Usuario de acceso</label><input class="field" id="directMerchUser" required></div>
-          <div class="formrow"><label>Contraseña</label><input class="field" id="directMerchPass" type="password" required></div>
+        <div class="formrow">
+          <label>Nombre del comercio</label>
+          <input class="field" id="directMerchName" placeholder="Ej. Don Burger" required>
         </div>
-        <div class="formrow"><label>Sucursal / Dirección</label><input class="field" id="directMerchBranch" required></div>
-        <div class="grid2">
-          <div class="formrow"><label>Latitud</label><input class="field" id="directMerchLat" type="number" step="any" required value="-0.1742"></div>
-          <div class="formrow"><label>Longitud</label><input class="field" id="directMerchLng" type="number" step="any" required value="-78.4845"></div>
+      </div>
+      
+      <div class="grid2">
+        <div class="formrow">
+          <label>Usuario de acceso</label>
+          <input class="field" id="directMerchUser" placeholder="Ej. donburger" required>
         </div>
-        <button class="btn green" style="margin-top:10px;width:100%">Guardar comercio</button>
-      </form>
-    `;
-  }else if(tab==='clientPayments'){
+        <div class="formrow">
+          <label>Contraseña (Predeterminada)</label>
+          <input class="field" id="directMerchPass" type="text" value="comercio123" readonly style="background-color: #f1f5f9; cursor: not-allowed;">
+        </div>
+      </div>
+
+      <div class="grid2">
+        <div class="formrow">
+          <label>Categoría (Selecciona una)</label>
+          <select class="field" id="directMerchCategory" required>
+            <option value="" disabled selected>-- Elige una categoría --</option>
+            <option value="🍔 Hamburguesas">🍔 Hamburguesas</option>
+            <option value="🍕 Pizza">🍕 Pizza</option>
+            <option value="☕ Cafetería">☕ Cafetería</option>
+            <option value="🍰 Repostería">🍰 Repostería</option>
+            <option value="🥩 Carnes y Asados">🥩 Carnes y Asados</option>
+            <option value="🥐 Repostería & Café">🥐 Repostería & Café</option>
+          </select>
+        </div>
+        <div class="formrow">
+          <label>Sucursal / Zona</label>
+          <input class="field" id="directMerchBranch" placeholder="Ej. La Carolina" required>
+        </div>
+      </div>
+
+      <div class="formrow">
+        <label>Dirección física (Calles)</label>
+        <input class="field" id="directMerchAddress" placeholder="Ej. Av. Shyris y NNUU" required>
+      </div>
+
+      <div class="grid2">
+        <div class="formrow">
+          <label>Latitud</label>
+          <input class="field" id="directMerchLat" type="number" step="any" required value="-0.1742">
+        </div>
+        <div class="formrow">
+          <label>Longitud</label>
+          <input class="field" id="directMerchLng" type="number" step="any" required value="-78.4845">
+        </div>
+      </div>
+
+      <button class="btn green" style="margin-top:10px;width:100%">Guardar comercio en Supabase</button>
+    </form>
+  `;
+
+  // 2. Consultamos de forma asíncrona a Supabase para calcular el siguiente ID real
+  (async () => {
+    let nextId = 'm1';
+    if(_supabase) {
+      try {
+        const { data, error } = await _supabase.from('merchants').select('id');
+        if(data && data.length > 0) {
+          // Buscamos el número más alto extrayendo los dígitos después de la 'm' (ej. m11 -> 11)
+          const maxNum = data.reduce((max, m) => {
+            if (!m.id) return max;
+            const match = m.id.match(/^m(\d+)$/i);
+            return match ? Math.max(max, parseInt(match[1], 10)) : max;
+          }, 0);
+          nextId = 'm' + (maxNum + 1);
+        }
+      } catch(err) {
+        console.error('Error al calcular el siguiente ID en Supabase:', err);
+      }
+    }
+    // Asignamos el ID calculado al input bloqueado
+    const idField = document.getElementById('directMerchId');
+    if(idField) idField.value = nextId;
+  })();
+}
+  else if(tab==='clientPayments'){
     const pendingClients = users.filter(u => u.plan !== 'free' && u.status === 'pendiente_pago');
     el.innerHTML=`
       <h2>Aprobación de pagos de clientes</h2>
@@ -1539,22 +1548,36 @@ async function saveMerchantFromAdmin(e) {
   renderAdmin('merchants');
 }
 
-async function adminCreateMerchantDirect(e){
-  e.preventDefault();
-  const newMerch = {
-    id: document.getElementById('directMerchId').value.trim(),
+async function adminCreateMerchantDirect(event) {
+  event.preventDefault();
+  
+  const newMerchant = {
+    id: document.getElementById('directMerchId').value,
     name: document.getElementById('directMerchName').value.trim(),
-    username: document.getElementById('directMerchUser').value.trim(),
+    username: document.getElementById('directMerchUser').value.trim().toLowerCase(),
     password: document.getElementById('directMerchPass').value,
     branch: document.getElementById('directMerchBranch').value.trim(),
+    category: document.getElementById('directMerchCategory').value,
+    address: document.getElementById('directMerchAddress').value.trim(),
     lat: parseFloat(document.getElementById('directMerchLat').value),
     lng: parseFloat(document.getElementById('directMerchLng').value)
   };
 
-  if(_supabase) { try { await _supabase.from('merchants').insert([newMerch]); } catch(e) {} }
-  mapShops.push({ name: newMerch.name, cat: 'Aliado socio', lat: newMerch.lat, lng: newMerch.lng, address: newMerch.branch });
-  toast('Comercio creado con éxito');
-  renderAdmin('merchants');
+  if (!_supabase) {
+    alert('No hay conexión con Supabase.');
+    return;
+  }
+
+  const { error } = await _supabase.from('merchants').insert([newMerchant]);
+
+  if (error) {
+    console.error('Error al guardar en Supabase:', error);
+    alert('Hubo un error al guardar el comercio: ' + error.message);
+  } else {
+    alert('¡Comercio creado con éxito!');
+    // Aquí puedes recargar tu lista de comercios o limpiar la vista
+    if (typeof loadAdminMerchants === 'function') loadAdminMerchants();
+  }
 }
 
 async function approveClientPayment(email){
