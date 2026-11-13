@@ -601,14 +601,54 @@ const DEMO={client:{user:'cliente@cuponeraff.com',pass:'cliente'},merchant:{user
 
 let globalCouponsStorage = [];
 
-let offers=[
-{id:'p1',merchantId:'m1',shop:'Burger House',branch:'La Carolina',category:'burger',discount:'30% OFF',offer:'30% de descuento en hamburguesas seleccionadas',image:'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600&auto=format&fit=crop&q=80',rating:'4.8',expires:'30 nov. 2026',description:'Hamburguesas artesanales y papas crocantes.',expiresISO:'2026-11-30',active:true,validAt:'Sucursal La Carolina',terms:['Válido únicamente con consumo en el restaurante.','No aplica para pedidos a domicilio ni para llevar.','Aplica solo en hamburguesas seleccionadas.','No aplica promoción sobre promoción ni es acumulable con otras ofertas.']},
-{id:'p2',merchantId:'m2',shop:'Pizza Nostra',branch:'Iñaquito',category:'pizza',discount:'2x1',offer:'2x1 en pizzas medianas',image:'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=600&auto=format&fit=crop&q=80',rating:'4.7',expires:'25 nov. 2026',description:'Dos pizzas medianas por el precio de una.',expiresISO:'2026-11-25',active:true,validAt:'Todas las sucursales',terms:['Válido únicamente con consumo en el restaurante.','No aplica para pedidos a domicilio ni para llevar.','Aplica solo en pizzas medianas.','No aplica promoción sobre promoción ni es acumulable con otras ofertas.']},
-{id:'p3',merchantId:'m3',shop:'Café Aroma',branch:'González Suárez',category:'cafe',discount:'20% OFF',offer:'20% de descuento en desayunos y brunch',image:'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=600&auto=format&fit=crop&q=80',rating:'4.9',expires:'30 nov. 2026',description:'Café de especialidad, desayunos y brunch.',expiresISO:'2026-11-30',active:true,validAt:'Sucursal González Suárez',terms:['Válido únicamente con consumo en el local.','No aplica a domicilio.','Aplica solo en desayunos y brunch.','No aplica promoción sobre promoción ni es acumulable con otras ofertas.']},
-{id:'p4',merchantId:'m4',shop:'Dulce Momento',branch:'El Batán',category:'dessert',discount:'25% OFF',offer:'25% de descuento en postres seleccionados',image:'https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=600&auto=format&fit=crop&q=80',rating:'4.6',expires:'28 nov. 2026',description:'Pasteles, cheesecakes y postres para compartir.',expiresISO:'2026-11-28',active:true,validAt:'Todas las sucursales',terms:['Válido únicamente con consumo en el local.','No aplica a domicilio ni para llevar.','Aplica solo en postres seleccionados.','No aplica promoción sobre promoción ni es acumulable con otras ofertas.']},
-{id:'p5',merchantId:'m5',shop:'La Parrilla Urbana',branch:'Centro Norte',category:'burger',discount:'15% OFF',offer:'15% de descuento en sándwiches',image:'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=600&auto=format&fit=crop&q=80',rating:'4.5',expires:'20 nov. 2026',description:'Sándwiches y sabores a la parrilla.',expiresISO:'2026-11-20',active:true,validAt:'Sucursal Centro Norte',terms:['Válido únicamente con consumo en el restaurante.','No aplica para pedidos a domicilio ni para llevar.','Aplica solo en sándwiches.','No aplica promoción sobre promoción ni es acumulable con otras ofertas.']},
-{id:'p6',merchantId:'m6',shop:'Matcha & Miel',branch:'La Floresta',category:'cafe',discount:'2x1',offer:'2x1 en bebidas seleccionadas',image:'https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=600&auto=format&fit=crop&q=80',rating:'4.8',expires:'30 nov. 2026',description:'Bebidas especiales y repostería artesanal.',expiresISO:'2026-11-30',active:true,validAt:'Todas las sucursales',terms:['Válido únicamente con consumo en el local.','No aplica a domicilio.','Aplica solo en bebidas seleccionadas.','No aplica promoción sobre promoción ni es acumulable con otras ofertas.']}
-];
+// Las promociones se cargan desde la tabla public.promotions de Supabase.
+let offers = [];
+let offersLoaded = false;
+let offersLoading = false;
+
+function normalizePromotion(row) {
+  let parsedTerms = row.terms ?? [];
+  if (typeof parsedTerms === 'string') {
+    try { parsedTerms = JSON.parse(parsedTerms); }
+    catch (_) { parsedTerms = parsedTerms ? [parsedTerms] : []; }
+  }
+  if (!Array.isArray(parsedTerms)) parsedTerms = [];
+  return {
+    id: row.id, merchantId: row.merchant_id, shop: row.shop || '',
+    branch: row.branch || '', category: row.category || '',
+    discount: row.discount || '', offer: row.offer || '',
+    image: row.image || '', rating: row.rating ?? '',
+    expires: row.expires || '', description: row.description || '',
+    expiresISO: row.expires_iso || '', active: row.active === true,
+    validAt: row.valid_at || '', terms: parsedTerms
+  };
+}
+
+async function loadOffers() {
+  if (!_supabase) {
+    console.error('No hay conexión configurada con Supabase para cargar promociones.');
+    toast('No se pudo conectar con la base de datos de promociones.');
+    return false;
+  }
+  if (offersLoading) return false;
+  offersLoading = true;
+  try {
+    const { data, error } = await _supabase.from('promotions')
+      .select('id, merchant_id, shop, branch, category, discount, offer, image, rating, expires, description, expires_iso, active, valid_at, terms')
+      .order('created_at', { ascending: false });
+    if (error) throw error;
+    offers = (data || []).map(normalizePromotion);
+    offersLoaded = true;
+    renderOffers();
+    return true;
+  } catch (error) {
+    console.error('Error al cargar promociones desde Supabase:', error);
+    toast('No se pudieron cargar las promociones. Intenta actualizar la página.');
+    return false;
+  } finally {
+    offersLoading = false;
+  }
+}
 
 let activeCat='all',currentUser=null,html5Qr=null,pendingCoupon=null,leafletMap=null,selectedPlan='free',pendingUserData=null;
 
@@ -648,8 +688,11 @@ function termsListHTML(terms,validAt){
   return '<ul>'+terms.map(t=>'<li>'+esc(t)+'</li>').join('')+'</ul><div class="terms-valid">Válido en: '+esc(validAt)+'</div>';
 }
 function isCampaignActive(o){
-  if(!o||o.active===false)return false;
-  if(o.expiresISO&&Date.now()>new Date(o.expiresISO+'T23:59:59-05:00').getTime())return false;
+  if(!o || o.active !== true) return false;
+  if(o.expiresISO) {
+    const expiry = new Date(o.expiresISO + 'T23:59:59-05:00').getTime();
+    if(!Number.isNaN(expiry) && Date.now() > expiry) return false;
+  }
   return true;
 }
 function couponEffStatus(c){
@@ -843,20 +886,31 @@ async function initMap(){
 }
 
 function setCat(b){document.querySelectorAll('.chip[data-cat]').forEach(x=>x.classList.remove('active'));b.classList.add('active');activeCat=b.dataset.cat;filterCards()}
-function filterCards(){const q=(document.getElementById('searchInput').value||'').toLowerCase();let n=0;document.querySelectorAll('.offer-card').forEach(c=>{const ok=(activeCat==='all'||c.dataset.cat===activeCat)&&(!q||c.innerText.toLowerCase().includes(q));c.classList.toggle('hidden',!ok);if(ok)n++});document.getElementById('empty').classList.toggle('hidden',n>0)}
+function filterCards(){const q=(document.getElementById('searchInput')?.value||'').toLowerCase();let n=0;document.querySelectorAll('.offer-card').forEach(c=>{const ok=(activeCat==='all'||c.dataset.cat===activeCat)&&(!q||c.innerText.toLowerCase().includes(q));c.classList.toggle('hidden',!ok);if(ok)n++});const empty=document.getElementById('empty');if(empty){if(offersLoaded&&offers.filter(isCampaignActive).length===0){empty.textContent='Por el momento no hay promociones disponibles.';empty.classList.remove('hidden')}else if(offers.filter(isCampaignActive).length>0){empty.textContent='No encontramos promociones con esa búsqueda.';empty.classList.toggle('hidden',n>0)}}}
 
 function renderOffers(){
-  document.getElementById('cards').innerHTML=offers.filter(isCampaignActive).map(o=>`
-    <article class="card offer-card" data-cat="${o.category}">
-      <div class="cardvisual"><span class="off">${o.discount}</span><img src="${o.image}" alt="${o.shop}"></div>
+  const cards = document.getElementById('cards');
+  const empty = document.getElementById('empty');
+  const activeOffers = offers.filter(isCampaignActive);
+  if(!activeOffers.length) {
+    cards.innerHTML = '';
+    empty.textContent = offersLoaded ? 'Por el momento no hay promociones disponibles.' : 'Cargando promociones...';
+    empty.classList.remove('hidden');
+    return;
+  }
+  cards.innerHTML = activeOffers.map(o=>`
+    <article class="card offer-card" data-cat="${esc(o.category)}">
+      <div class="cardvisual"><span class="off">${esc(o.discount)}</span><img src="${esc(o.image)}" alt="${esc(o.shop)}"></div>
       <div class="cardbody">
-        <div class="cardtitle"><h3>${o.shop}</h3><span class="rating">★ ${o.rating}</span></div>
-        <p>${o.description}</p>
-        <p>📍 ${o.branch}, Quito</p>
-        <div class="cardfoot"><small>Válido hasta ${o.expires}</small><button class="btn small" onclick="claim('${o.id}')">Obtener cupón</button></div>
+        <div class="cardtitle"><h3>${esc(o.shop)}</h3><span class="rating">${o.rating !== '' ? '★ ' + esc(o.rating) : ''}</span></div>
+        <p>${esc(o.description)}</p>
+        <p>📍 ${esc(o.branch)}, Quito</p>
+        <div class="cardfoot"><small>Válido hasta ${esc(o.expires)}</small><button class="btn small" onclick="claim('${esc(o.id)}')">Obtener cupón</button></div>
       </div>
     </article>
   `).join('');
+  empty.classList.add('hidden');
+  filterCards();
 }
 document.getElementById('searchInput').addEventListener('input',filterCards);
 
@@ -1159,13 +1213,13 @@ function renderMerchantPromos() {
     const validAt = o.validAt || ('Sucursal ' + o.branch);
     return `
     <article class="card">
-      <div class="cardvisual"><span class="off">${o.discount}</span><img src="${o.image}" alt="${o.shop}"></div>
+      <div class="cardvisual"><span class="off">${esc(o.discount)}</span><img src="${esc(o.image)}" alt="${esc(o.shop)}"></div>
       <div class="cardbody">
-        <div class="cardtitle"><h3>${o.shop}</h3><span class="rating">★ ${o.rating}</span></div>
-        <p>${o.offer}</p>
-        <p>📍 ${o.branch}, Quito</p>
+        <div class="cardtitle"><h3>${esc(o.shop)}</h3><span class="rating">${o.rating !== '' ? '★ ' + esc(o.rating) : ''}</span></div>
+        <p>${esc(o.offer)}</p>
+        <p>📍 ${esc(o.branch)}, Quito</p>
         <div class="terms-mini"><b class="tt">Términos y condiciones</b>${termsListHTML(terms, validAt)}</div>
-        <div class="cardfoot"><small>Válido hasta ${o.expires}</small><span class="userpill ${active?'ok':'off'}">${active?'Campaña activa':'Campaña inactiva'}</span></div>
+        <div class="cardfoot"><small>Válido hasta ${esc(o.expires)}</small><span class="userpill ${active?'ok':'off'}">${active?'Campaña activa':'Campaña inactiva'}</span></div>
       </div>
     </article>`;
   }).join('');
@@ -1593,6 +1647,7 @@ async function approveClientPayment(email){
 function adminTab(tab,b){renderAdmin(tab)}
 
 renderOffers();
+loadOffers();
 initMap();
 updateNavHeader();
 </script></body></html>
