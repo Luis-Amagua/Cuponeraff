@@ -456,6 +456,7 @@ th{color:#806c5c;background:#fffaf6;font-size:9px;text-transform:uppercase;lette
       <button class="chip" onclick="adminTab('requests',this)">Solicitudes de comercios</button>
       <button class="chip" onclick="adminTab('createMerchant',this)">+ Crear Comercio</button>
       <button class="chip" onclick="adminTab('clientPayments',this)">Aprobar Pagos Clientes</button>
+      <button class="chip" onclick="adminTab('addPromotion',this)">Agregar Promoción</button>
     </div>
     <div class="panel" id="adminContent"></div>
   </div>
@@ -1426,7 +1427,8 @@ async function renderAdmin(tab){
     (tab==='merchants'&&b.textContent.includes('Comercios'))||
     (tab==='requests'&&b.textContent.includes('Solicitudes'))||
     (tab==='createMerchant'&&b.textContent.includes('Crear Comercio'))||
-    (tab==='clientPayments'&&b.textContent.includes('Aprobar Pagos'))
+    (tab==='clientPayments'&&b.textContent.includes('Aprobar Pagos'))||
+    (tab==='addPromotion'&&b.textContent.includes('Agregar Promoción'))
   ));
 
   const el=document.getElementById('adminContent');
@@ -1558,6 +1560,175 @@ async function renderAdmin(tab){
       </div>
     `;
   }
+
+
+else if(tab==='addPromotion'){
+
+  const merchantOptions = merchants.map(m => `
+    <option value="${esc(m.id)}"
+      data-name="${esc(m.name)}"
+      data-branch="${esc(m.branch || '')}"
+      data-category="${esc(m.category || '')}">
+      ${esc(m.name)} - ${esc(m.branch || 'Sin sucursal')}
+    </option>
+  `).join('');
+
+  el.innerHTML = `
+    <h2>Agregar nueva promoción</h2>
+    <p class="sub">Selecciona un comercio y completa la información de su nueva campaña.</p>
+
+    <form onsubmit="adminCreatePromotion(event)">
+
+      <div class="grid2">
+        <div class="formrow">
+          <label>ID de promoción (Automático)</label>
+          <input class="field" id="promoId" value="Cargando..." readonly
+            style="background:#f1f5f9;cursor:not-allowed;font-weight:bold;">
+        </div>
+
+        <div class="formrow">
+          <label>Comercio</label>
+          <select class="field" id="promoMerchantSelect"
+            onchange="fillPromotionMerchantData()" required>
+            <option value="">-- Selecciona un comercio --</option>
+            ${merchantOptions}
+          </select>
+        </div>
+      </div>
+
+      <div class="grid2">
+        <div class="formrow">
+          <label>Merchant ID</label>
+          <input class="field" id="promoMerchantId" readonly required>
+        </div>
+
+        <div class="formrow">
+          <label>Nombre del comercio (Shop)</label>
+          <input class="field" id="promoShop" readonly required>
+        </div>
+      </div>
+
+      <div class="grid2">
+        <div class="formrow">
+          <label>Sucursal (Branch)</label>
+          <input class="field" id="promoBranch" readonly>
+        </div>
+
+        <div class="formrow">
+          <label>Categoría</label>
+          <input class="field" id="promoCategory" readonly>
+        </div>
+      </div>
+
+      <div class="grid2">
+        <div class="formrow">
+          <label>Descuento (Discount)</label>
+          <input class="field" id="promoDiscount"
+            placeholder="Ej. 30% OFF" required>
+        </div>
+
+        <div class="formrow">
+          <label>Calificación (Rating)</label>
+          <input class="field" id="promoRating" type="number"
+            min="0" max="5" step="0.1" placeholder="Ej. 4.8">
+        </div>
+      </div>
+
+      <div class="formrow">
+        <label>Oferta (Offer)</label>
+        <input class="field" id="promoOffer"
+          placeholder="Ej. 30% de descuento en hamburguesas seleccionadas"
+          required>
+      </div>
+
+      <div class="formrow">
+        <label>Imagen (URL)</label>
+        <input class="field" id="promoImage" type="url"
+          placeholder="https://..." required>
+      </div>
+
+      <div class="formrow">
+        <label>Descripción</label>
+        <textarea class="field" id="promoDescription"
+          placeholder="Describe brevemente la promoción..."></textarea>
+      </div>
+
+      <div class="grid2">
+        <div class="formrow">
+          <label>Fecha de expiración (Expires)</label>
+          <input class="field" id="promoExpires"
+            placeholder="Ej. 30 nov. 2026">
+        </div>
+
+        <div class="formrow">
+          <label>Fecha de expiración ISO (Expires ISO)</label>
+          <input class="field" id="promoExpiresISO" type="date" required>
+        </div>
+      </div>
+
+      <div class="grid2">
+        <div class="formrow">
+          <label>Válido en (Valid At)</label>
+          <input class="field" id="promoValidAt"
+            placeholder="Ej. Sucursal La Carolina">
+        </div>
+
+        <div class="formrow">
+          <label>Estado de la promoción (Active)</label>
+          <select class="field" id="promoActive">
+            <option value="true" selected>Activa</option>
+            <option value="false">Inactiva</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="formrow">
+        <label>Términos y condiciones (Terms)</label>
+        <textarea class="field" id="promoTerms" rows="5"
+          placeholder="Escribe cada condición en una línea diferente."></textarea>
+        <small class="sub">Cada línea se guardará como un elemento independiente.</small>
+      </div>
+
+      <button class="btn green" type="submit"
+        style="margin-top:10px;width:100%">
+        Guardar promoción en Supabase
+      </button>
+
+    </form>
+  `;
+
+  // Generar el siguiente ID disponible: p1, p2, p3...
+  (async () => {
+    let nextId = 'p1';
+
+    if (_supabase) {
+      try {
+        const { data, error } = await _supabase
+          .from('promotions')
+          .select('id');
+
+        if (error) throw error;
+
+        const maxNum = (data || []).reduce((max, p) => {
+          const match = (p.id || '').match(/^p(\d+)$/i);
+          return match
+            ? Math.max(max, parseInt(match[1], 10))
+            : max;
+        }, 0);
+
+        nextId = 'p' + (maxNum + 1);
+
+      } catch (err) {
+        console.error('Error generando ID de promoción:', err);
+        toast('No se pudo generar el ID de promoción');
+      }
+    }
+
+    const idField = document.getElementById('promoId');
+    if (idField) idField.value = nextId;
+  })();
+}
+
 }
 
 function openAdminMerchantModal(reqId, name, address) {
@@ -1643,6 +1814,80 @@ async function approveClientPayment(email){
   toast('¡Pago aprobado y cuenta activada!');
   renderAdmin('clientPayments');
 }
+
+
+function fillPromotionMerchantData() {
+  const select = document.getElementById('promoMerchantSelect');
+  const option = select.options[select.selectedIndex];
+
+  if (!option || !option.value) return;
+
+  document.getElementById('promoMerchantId').value = option.value;
+  document.getElementById('promoShop').value = option.dataset.name || '';
+  document.getElementById('promoBranch').value = option.dataset.branch || '';
+  document.getElementById('promoCategory').value = option.dataset.category || '';
+}
+
+
+async function adminCreatePromotion(event) {
+  event.preventDefault();
+
+  if (!_supabase) {
+    toast('No hay conexión con Supabase.');
+    return;
+  }
+
+  const merchantId = document.getElementById('promoMerchantId').value;
+
+  if (!merchantId) {
+    toast('Primero debes seleccionar un comercio.');
+    return;
+  }
+
+  const terms = document.getElementById('promoTerms').value
+    .split('\n')
+    .map(t => t.trim())
+    .filter(t => t.length > 0);
+
+  const newPromotion = {
+    id: document.getElementById('promoId').value,
+    merchant_id: merchantId,
+    shop: document.getElementById('promoShop').value,
+    branch: document.getElementById('promoBranch').value || null,
+    category: document.getElementById('promoCategory').value || null,
+    discount: document.getElementById('promoDiscount').value.trim(),
+    offer: document.getElementById('promoOffer').value.trim(),
+    image: document.getElementById('promoImage').value.trim(),
+    rating: document.getElementById('promoRating').value
+      ? parseFloat(document.getElementById('promoRating').value)
+      : null,
+    expires: document.getElementById('promoExpires').value.trim() || null,
+    description: document.getElementById('promoDescription').value.trim() || null,
+    expires_iso: document.getElementById('promoExpiresISO').value,
+    active: document.getElementById('promoActive').value === 'true',
+    valid_at: document.getElementById('promoValidAt').value.trim() || null,
+    terms: terms
+  };
+
+  const { error } = await _supabase
+    .from('promotions')
+    .insert([newPromotion]);
+
+  if (error) {
+    console.error('Error guardando promoción:', error);
+    toast('Error al guardar: ' + error.message);
+    return;
+  }
+
+  toast('¡Promoción creada correctamente!');
+
+  // Actualizar las promociones de la página principal
+  await loadOffers();
+
+  // Volver a cargar el formulario y generar el siguiente ID
+  renderAdmin('addPromotion');
+}
+
 
 function adminTab(tab,b){renderAdmin(tab)}
 
